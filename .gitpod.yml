@@ -1,0 +1,7 @@
+tasks:
+  - init: |
+      npm install
+    command: |
+      echo "PUBLIC_URL=$(gp url 3000)" > .env.development
+      echo "REACT_APP_VERSION=\$npm_package_version" >> .env.development
+      npm start
