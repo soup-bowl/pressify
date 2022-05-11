@@ -1,16 +1,22 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import Home from './pages/home';
+import App from './pages/app';
 
 const root = ReactDOM.createRoot(
 	document.getElementById('root') as HTMLElement
 );
 root.render(
 	<StrictMode>
-		<App />
+		<BrowserRouter>
+			<Routes>
+				<Route index element={<Home />} />
+				<Route path="app" element={<App />} />
+			</Routes>
+		</BrowserRouter>
 	</StrictMode>
 );
 
