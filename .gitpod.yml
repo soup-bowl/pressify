@@ -6,3 +6,10 @@ tasks:
       echo "REACT_APP_VERSION=\$npm_package_version" >> .env.development.local
       cp .env.development.local .env.production.local
       npm start
+
+ports:
+  - port: 3000
+    name: Frontend
+    description: React PWA app
+    visibility: public
+    onOpen: open-browser
