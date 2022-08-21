@@ -5,6 +5,7 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import Home from './pages/home';
 import App from './pages/app';
+import Layout from './pages/_layout';
 
 const root = ReactDOM.createRoot(
 	document.getElementById('root') as HTMLElement
@@ -13,8 +14,10 @@ root.render(
 	<StrictMode>
 		<BrowserRouter>
 			<Routes>
-				<Route index element={<Home />} />
-				<Route path="app" element={<App />} />
+				<Route path="/" element={<Layout />}>
+					<Route index element={<Home />} />
+					<Route path="app" element={<App />} />
+				</Route>
 			</Routes>
 		</BrowserRouter>
 	</StrictMode>

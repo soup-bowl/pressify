@@ -1,6 +1,7 @@
-import { Grid, Button, TextField, Typography, Container, ThemeProvider, CssBaseline, Box } from '@mui/material';
-import { useState } from 'react';
+import { Button, TextField, Typography, Container, Box } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import agent from '../agent';
 
 export default function Home() {
 	const [inputURL, setInputURL] = useState('');
@@ -19,28 +20,27 @@ export default function Home() {
 		console.log("hello!");
 	};
 
+	useEffect(() => {
+        agent.Info.full('https://labour.org.uk')
+        .then((response:any) => {
+            console.log(response);
+        });
+    }, []);
+
 	return(
 		<Box sx={{ display: 'flex' }}>
 			<Container maxWidth="lg">
+				<Typography my={2}>We will try to pick details out of the URL you specify.</Typography>
 				<form onSubmit={submitForm} noValidate>
-					<Grid container direction="column" alignItems="center" spacing={2}>
-						<Grid item>
-							<Typography my={2}>We will try to pick details out of the URL you specify.</Typography>
-						</Grid>
-						<Grid item>
-							<TextField fullWidth
-								id="url"
-								type="url"
-								label="URL"
-								variant="outlined"
-								onChange={changeForm}
-								onBlur={scanURL}
-							/>
-						</Grid>
-						<Grid item>
-							<Button type="submit" variant="contained">Appify!</Button>
-						</Grid>
-					</Grid>
+					<TextField fullWidth
+						id="url"
+						type="url"
+						label="URL"
+						variant="outlined"
+						onChange={changeForm}
+						onBlur={scanURL}
+					/>
+					<Button type="submit" variant="contained">Appify!</Button>
 				</form>
 			</Container>
 		</Box>
