@@ -8,6 +8,7 @@ import { Layout, LayoutLight } from './pages/_layout';
 import Directory from './pages/iterator';
 import Content from './pages/content';
 import { AboutPage } from './pages/info';
+import Search from './pages/search';
 
 const root = ReactDOM.createRoot(
 	document.getElementById('root') as HTMLElement
@@ -22,6 +23,7 @@ root.render(
 				<Route path="/:inputURL/" element={<Layout />}>
 					<Route index element={<AppHome />} />
 					<Route path="about" element={<AboutPage />} />
+					<Route path="search/:seachTerms" element={<Search />} />
 					<Route path="posts" element={<Directory posts />} />
 					<Route path="posts/:postID" element={<Content posts />} />
 					<Route path="pages" element={<Directory pages />} />

@@ -17,12 +17,26 @@ export interface IPost {
 	excerpt: IPostRendered;
 	content: IPostRendered;
 	author: number;
+	type: string;
 	modified: Date;
 	created: Date;
-	link: string;
-	categories: number[];
-	tags: number[];
+	link?: string;
+	categories?: number[];
+	tags?: number[];
 	_embedded?: IEmbed; 
+}
+
+export interface ISearch {
+	id: number;
+	title: string;
+	url: string;
+	type: string;
+	subtype: string;
+	_embedded: ISearchEmbed;
+}
+
+export interface ISearchEmbed {
+	self: IPost[];
 }
 
 export interface IUser {

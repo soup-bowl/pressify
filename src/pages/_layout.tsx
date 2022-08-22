@@ -2,7 +2,7 @@ import { Outlet, useNavigate, useParams } from "react-router-dom";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { CssBaseline, ThemeProvider, Toolbar, IconButton, Typography,
 	Container, styled, Drawer, Divider, Box, List, ListItemIcon,
-	ListItemText, useMediaQuery, ListItemButton} from '@mui/material';
+	ListItemText, useMediaQuery, ListItemButton, alpha, InputBase} from '@mui/material';
 import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import theme from '../theme';
@@ -10,6 +10,7 @@ import agent from "../agent";
 import { ISiteInformation } from "../interfaces";
 
 import MenuIcon from '@mui/icons-material/Menu';
+import SearchIcon from '@mui/icons-material/Search';
 import HomeIcon from '@mui/icons-material/Home';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -53,6 +54,34 @@ const AppBar = styled(MuiAppBar, {
 	}),
 }));
 
+const Search = styled('div')(({ theme }) => ({
+	position: 'relative',
+	borderRadius: theme.shape.borderRadius,
+	backgroundColor: alpha(theme.palette.common.white, 0.15),
+	'&:hover': {
+		backgroundColor: alpha(theme.palette.common.white, 0.25),
+	},
+	//marginLeft: 0,
+	//width: '100%',
+	[theme.breakpoints.down('sm')]: {
+		display: 'none',
+	},
+	[theme.breakpoints.up('sm')]: {
+		marginLeft: theme.spacing(1),
+		width: 'auto',
+	},
+}));
+  
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+	padding: theme.spacing(0, 2),
+	height: '100%',
+	position: 'absolute',
+	pointerEvents: 'none',
+	display: 'flex',
+	alignItems: 'center',
+	justifyContent: 'center',
+}));
+
 const DrawerHeader = styled('div')(({ theme }) => ({
 	display: 'flex',
 	alignItems: 'center',
@@ -62,6 +91,29 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 	justifyContent: 'flex-end',
 }));
 
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+	color: 'inherit',
+	'& .MuiInputBase-input': {
+		padding: theme.spacing(1, 1, 1, 0),
+		// vertical padding + font size from searchIcon
+		paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+		transition: theme.transitions.create('width'),
+		width: '100%',
+		[theme.breakpoints.up('sm')]: {
+			width: '12ch',
+			'&:focus': {
+				width: '30ch',
+			},
+		},
+		[theme.breakpoints.up('md')]: {
+			width: '24ch',
+			'&:focus': {
+				width: '60ch',
+			},
+		},
+	},
+}));
+
 export function Layout() {
 	const navigate = useNavigate();
 	const { inputURL } = useParams();
@@ -69,6 +121,10 @@ export function Layout() {
 	const desktop = useMediaQuery("(min-width: 961px)");
 	const [mainInfo, setMainInfo] = useState<ISiteInformation>({} as ISiteInformation);
 	const [apiError, setApiError] = useState<string>('');
+
+	const submitForm = (e:any) => {
+		return navigate(`/${inputURL}/search/${e.target[0].value}`);
+	};
 
 	const handleDrawerOpen = () => {
 		setOpen(true);
@@ -116,7 +172,25 @@ export function Layout() {
 							<MenuIcon />
 						</IconButton>
 						: null }
-						<Typography variant="h6" noWrap component="div">{mainInfo.name}</Typography>
+						<Typography
+							variant="h6"
+							noWrap
+							component="div"
+							sx={{ flexGrow: 1, display: { xs: 'block', sm: 'block' } }}
+						>
+							{mainInfo.name}
+						</Typography>
+						<form onSubmit={submitForm}>
+							<Search>
+								<SearchIconWrapper>
+									<SearchIcon />
+								</SearchIconWrapper>
+								<StyledInputBase
+									placeholder="Search…"
+									inputProps={{ 'aria-label': 'search' }}
+								/>
+							</Search>
+						</form>
 					</Toolbar>
 				</AppBar>
 				<Drawer

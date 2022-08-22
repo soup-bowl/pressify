@@ -7,7 +7,7 @@ interface Props {
 	page?: boolean;
 }
 
-function descriptionSanitiser(input:string) {
+export function descriptionSanitiser(input:string) {
 	return input.replace(/<[^>]*>?/gm, '') // Remove HTML tags.
 		.replaceAll('&#8220;', '"')
 		.replaceAll('&#8221;', '"')

@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { IPost } from './interfaces';
+import { IPost, ISearch } from './interfaces';
 
 const responseBody = <T> ( response: AxiosResponse<T> ) => response.data;
 
@@ -22,6 +22,9 @@ const Posts = {
 		url + '/wp-json/wp/v2/' + ((pages) ? 'pages' : 'posts') + '/' + page
 		+ '?_embed=author,wp:featuredmedia'
 		//+ '&_fields=id,title,content,author,link,categories,tags,embedded'
+	),
+	search: (url: string, search: string) => requests.get<ISearch[]>(
+		`${url}/wp-json/wp/v2/search?search=${search}&_embed=self`
 	)
 }
 

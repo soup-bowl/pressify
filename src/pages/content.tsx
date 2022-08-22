@@ -22,7 +22,7 @@ export default function Content({posts, pages}: Props) {
 		if (postID !== undefined) {
 			agent.Posts.individual(`https://${inputURL}`, parseInt(postID), (pages) ? true : false)
 			.then((response:IPost) => {
-				console.log((pages) ? 'Page' : 'Post', response);
+				//console.log((pages) ? 'Page' : 'Post', response);
 				setPost(response);
 				setLoadingContent(false);
 			})
