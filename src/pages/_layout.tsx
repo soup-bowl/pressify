@@ -87,6 +87,8 @@ export default function Layout() {
         });
     }, []);
 
+	useEffect(() => { document.title = `${mainInfo.name} - Wapp` }, [mainInfo]);
+
 	return(
 		<ThemeProvider theme={theme}>
 			<Box sx={{ display: 'flex' }}>
