@@ -42,7 +42,7 @@ export default function Directory({posts, pages}: Props) {
 			{!loadingContent ?
 				<>
 				{apiError === '' ?
-					<CardDisplay posts={postCollection} page={pages} />
+					<CardDisplay posts={postCollection} />
 				:
 					<>
 						<Typography my={2}>

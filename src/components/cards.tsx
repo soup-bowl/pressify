@@ -1,10 +1,9 @@
 import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from "@mui/material";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { IPost } from "../interfaces";
 
 interface Props {
 	posts: IPost[];
-	page?: boolean;
 }
 
 export function descriptionSanitiser(input:string) {
@@ -16,15 +15,16 @@ export function descriptionSanitiser(input:string) {
 		.replaceAll('&hellip;', '...');
 }
 
-export function CardDisplay({posts, page}:Props) {
-	const location = useLocation().pathname.replace('/posts', '').replace('/pages', '');
+export function CardDisplay({posts}:Props) {
+	const { inputURL } = useParams();
+	const location = `${process.env.PUBLIC_URL}/#/${inputURL}`;
 
 	return(
 		<Grid container spacing={2} my={2}>
 			{posts.map((post:IPost) => (
 				<Grid key={post.id} item xs={12} sm={6} md={4}>
 					<Card sx={{ maxWidth: 345 }}>
-						<CardActionArea href={process.env.PUBLIC_URL + '/#' + location + ((page) ? '/pages' : '/posts') + '/' + post.id}>
+						<CardActionArea href={`${location}${((post.type === 'post') ? '/posts' : '/pages')}/${post.id}`}>
 							{post._embedded !== undefined && post._embedded["wp:featuredmedia"] !== undefined  ?
 							<CardMedia
 								component="img"
