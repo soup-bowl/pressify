@@ -1,8 +1,10 @@
 import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from "@mui/material";
+import { useLocation } from "react-router-dom";
 import { IPost } from "../interfaces";
 
 interface Props {
 	posts: IPost[];
+	page?: boolean;
 }
 
 function descriptionSanitiser(input:string) {
@@ -14,13 +16,15 @@ function descriptionSanitiser(input:string) {
 		.replaceAll('&hellip;', '...');
 }
 
-export function CardDisplay({posts}:Props) {
+export function CardDisplay({posts, page}:Props) {
+	const location = useLocation().pathname.replace('/posts', '').replace('/pages', '');
+
 	return(
 		<Grid container spacing={2} my={2}>
 			{posts.map((post:IPost) => (
 				<Grid key={post.id} item xs={12} sm={6} md={4}>
 					<Card sx={{ maxWidth: 345 }}>
-						<CardActionArea href={window.location.hash + '/' + post.id}>
+						<CardActionArea href={'/#' + location + ((page) ? '/pages' : '/posts') + '/' + post.id}>
 							{post._embedded !== undefined && post._embedded["wp:featuredmedia"] !== undefined  ?
 							<CardMedia
 								component="img"

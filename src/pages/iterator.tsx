@@ -11,15 +11,6 @@ interface Props {
 	pages?: boolean;
 }
 
-function descriptionSanitiser(input:string) {
-	return input.replace(/<[^>]*>?/gm, '') // Remove HTML tags.
-		.replaceAll('&#8220;', '"')
-		.replaceAll('&#8221;', '"')
-		.replaceAll('&#8216;', '\'')
-		.replaceAll('&#8217;', '\'')
-		.replaceAll('&hellip;', '...');
-}
-
 export default function Directory({posts, pages}: Props) {
 	const [mainInfo] = useOutletContext<[ISiteInformation]>();
 	const { inputURL } = useParams();

@@ -86,10 +86,25 @@ export function AppHome() {
 		<Box>
 			<Typography variant="h1">{mainInfo.name}</Typography>
 			<Typography my={2}>{mainInfo.description}</Typography>
-			<Typography variant="h2">Posts</Typography>
-			{postCollection.length > 0 ? <CardDisplay posts={postCollection} /> : <CircularProgress />}
-			<Typography variant="h2">Pages</Typography>
-			{pageCollection.length > 0 ? <CardDisplay posts={pageCollection} /> : <CircularProgress />}
+			{!loadingContent ?
+				<>
+				{postCollection.length > 0 ?
+					<>
+					<Typography variant="h2">Posts</Typography>
+					<CardDisplay posts={postCollection} />
+					</>
+					: null}
+				
+				{pageCollection.length > 0 ?
+					<>
+					<Typography variant="h2">Pages</Typography>
+					<CardDisplay posts={pageCollection} />
+					</>
+					: null}
+				</>
+			:
+				<CircularProgress />
+			}
 		</Box>
 	);
 }
