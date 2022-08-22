@@ -98,7 +98,7 @@ export function AppHome() {
 				{pageCollection.length > 0 ?
 					<>
 					<Typography variant="h2">Pages</Typography>
-					<CardDisplay posts={pageCollection} />
+					<CardDisplay posts={pageCollection} page />
 					</>
 					: null}
 				</>
