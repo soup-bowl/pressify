@@ -24,7 +24,7 @@ While we will [sanitise the HTML response](https://www.npmjs.com/package/dompuri
 For more info, see [React docs on **dangerouslySetInnerHTML**](https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml). 
 
 ## Getting Started
-​
+
 ### With Gitpod
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/soup-bowl/whatsth.is)
