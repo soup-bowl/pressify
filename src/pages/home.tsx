@@ -1,9 +1,10 @@
 import { Button, TextField, Typography, Container, Box } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import agent from '../agent';
+import { useNavigate, useOutletContext } from 'react-router-dom';
+import { ISiteInformation } from '../interfaces';
 
 export default function Home() {
+	const [mainInfo] = useOutletContext<[ISiteInformation]>();
 	const [inputURL, setInputURL] = useState('');
 	const navigate = useNavigate();
 
@@ -21,11 +22,8 @@ export default function Home() {
 	};
 
 	useEffect(() => {
-        agent.Info.full('https://labour.org.uk')
-        .then((response:any) => {
-            console.log(response);
-        });
-    }, []);
+        console.log(mainInfo);
+    }, [mainInfo]);
 
 	return(
 		<Box sx={{ display: 'flex' }}>
