@@ -12,8 +12,16 @@ const Info = {
 };
 
 const Posts = {
-	list: (url: string, pages:boolean = false) => requests.get<IPost[]>(url + '/wp-json/wp/v2/' + ((pages) ? 'pages' : 'posts')),
-	individual: (url: string, page:number, pages:boolean = false) => requests.get<IPost>(url + '/wp-json/wp/v2/' + ((pages) ? 'pages' : 'posts') + '/' + page)
+	list: (url: string, pages:boolean = false) => requests.get<IPost[]>(
+		url + '/wp-json/wp/v2/' + ((pages) ? 'pages' : 'posts')
+		+ '?_embed=wp:featuredmedia'
+		//+ '&_fields=id,title,excerpt,author,link,embedded'
+	),
+	individual: (url: string, page:number, pages:boolean = false) => requests.get<IPost>(
+		url + '/wp-json/wp/v2/' + ((pages) ? 'pages' : 'posts') + '/' + page
+		+ '?_embed=author,wp:featuredmedia'
+		//+ '&_fields=id,title,content,author,link,categories,tags,embedded'
+	)
 }
 
 const agent = {

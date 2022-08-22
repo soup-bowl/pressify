@@ -1,11 +1,11 @@
 import { Box, CircularProgress, Grid, Typography } from "@mui/material";
 import { AxiosError } from "axios";
+import DOMPurify from "dompurify";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import agent from "../agent";
 import { IPost } from "../interfaces";
 import "./content.css";
-
 
 interface Props {
 	posts?: boolean;
@@ -46,9 +46,9 @@ export default function Content({posts, pages}: Props) {
 			{apiError === '' ?
 				<Box>
 					<Typography variant="h1">
-						<div dangerouslySetInnerHTML={{__html:post.title.rendered}}></div>
+						<div dangerouslySetInnerHTML={{__html:DOMPurify.sanitize(post.title.rendered)}}></div>
 					</Typography>
-					<div dangerouslySetInnerHTML={{__html:post.content.rendered}}></div>
+					<div dangerouslySetInnerHTML={{__html:DOMPurify.sanitize(post.content.rendered)}}></div>
 				</Box>
 				:
 				<>
