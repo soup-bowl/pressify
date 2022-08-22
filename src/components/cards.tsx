@@ -24,7 +24,7 @@ export function CardDisplay({posts, page}:Props) {
 			{posts.map((post:IPost) => (
 				<Grid key={post.id} item xs={12} sm={6} md={4}>
 					<Card sx={{ maxWidth: 345 }}>
-						<CardActionArea href={'/#' + location + ((page) ? '/pages' : '/posts') + '/' + post.id}>
+						<CardActionArea href={process.env.PUBLIC_URL + '/#' + location + ((page) ? '/pages' : '/posts') + '/' + post.id}>
 							{post._embedded !== undefined && post._embedded["wp:featuredmedia"] !== undefined  ?
 							<CardMedia
 								component="img"
