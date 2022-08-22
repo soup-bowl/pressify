@@ -13,6 +13,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import HomeIcon from '@mui/icons-material/Home';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import DescriptionIcon from '@mui/icons-material/Description';
+import CoPresentIcon from '@mui/icons-material/CoPresent';
 
 const drawerWidth = 240;
 
@@ -61,7 +62,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 	justifyContent: 'flex-end',
 }));
 
-export default function Layout() {
+export function Layout() {
 	const navigate = useNavigate();
 	const { inputURL } = useParams();
 	const [open, setOpen] = useState(false);
@@ -80,7 +81,7 @@ export default function Layout() {
 	useEffect(() => {
 		agent.Info.full(`https://${inputURL}`)
         .then((response:any) => {
-			console.log('Info Reply', response);
+			//console.log('Info Reply', response);
 			setApiError('');
 			setMainInfo({
 				name: response.name ?? 'N/A',
@@ -94,8 +95,6 @@ export default function Layout() {
 			setMainInfo({} as ISiteInformation);
 		});
     }, [inputURL]);
-
-	useEffect(() => { document.title = `${mainInfo.name ?? 'Error'} - Wapp` }, [mainInfo]);
 
 	return(
 		<ThemeProvider theme={theme}>
@@ -142,25 +141,38 @@ export default function Layout() {
 					<Divider />
 					<List>
 						<ListItemButton
-							onClick={() => {navigate('/');handleDrawerClose();}}
-							selected={window.location.hash.includes("/")}
+							onClick={() => {navigate(`/${inputURL}`);handleDrawerClose();}}
+							selected={(window.location.hash.replace(`/${inputURL}`, '') === "#")}
 						>
 							<ListItemIcon><HomeIcon /></ListItemIcon>
 							<ListItemText primary="Home" />
 						</ListItemButton>
+					</List>
+					<Divider />
+					<List>
 						<ListItemButton
-							onClick={() => {navigate('/');handleDrawerClose();}}
-							selected={window.location.hash.includes("/")}
+							onClick={() => {navigate(`/${inputURL}/posts`);handleDrawerClose();}}
+							selected={window.location.hash.includes("/posts")}
 						>
 							<ListItemIcon><PushPinIcon /></ListItemIcon>
 							<ListItemText primary="Posts" />
 						</ListItemButton>
 						<ListItemButton
-							onClick={() => {navigate('/');handleDrawerClose();}}
-							selected={window.location.hash.includes("/")}
+							onClick={() => {navigate(`/${inputURL}/pages`);handleDrawerClose();}}
+							selected={window.location.hash.includes("/pages")}
 						>
 							<ListItemIcon><DescriptionIcon /></ListItemIcon>
 							<ListItemText primary="Pages" />
+						</ListItemButton>
+					</List>
+					<Divider />
+					<List>
+						<ListItemButton
+							onClick={() => {navigate(`/${inputURL}/about`);handleDrawerClose();}}
+							selected={window.location.hash.includes("/about")}
+						>
+							<ListItemIcon><CoPresentIcon /></ListItemIcon>
+							<ListItemText primary="About" />
 						</ListItemButton>
 					</List>
 				</Drawer>
@@ -190,6 +202,19 @@ export default function Layout() {
 						}
 					</Container>
 				</Main>
+			</Box>
+		</ThemeProvider>
+	);
+}
+
+export function LayoutLight() {
+	return(
+		<ThemeProvider theme={theme}>
+			<Box sx={{ display: 'flex' }}>
+				<CssBaseline />
+				<Container maxWidth="md">
+					<Outlet />
+				</Container>
 			</Box>
 		</ThemeProvider>
 	);

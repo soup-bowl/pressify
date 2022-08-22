@@ -1,25 +1,34 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
-import Home from './pages/home';
-import App from './pages/app';
-import Layout from './pages/_layout';
+import { AppHome, MainHome } from './pages/home';
+import { Layout, LayoutLight } from './pages/_layout';
+import Directory from './pages/iterator';
+import Content from './pages/content';
+import { AboutPage } from './pages/info';
 
 const root = ReactDOM.createRoot(
 	document.getElementById('root') as HTMLElement
 );
 root.render(
 	<StrictMode>
-		<BrowserRouter>
+		<HashRouter>
 			<Routes>
-				<Route path="/" element={<App />} />
+				<Route path="/" element={<LayoutLight />}>
+					<Route index element={<MainHome />} />
+				</Route>
 				<Route path="/:inputURL/" element={<Layout />}>
-					<Route index element={<Home />} />
+					<Route index element={<AppHome />} />
+					<Route path="about" element={<AboutPage />} />
+					<Route path="posts" element={<Directory posts />} />
+					<Route path="posts/:postID" element={<Content posts />} />
+					<Route path="pages" element={<Directory pages />} />
+					<Route path="pages/:postID" element={<Content pages />} />
 				</Route>
 			</Routes>
-		</BrowserRouter>
+		</HashRouter>
 	</StrictMode>
 );
 
