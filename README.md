@@ -4,6 +4,10 @@
   <a href="https://gitpod.io/#https://github.com/soup-bowl/wordpress-pwa"><img src="https://img.shields.io/badge/open%20in-Gitpod-orange?logo=gitpod&logoColor=white" /></a>
 </p>
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/11209477/186022119-a471780d-6047-43af-88f3-b17a06d727ac.png" />
+</p>
+
 Uses the power of the **[WordPress REST API][wapi]** and **[Progressive Web Apps][pwa]** to form a portable app viewer for WordPress-based sites.
 
 [Check it out in action][live]!
