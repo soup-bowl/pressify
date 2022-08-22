@@ -14,7 +14,7 @@ root.render(
 	<StrictMode>
 		<BrowserRouter>
 			<Routes>
-				<Route path="/" element={<Layout />}>
+				<Route path="/:inputURL/" element={<Layout />}>
 					<Route index element={<Home />} />
 					<Route path="app" element={<App />} />
 				</Route>

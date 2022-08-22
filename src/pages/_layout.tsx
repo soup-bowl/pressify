@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { CssBaseline, ThemeProvider, Toolbar, IconButton, Typography,
 	Container, styled, Drawer, Divider, Box, List, ListItemIcon,
@@ -62,9 +62,11 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function Layout() {
 	const navigate = useNavigate();
+	const { inputURL } = useParams();
 	const [open, setOpen] = useState(false);
 	const desktop = useMediaQuery("(min-width: 961px)");
 	const [mainInfo, setMainInfo] = useState<ISiteInformation>({} as ISiteInformation);
+	const [apiError, setApiError] = useState<string>('');
 
 	const handleDrawerOpen = () => {
 		setOpen(true);
@@ -75,19 +77,24 @@ export default function Layout() {
 	};
 
 	useEffect(() => {
-        agent.Info.full('https://labour.org.uk')
+		agent.Info.full(`https://${inputURL}`)
         .then((response:any) => {
 			console.log('Info Reply', response);
+			setApiError('');
 			setMainInfo({
 				name: response.name ?? 'N/A',
 				url: response.url,
 				hasPages: false,
 				hasPosts: false
 			});
-        });
-    }, []);
+        })
+		.catch((err:any) => {
+			setApiError('An error has occurred: ');
+			setMainInfo({} as ISiteInformation);
+		});
+    }, [inputURL]);
 
-	useEffect(() => { document.title = `${mainInfo.name} - Wapp` }, [mainInfo]);
+	useEffect(() => { document.title = `${mainInfo.name ?? 'Error'} - Wapp` }, [mainInfo]);
 
 	return(
 		<ThemeProvider theme={theme}>
@@ -157,8 +164,13 @@ export default function Layout() {
 					</List>
 				</Drawer>
 				<Main open={open}>
+					<DrawerHeader />
 					<Container maxWidth="md">
+						{apiError === '' ?
 						<Outlet context={[mainInfo]}  />
+						:
+						<Typography>{apiError}</Typography>
+						}
 					</Container>
 				</Main>
 			</Box>
