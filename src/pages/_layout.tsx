@@ -123,6 +123,7 @@ export function Layout() {
 	const [apiError, setApiError] = useState<string>('');
 
 	const submitForm = (e:any) => {
+		e.preventDefault();
 		return navigate(`/${inputURL}/search/${e.target[0].value}`);
 	};
 
