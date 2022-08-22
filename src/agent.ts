@@ -12,9 +12,10 @@ const Info = {
 };
 
 const Posts = {
-	list: (url: string, pages:boolean = false) => requests.get<IPost[]>(
+	list: (url: string, pages:boolean = false, no_per_page:number = -1) => requests.get<IPost[]>(
 		url + '/wp-json/wp/v2/' + ((pages) ? 'pages' : 'posts')
 		+ '?_embed=wp:featuredmedia'
+		+ ((no_per_page >= 0) ? `&per_page=${no_per_page}` : '')
 		//+ '&_fields=id,title,excerpt,author,link,embedded'
 	),
 	individual: (url: string, page:number, pages:boolean = false) => requests.get<IPost>(

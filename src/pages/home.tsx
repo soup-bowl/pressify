@@ -1,9 +1,11 @@
-import { Button, TextField, Typography, Box, Grid, Link } from '@mui/material';
+import { Button, TextField, Typography, Box, Grid, Link, CircularProgress } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useNavigate, useOutletContext } from 'react-router-dom';
-import { ISiteInformation } from '../interfaces';
+import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
+import { IPost, ISiteInformation } from '../interfaces';
 
 import GitHubIcon from '@mui/icons-material/GitHub';
+import agent from '../agent';
+import { CardDisplay } from '../components/cards';
 
 export function MainHome() {
 	const [inputURL, setInputURL] = useState('');
@@ -62,12 +64,32 @@ export function MainHome() {
 
 export function AppHome() {
 	const [mainInfo] = useOutletContext<[ISiteInformation]>();
+	const { inputURL } = useParams();
+	const [loadingContent, setLoadingContent] = useState<boolean>(true);
+	const [postCollection, setPostCollection] = useState<IPost[]>([]);
+	const [pageCollection, setPageCollection] = useState<IPost[]>([]);
 
-	/*useEffect(() => {
-        console.log(mainInfo);
-    }, [mainInfo]);*/
+	useEffect(() => {
+		Promise.all([
+			agent.Posts.list(`https://${inputURL}`, false, 3),
+			agent.Posts.list(`https://${inputURL}`, true, 3),
+		]).then(values => {
+			setPostCollection(values[0]);
+			setPageCollection(values[1]);
+			setLoadingContent(false);
+		});
+    }, [inputURL]);
 
 	useEffect(() => { document.title = `${mainInfo.name ?? 'Error'} - Wapp` }, [mainInfo]);
 
-	return( <Typography my={2}>Not implemented.</Typography> );
+	return(
+		<Box>
+			<Typography variant="h1">{mainInfo.name}</Typography>
+			<Typography my={2}>{mainInfo.description}</Typography>
+			<Typography variant="h2">Posts</Typography>
+			{postCollection.length > 0 ? <CardDisplay posts={postCollection} /> : <CircularProgress />}
+			<Typography variant="h2">Pages</Typography>
+			{pageCollection.length > 0 ? <CardDisplay posts={pageCollection} /> : <CircularProgress />}
+		</Box>
+	);
 }

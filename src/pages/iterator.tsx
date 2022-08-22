@@ -1,8 +1,9 @@
-import { Box, Card, CardActionArea, CardContent, CardMedia, CircularProgress, Grid, Typography } from "@mui/material";
+import { Box, CircularProgress, Grid, Typography } from "@mui/material";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 import agent from "../agent";
+import { CardDisplay } from "../components/cards";
 import { IPost, ISiteInformation } from "../interfaces";
 
 interface Props {
@@ -27,6 +28,7 @@ export default function Directory({posts, pages}: Props) {
 	const [apiError, setApiError] = useState<string>('');
 
 	useEffect(() => {
+		setLoadingContent(true);
 		agent.Posts.list(`https://${inputURL}`, (pages) ? true : false)
         .then((response:IPost[]) => {
 			//console.log((pages) ? 'Pages' : 'Posts', response);
@@ -49,31 +51,7 @@ export default function Directory({posts, pages}: Props) {
 			{!loadingContent ?
 				<>
 				{apiError === '' ?
-					<Grid container spacing={2} my={2}>
-						{postCollection.map((post:IPost) => (
-							<Grid key={post.id} item xs={12} sm={6} md={4}>
-								<Card sx={{ maxWidth: 345 }}>
-									<CardActionArea href={window.location.hash + '/' + post.id}>
-										{post._embedded !== undefined && post._embedded["wp:featuredmedia"] !== undefined  ?
-										<CardMedia
-											component="img"
-											height="140"
-											image={post._embedded?.["wp:featuredmedia"]?.[0].media_details.sizes.full.source_url ?? ''}
-										/>
-										: null }
-										<CardContent>
-											<Typography gutterBottom variant="h5" component="div">
-												{descriptionSanitiser(post.title.rendered)}
-											</Typography>
-											<Typography variant="body2" color="text.secondary">
-												{descriptionSanitiser(post.excerpt.rendered)}
-											</Typography>
-										</CardContent>
-									</CardActionArea>
-								</Card>
-							</Grid>
-						))}
-					</Grid>
+					<CardDisplay posts={postCollection} />
 				:
 					<>
 						<Typography my={2}>

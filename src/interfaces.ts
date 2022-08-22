@@ -1,5 +1,6 @@
 export interface ISiteInformation {
 	name: string;
+	description?: string;
 	url: string;
 	hasPages: boolean;
 	hasPosts: boolean;
