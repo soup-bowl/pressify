@@ -155,7 +155,7 @@ export function Layout() {
 				<AppBar
 					position="fixed"
 					open={open}
-					sx={{zIndex: (theme) => ( desktop ? theme.zIndex.drawer + 1 : 0)}}>
+					sx={{zIndex: (theme) => ( desktop ? theme.zIndex.drawer + 1 : 1)}}>
 					<Toolbar>
 						{ ! desktop ?
 						<IconButton
