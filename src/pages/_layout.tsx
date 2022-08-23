@@ -61,11 +61,6 @@ const Search = styled('div')(({ theme }) => ({
 	'&:hover': {
 		backgroundColor: alpha(theme.palette.common.white, 0.25),
 	},
-	//marginLeft: 0,
-	//width: '100%',
-	[theme.breakpoints.down('sm')]: {
-		display: 'none',
-	},
 	[theme.breakpoints.up('sm')]: {
 		marginLeft: theme.spacing(1),
 		width: 'auto',
@@ -99,16 +94,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 		paddingLeft: `calc(1em + ${theme.spacing(4)})`,
 		transition: theme.transitions.create('width'),
 		width: '100%',
-		[theme.breakpoints.up('sm')]: {
-			width: '12ch',
+		[theme.breakpoints.up('xs')]: {
+			width: '0ch',
 			'&:focus': {
-				width: '30ch',
+				width: '20ch',
 			},
 		},
-		[theme.breakpoints.up('md')]: {
+		[theme.breakpoints.up('sm')]: {
 			width: '24ch',
 			'&:focus': {
-				width: '60ch',
+				width: '40ch',
 			},
 		},
 	},
