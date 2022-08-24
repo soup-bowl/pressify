@@ -1,4 +1,4 @@
-import { Box, Chip, CircularProgress, Grid, Stack, Typography } from "@mui/material";
+import { Box, Chip, CircularProgress, Grid, Typography } from "@mui/material";
 import DOMPurify from "dompurify";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -21,33 +21,30 @@ export default function Content({posts, pages}: Props) {
 	const [apiError, setApiError] = useState<string>('');
 	const wp = new WPAPI({ endpoint: `https://${inputURL}/wp-json` });
 
+	const saveResponse = (post:any) => {
+		//console.log(post as IPost);
+		setPost(post as IPost);
+		setLoadingContent(false);
+	}
+
+	const errResponse = (err:any) => {
+		setApiError(`${err}`);
+		setLoadingContent(false);
+	}
+
 	useEffect(() => {
 		setLoadingContent(true);
 
 		if (posts && postID !== undefined) {
 			wp.posts().embed().id(parseInt(postID)).get()
-			.then(post => {
-				console.log(post as IPost);
-				setPost(post as IPost);
-				setLoadingContent(false);
-			})
-			.catch((err) => {
-				setApiError(`${err}`);
-				setLoadingContent(false);
-			});
+				.then((post:any) => saveResponse(post))
+				.catch((err:any) => errResponse(err));
 		}
 
 		if (pages && postID !== undefined) {
 			wp.pages().embed().id(parseInt(postID)).get()
-			.then(page => {
-				//console.log(page as IPost);
-				setPost(page as IPost);
-				setLoadingContent(false);
-			})
-			.catch((err) => {
-				setApiError(`${err}`);
-				setLoadingContent(false);
-			});
+				.then((post:any) => saveResponse(post))
+				.catch((err:any) => errResponse(err));
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [postID, posts, pages]);
