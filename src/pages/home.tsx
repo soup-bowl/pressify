@@ -47,7 +47,7 @@ export function MainHome() {
 			direction="column"
 			alignItems="center"
 			justifyContent="center"
-			style={{ minHeight: '50vh' }}
+			style={{ minHeight: '80vh' }}
 		>
 			<Grid item xs={3} textAlign="center">
 				<Typography variant="h1">WordPress App Generator</Typography>
@@ -55,6 +55,9 @@ export function MainHome() {
 					If the URL you specify is a WordPress site with an exposed&nbsp;
 					<Link href="https://developer.wordpress.org/rest-api/">WordPress REST API</Link>, we can generate a
 					basic web application from the API contents.
+				</Typography>
+				<Typography my={2}>
+					Just specify the main URL, without a protocol. e.g. www.example.com, or example.com/subinstall.
 				</Typography>
 				<form onSubmit={submitForm} noValidate>
 					<TextField fullWidth
@@ -69,13 +72,19 @@ export function MainHome() {
 					</Box>
 				</form>
 				<Box>
-					<Typography variant="h2">History</Typography>
-					<Paper sx={{ padding: '1em', marginY: '1em' }}>
-						{historic.map((item:string, index:number) => (
-							<Typography key={index} textAlign="left">
-								<Link onClick={() => navigate(`/${item}`)} sx={{ cursor: 'pointer' }}>{item}</Link>
-							</Typography>
-						))}
+					<Typography variant="h2">Recent History</Typography>
+					<Paper sx={{ padding: 2, my: 1, mx: 8 }}>
+						{historic.length > 0 ?
+							<>
+							{historic.map((item:string, index:number) => (
+								<Typography key={index} textAlign="left" my={1}>
+									<Link onClick={() => navigate(`/${item}`)} sx={{ cursor: 'pointer' }}>{item}</Link>
+								</Typography>
+							))}
+							</>
+						: 
+							<Typography textAlign="left" >No recent URLs.</Typography>
+						}
 					</Paper>
 				</Box>
 				<Typography my={2}>
