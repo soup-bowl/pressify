@@ -32,7 +32,7 @@ export function MainHome() {
 
 	const changeForm = (e:any) => {
 		// Thanks to https://stackoverflow.com/a/31941978.
-		setInputURL(e.target.value.match(/([^\/,\s]+\.[^\/,\s]+?)(?=\/|,|\s|$|\?|#)/g)[0]);
+		setInputURL(e.target.value.match(/([^/,\s]+\.[^/,\s]+?)(?=\/|,|\s|$|\?|#)/g)[0]);
 	};
 
 	useEffect(() => {
