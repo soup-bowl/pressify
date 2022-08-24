@@ -1,4 +1,4 @@
-import { Button, TextField, Typography, Box, Grid, Link, CircularProgress } from '@mui/material';
+import { Button, TextField, Typography, Box, Grid, Link, CircularProgress, Paper } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { IPost, ISiteInfo } from '../interfaces';
@@ -9,11 +9,24 @@ import WPAPI from 'wpapi';
 import { GeneralAPIError } from '../components/error';
 
 export function MainHome() {
-	const [inputURL, setInputURL] = useState('');
 	const navigate = useNavigate();
+	const [inputURL, setInputURL] = useState('');
 
 	const submitForm = (e:any) => {
 		e.preventDefault();
+
+		let history:string[] = JSON.parse(localStorage.getItem('URLHistory') ?? '[]');
+		if (!(history.indexOf(inputURL) > -1)) {
+			history.push(inputURL);
+
+			if (history.length > 6) {
+				history.shift();
+			}
+
+			localStorage.setItem('URLHistory', JSON.stringify(history));
+		}
+		
+
 		return navigate('/' + inputURL);
 	};
 
@@ -24,6 +37,8 @@ export function MainHome() {
 	useEffect(() => {
 		document.title = `Choose a site - Wapp`;
 	}, []);
+
+	let historic = JSON.parse(localStorage.getItem('URLHistory') ?? '[]').reverse();
 
 	return(
 		<Grid
@@ -53,6 +68,16 @@ export function MainHome() {
 						<Button type="submit" variant="contained">Appify!</Button>
 					</Box>
 				</form>
+				<Box>
+					<Typography variant="h2">History</Typography>
+					<Paper sx={{ padding: '1em', marginY: '1em' }}>
+						{historic.map((item:string, index:number) => (
+							<Typography key={index} textAlign="left">
+								<Link onClick={() => navigate(`/${item}`)} sx={{ cursor: 'pointer' }}>{item}</Link>
+							</Typography>
+						))}
+					</Paper>
+				</Box>
 				<Typography my={2}>
 					🧪 A <Link href="https://soupbowl.io">Soupbowl</Link> experiment&nbsp;
 					<GitHubIcon fontSize='inherit' /> <Link href="https://github.com/soup-bowl/project-wordpress-pwa">
