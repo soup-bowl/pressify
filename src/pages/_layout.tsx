@@ -6,6 +6,8 @@ import { CssBaseline, ThemeProvider, Toolbar, IconButton, Typography,
 import { useEffect, useState } from "react";
 import theme from '../theme';
 import { ISiteInfo } from "../interfaces";
+import WPAPI from "wpapi";
+import { PrincipalAPIError } from "../components/error";
 
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
@@ -13,8 +15,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import DescriptionIcon from '@mui/icons-material/Description';
 import CoPresentIcon from '@mui/icons-material/CoPresent';
-import WPAPI from "wpapi";
-import { PrincipalAPIError } from "../components/error";
+import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 
 const drawerWidth = 240;
 
@@ -239,6 +240,10 @@ export function Layout() {
 					</List>
 					<Divider />
 					<List>
+						<ListItemButton onClick={() => {navigate('/');handleDrawerClose();}}>
+							<ListItemIcon><KeyboardReturnIcon /></ListItemIcon>
+							<ListItemText primary="Change Site" />
+						</ListItemButton>
 						<ListItemButton
 							onClick={() => {navigate(`/${inputURL}/about`);handleDrawerClose();}}
 							selected={window.location.hash.includes("/about")}
