@@ -6,48 +6,75 @@ import { CardDisplay } from "../components/cards";
 import { GeneralAPIError } from "../components/error";
 import { IPost, ISiteInfo } from "../interfaces";
 
-interface Props {
+interface PostProps {
 	posts?: boolean;
 	pages?: boolean;
+	categories?: boolean;
+	tax?: boolean;
 }
 
-export default function Directory({posts, pages}: Props) {
+export function PostListings({posts = false, pages = false, categories = false, tax = false}: PostProps) {
 	const [mainInfo] = useOutletContext<[ISiteInfo]>();
-	const { inputURL } = useParams();
+	const { inputURL, searchID } = useParams();
 	const [loadingContent, setLoadingContent] = useState<boolean>(true);
 	const [postCollection, setPostCollection] = useState<IPost[]>([]);
 	const [apiError, setApiError] = useState<string>('');
 	const wp = new WPAPI({ endpoint: `https://${inputURL}/wp-json` });
 
+	const CommonInterface = {
+		posts: () => wp.posts().embed().get(),
+		postsByCategory: (cat:number) => wp.posts().categories(cat).embed().get(),
+		postsByTag: (cat:number) => wp.posts().tags(cat).embed().get(),
+		pages: () => wp.pages().embed().get(),
+		pagesByCategory: (cat:number) => wp.pages().categories(cat).embed().get(),
+		pagesByTag: (cat:number) => wp.pages().tags(cat).embed().get(),
+	}
+
+	const saveResponse = (posts:any) => {
+		delete posts['_paging'];
+		//console.log(posts as IPost[], paging);
+		setPostCollection(posts);
+		setLoadingContent(false);
+	}
+
+	const errResponse = (err:any) => {
+		setApiError(`[${err.code}] ${err.message}`);
+		setLoadingContent(false);
+	}
+
 	useEffect(() => {
 		setLoadingContent(true);
 
 		if (posts) {
-			wp.posts().embed().get()
-			.then(posts => {
-				delete posts['_paging'];
-				//console.log(posts as IPost[], paging);
-				setPostCollection(posts);
-				setLoadingContent(false);
-			})
-			.catch((err) => {
-				setApiError(`[${err.code}] ${err.message}`);
-				setLoadingContent(false);
-			});
+			if (categories) {
+				CommonInterface.postsByCategory(parseInt(searchID ?? '0'))
+					.then((posts:any) => saveResponse(posts))
+					.catch((err:any) => errResponse(err));
+			} else if (tax) {
+				CommonInterface.postsByTag(parseInt(searchID ?? '0'))
+					.then((posts:any) => saveResponse(posts))
+					.catch((err:any) => errResponse(err));
+			} else {
+				CommonInterface.posts()
+					.then((posts:any) => saveResponse(posts))
+					.catch((err:any) => errResponse(err));
+			}
 		}
 
 		if (pages) {
-			wp.pages().embed().get()
-			.then(pages => {
-				delete pages['_paging'];
-				//console.log(pages as IPost[], paging);
-				setPostCollection(pages);
-				setLoadingContent(false);
-			})
-			.catch((err) => {
-				setApiError(`[${err.code}] ${err.message}`);
-				setLoadingContent(false);
-			});
+			if (categories) {
+				CommonInterface.pagesByCategory(parseInt(searchID ?? '0'))
+					.then((posts:any) => saveResponse(posts))
+					.catch((err:any) => errResponse(err));
+			} else if (tax) {
+				CommonInterface.pagesByTag(parseInt(searchID ?? '0'))
+					.then((posts:any) => saveResponse(posts))
+					.catch((err:any) => errResponse(err));
+			} else {
+				CommonInterface.pages()
+					.then((posts:any) => saveResponse(posts))
+					.catch((err:any) => errResponse(err));
+			}
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [posts, pages]);

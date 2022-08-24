@@ -11,6 +11,7 @@ export interface ISiteInfo {
 export interface IEmbed {
 	author?: IUser[];
 	'wp:featuredmedia'?: IMedia[];
+	'wp:term'?: ITag[][];
 }
 
 export interface IPost {
@@ -25,7 +26,15 @@ export interface IPost {
 	link?: string;
 	categories?: number[];
 	tags?: number[];
-	_embedded?: IEmbed; 
+	_embedded?: IEmbed;
+}
+
+export interface ITag {
+	id: number;
+	name: string;
+	slug: string;
+	link: string;
+	taxonomy: string;
 }
 
 export interface ISearch {

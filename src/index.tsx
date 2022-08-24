@@ -5,7 +5,7 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import { AppHome, MainHome } from './pages/home';
 import { Layout, LayoutLight } from './pages/_layout';
-import Directory from './pages/iterator';
+import { PostListings } from './pages/iterator';
 import Content from './pages/content';
 import { AboutPage } from './pages/info';
 import Search from './pages/search';
@@ -24,10 +24,14 @@ root.render(
 					<Route index element={<AppHome />} />
 					<Route path="about" element={<AboutPage />} />
 					<Route path="search/:seachTerms" element={<Search />} />
-					<Route path="posts" element={<Directory posts />} />
+					<Route path="posts" element={<PostListings posts />} />
+					<Route path="pages" element={<PostListings pages />} />
 					<Route path="posts/:postID" element={<Content posts />} />
-					<Route path="pages" element={<Directory pages />} />
 					<Route path="pages/:postID" element={<Content pages />} />
+					<Route path="posts/category/:searchID" element={<PostListings posts categories />} />
+					<Route path="posts/tag/:searchID" element={<PostListings posts tax />} />
+					<Route path="pages/category/:searchID" element={<PostListings pages categories />} />
+					<Route path="pages/tag/:searchID" element={<PostListings pages tax />} />
 				</Route>
 			</Routes>
 		</HashRouter>

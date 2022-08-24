@@ -1,11 +1,11 @@
-import { Box, CircularProgress, Grid, Typography } from "@mui/material";
+import { Box, Chip, CircularProgress, Grid, Stack, Typography } from "@mui/material";
 import DOMPurify from "dompurify";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import WPAPI from "wpapi";
 import { degubbins } from "../components/cards";
 import { GeneralAPIError } from "../components/error";
-import { IPost } from "../interfaces";
+import { IPost, ITag } from "../interfaces";
 import "./content.css";
 
 interface Props {
@@ -14,6 +14,7 @@ interface Props {
 }
 
 export default function Content({posts, pages}: Props) {
+	const navigate = useNavigate();
 	const { inputURL, postID } = useParams();
 	const [loadingContent, setLoadingContent] = useState<boolean>(true);
 	const [post, setPost] = useState<IPost>({} as IPost);
@@ -24,9 +25,9 @@ export default function Content({posts, pages}: Props) {
 		setLoadingContent(true);
 
 		if (posts && postID !== undefined) {
-			wp.posts().id(parseInt(postID)).get()
+			wp.posts().embed().id(parseInt(postID)).get()
 			.then(post => {
-				//console.log(post as IPost);
+				console.log(post as IPost);
 				setPost(post as IPost);
 				setLoadingContent(false);
 			})
@@ -37,7 +38,7 @@ export default function Content({posts, pages}: Props) {
 		}
 
 		if (pages && postID !== undefined) {
-			wp.pages().id(parseInt(postID)).get()
+			wp.pages().embed().id(parseInt(postID)).get()
 			.then(page => {
 				//console.log(page as IPost);
 				setPost(page as IPost);
@@ -69,6 +70,36 @@ export default function Content({posts, pages}: Props) {
 						{degubbins(post.title.rendered)}
 					</Typography>
 					<div dangerouslySetInnerHTML={{__html:DOMPurify.sanitize(post.content.rendered)}}></div>
+					<Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+						{post._embedded !== undefined && post._embedded["wp:term"] !== undefined
+						&& post._embedded["wp:term"][0] !== undefined  ?
+							<Grid item xs={12} sm={6}>
+								<Typography variant="h4">Categories</Typography>
+								{post._embedded?.["wp:term"]?.[0].map((cat:ITag) => (
+									<Chip
+										key={cat.id}
+										label={cat.name}
+										onClick={() => navigate(`/${inputURL}/posts/category/${cat.id}`)}
+										sx={{ margin: 1 }}
+									/>
+								))}
+							</Grid>
+						: null}
+						{post._embedded !== undefined && post._embedded["wp:term"] !== undefined
+						&& post._embedded["wp:term"][1] !== undefined  ?
+							<Grid item xs={12} sm={6}>
+								<Typography variant="h4">Tags</Typography>
+								{post._embedded?.["wp:term"]?.[1].map((cat:ITag) => (
+									<Chip
+										key={cat.id}
+										label={cat.name}
+										onClick={() => navigate(`/${inputURL}/posts/tag/${cat.id}`)}
+										sx={{ margin: 1 }}
+									/>
+								))}
+							</Grid>
+						: null}
+					</Grid>
 				</Box>
 			:
 				<Grid container spacing={0} my={2} direction="column" alignItems="center">
