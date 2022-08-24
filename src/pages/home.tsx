@@ -1,7 +1,7 @@
 import { Button, TextField, Typography, Box, Grid, Link, CircularProgress } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
-import { IPost, ISiteInformation } from '../interfaces';
+import { IPost, ISiteInfo } from '../interfaces';
 
 import GitHubIcon from '@mui/icons-material/GitHub';
 import { WPPosts } from '../agent';
@@ -63,7 +63,7 @@ export function MainHome() {
 }
 
 export function AppHome() {
-	const [mainInfo] = useOutletContext<[ISiteInformation]>();
+	const [mainInfo] = useOutletContext<[ISiteInfo]>();
 	const { inputURL } = useParams();
 	const [loadingContent, setLoadingContent] = useState<boolean>(true);
 	const [postCollection, setPostCollection] = useState<IPost[]>([]);

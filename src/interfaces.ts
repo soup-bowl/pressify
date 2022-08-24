@@ -1,9 +1,11 @@
-export interface ISiteInformation {
+export interface ISiteInfo {
 	name: string;
-	description?: string;
+	description: string;
 	url: string;
-	hasPages: boolean;
-	hasPosts: boolean;
+	namespaces: string[];
+	site_logo?: string;
+	site_icon?: string;
+	_embedded?: IEmbed;
 }
 
 export interface IEmbed {

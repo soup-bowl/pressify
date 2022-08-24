@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import theme from '../theme';
 import { WPMain } from "../agent";
-import { ISiteInformation } from "../interfaces";
+import { ISiteInfo } from "../interfaces";
 
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
@@ -114,7 +114,7 @@ export function Layout() {
 	const { inputURL } = useParams();
 	const [open, setOpen] = useState(false);
 	const desktop = useMediaQuery("(min-width: 961px)");
-	const [mainInfo, setMainInfo] = useState<ISiteInformation>({} as ISiteInformation);
+	const [mainInfo, setMainInfo] = useState<ISiteInfo>({} as ISiteInfo);
 	const [apiError, setApiError] = useState<string>('');
 
 	const submitForm = (e:any) => {
@@ -132,19 +132,19 @@ export function Layout() {
 
 	useEffect(() => {
 		WPMain.info(`https://${inputURL}`)
-        .then((response:any) => {
+        .then((response:ISiteInfo) => {
 			//console.log('Info Reply', response);
 			setApiError('');
 			setMainInfo({
 				name: response.name ?? 'N/A',
+				description: response.description ?? '',
 				url: response.url,
-				hasPages: false,
-				hasPosts: false
+				namespaces: response.namespaces,
 			});
         })
 		.catch((err:AxiosError) => {
 			setApiError(`[${err.code}] ${err.message}`);
-			setMainInfo({} as ISiteInformation);
+			setMainInfo({} as ISiteInfo);
 		});
     }, [inputURL]);
 

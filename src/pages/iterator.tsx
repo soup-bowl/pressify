@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 import { WPPosts } from "../agent";
 import { CardDisplay } from "../components/cards";
-import { IPost, ISiteInformation } from "../interfaces";
+import { IPost, ISiteInfo } from "../interfaces";
 
 interface Props {
 	posts?: boolean;
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export default function Directory({posts, pages}: Props) {
-	const [mainInfo] = useOutletContext<[ISiteInformation]>();
+	const [mainInfo] = useOutletContext<[ISiteInfo]>();
 	const { inputURL } = useParams();
 	const [loadingContent, setLoadingContent] = useState<boolean>(true);
 	const [postCollection, setPostCollection] = useState<IPost[]>([]);

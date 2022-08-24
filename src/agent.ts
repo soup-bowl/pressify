@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { IPost, ISearch } from './interfaces';
+import { IPost, ISearch, ISiteInfo } from './interfaces';
 
 const responseBody = <T> ( response: AxiosResponse<T> ) => response.data;
 
@@ -8,7 +8,7 @@ const requests = {
 };
 
 export const WPMain = {
-	info: (url: string) => requests.get(url + '/wp-json'),
+	info: (url: string) => requests.get<ISiteInfo>(url + '/wp-json'),
 	search: (url: string, search: string) => requests.get<ISearch[]>(
 		`${url}/wp-json/wp/v2/search?search=${search}&_embed=self`
 	)
