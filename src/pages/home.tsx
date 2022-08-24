@@ -31,7 +31,8 @@ export function MainHome() {
 	};
 
 	const changeForm = (e:any) => {
-		setInputURL(e.target.value.replace(/(?:https?):\/\//g, '').match(/([^\/,\s]+\.[^\/,\s]+?)(?=\/|,|\s|$|\?|#)/g)[0]);
+		// Thanks to https://stackoverflow.com/a/31941978.
+		setInputURL(e.target.value.match(/([^\/,\s]+\.[^\/,\s]+?)(?=\/|,|\s|$|\?|#)/g)[0]);
 	};
 
 	useEffect(() => {
@@ -55,9 +56,6 @@ export function MainHome() {
 					If the URL you specify is a WordPress site with an exposed&nbsp;
 					<Link href="https://developer.wordpress.org/rest-api/">WordPress REST API</Link>, we can generate a
 					basic web application from the API contents.
-				</Typography>
-				<Typography my={2}>
-					Just specify the main URL, without a protocol. e.g. www.example.com, or example.com/subinstall.
 				</Typography>
 				<form onSubmit={submitForm} noValidate>
 					<TextField fullWidth
