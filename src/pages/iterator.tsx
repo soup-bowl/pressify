@@ -1,8 +1,7 @@
 import { Box, CircularProgress, Grid, Typography } from "@mui/material";
-import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
-import { WPPosts } from "../agent";
+import WPAPI from "wpapi";
 import { CardDisplay } from "../components/cards";
 import { IPost, ISiteInfo } from "../interfaces";
 
@@ -17,20 +16,40 @@ export default function Directory({posts, pages}: Props) {
 	const [loadingContent, setLoadingContent] = useState<boolean>(true);
 	const [postCollection, setPostCollection] = useState<IPost[]>([]);
 	const [apiError, setApiError] = useState<string>('');
+	const wp = new WPAPI({ endpoint: `https://${inputURL}/wp-json` });
 
 	useEffect(() => {
 		setLoadingContent(true);
-		WPPosts.getMany(`https://${inputURL}`, (pages) ? true : false)
-        .then((response:IPost[]) => {
-			//console.log((pages) ? 'Pages' : 'Posts', response);
-			setPostCollection(response);
-			setLoadingContent(false);
-        })
-		.catch((err:AxiosError) => {
-			setApiError(`[${err.code}] ${err.message}`);
-			setLoadingContent(false);
-		});
-    }, [inputURL, posts, pages]);
+
+		if (posts) {
+			wp.posts().embed().get()
+			.then(posts => {
+				delete posts['_paging'];
+				//console.log(posts as IPost[], paging);
+				setPostCollection(posts);
+				setLoadingContent(false);
+			})
+			.catch((err) => {
+				setApiError(`${err}`);
+				setLoadingContent(false);
+			});
+		}
+
+		if (pages) {
+			wp.pages().embed().get()
+			.then(pages => {
+				delete pages['_paging'];
+				//console.log(pages as IPost[], paging);
+				setPostCollection(pages);
+				setLoadingContent(false);
+			})
+			.catch((err) => {
+				setApiError(`${err}`);
+				setLoadingContent(false);
+			});
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [posts, pages]);
 
 	useEffect(() => {
 		document.title = `${mainInfo.name ?? 'Error'} ${posts ? 'Posts' : 'Pages'} - Wapp`;

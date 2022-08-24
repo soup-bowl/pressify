@@ -1,9 +1,8 @@
 import { Box, CircularProgress, Grid, Typography } from "@mui/material";
-import { AxiosError } from "axios";
 import DOMPurify from "dompurify";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { WPPosts } from "../agent";
+import WPAPI from "wpapi";
 import { IPost } from "../interfaces";
 import "./content.css";
 
@@ -17,21 +16,38 @@ export default function Content({posts, pages}: Props) {
 	const [loadingContent, setLoadingContent] = useState<boolean>(true);
 	const [post, setPost] = useState<IPost>({} as IPost);
 	const [apiError, setApiError] = useState<string>('');
+	const wp = new WPAPI({ endpoint: `https://${inputURL}/wp-json` });
 
 	useEffect(() => {
-		if (postID !== undefined) {
-			WPPosts.getOne(`https://${inputURL}`, parseInt(postID), (pages) ? true : false)
-			.then((response:IPost) => {
-				//console.log((pages) ? 'Page' : 'Post', response);
-				setPost(response);
+		setLoadingContent(true);
+
+		if (posts && postID !== undefined) {
+			wp.posts().id(parseInt(postID)).get()
+			.then(post => {
+				//console.log(post as IPost);
+				setPost(post as IPost);
 				setLoadingContent(false);
 			})
-			.catch((err:AxiosError) => {
-				setApiError(`[${err.code}] ${err.message}`);
+			.catch((err) => {
+				setApiError(`${err}`);
 				setLoadingContent(false);
 			});
 		}
-    }, [inputURL, postID, posts, pages]);
+
+		if (pages && postID !== undefined) {
+			wp.pages().id(parseInt(postID)).get()
+			.then(page => {
+				//console.log(page as IPost);
+				setPost(page as IPost);
+				setLoadingContent(false);
+			})
+			.catch((err) => {
+				setApiError(`${err}`);
+				setLoadingContent(false);
+			});
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [postID, posts, pages]);
 
 	useEffect(() => {
 		if (post !== undefined && post.title !== undefined) {

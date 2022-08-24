@@ -6,7 +6,6 @@ import { CssBaseline, ThemeProvider, Toolbar, IconButton, Typography,
 import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import theme from '../theme';
-import { WPMain } from "../agent";
 import { ISiteInfo } from "../interfaces";
 
 import MenuIcon from '@mui/icons-material/Menu';
@@ -15,6 +14,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import DescriptionIcon from '@mui/icons-material/Description';
 import CoPresentIcon from '@mui/icons-material/CoPresent';
+import WPAPI from "wpapi";
 
 const drawerWidth = 240;
 
@@ -66,7 +66,7 @@ const Search = styled('div')(({ theme }) => ({
 		width: 'auto',
 	},
 }));
-  
+
 const SearchIconWrapper = styled('div')(({ theme }) => ({
 	padding: theme.spacing(0, 2),
 	height: '100%',
@@ -116,6 +116,7 @@ export function Layout() {
 	const desktop = useMediaQuery("(min-width: 961px)");
 	const [mainInfo, setMainInfo] = useState<ISiteInfo>({} as ISiteInfo);
 	const [apiError, setApiError] = useState<string>('');
+	const wp = new WPAPI({ endpoint: `https://${inputURL}/wp-json` });
 
 	const submitForm = (e:any) => {
 		e.preventDefault();
@@ -131,8 +132,8 @@ export function Layout() {
 	};
 
 	useEffect(() => {
-		WPMain.info(`https://${inputURL}`)
-        .then((response:ISiteInfo) => {
+		wp.root().get()
+		.then((response:any) => {
 			//console.log('Info Reply', response);
 			setApiError('');
 			setMainInfo({
@@ -141,12 +142,13 @@ export function Layout() {
 				url: response.url,
 				namespaces: response.namespaces,
 			});
-        })
+		})
 		.catch((err:AxiosError) => {
-			setApiError(`[${err.code}] ${err.message}`);
+			setApiError(`${err}`);
 			setMainInfo({} as ISiteInfo);
 		});
-    }, [inputURL]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [inputURL]);
 
 	return(
 		<ThemeProvider theme={theme}>

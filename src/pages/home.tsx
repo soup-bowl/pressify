@@ -4,8 +4,8 @@ import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { IPost, ISiteInfo } from '../interfaces';
 
 import GitHubIcon from '@mui/icons-material/GitHub';
-import { WPPosts } from '../agent';
 import { CardDisplay } from '../components/cards';
+import WPAPI from 'wpapi';
 
 export function MainHome() {
 	const [inputURL, setInputURL] = useState('');
@@ -68,17 +68,21 @@ export function AppHome() {
 	const [loadingContent, setLoadingContent] = useState<boolean>(true);
 	const [postCollection, setPostCollection] = useState<IPost[]>([]);
 	const [pageCollection, setPageCollection] = useState<IPost[]>([]);
+	const wp = new WPAPI({ endpoint: `https://${inputURL}/wp-json` });
 
 	useEffect(() => {
 		Promise.all([
-			WPPosts.getMany(`https://${inputURL}`, false, 3),
-			WPPosts.getMany(`https://${inputURL}`, true, 3),
+			wp.posts().perPage(3).embed().get(),
+			wp.pages().perPage(3).embed().get(),
 		]).then(values => {
+			delete values[0]['_paging'];
+			delete values[1]['_paging'];
 			setPostCollection(values[0]);
 			setPageCollection(values[1]);
 			setLoadingContent(false);
 		});
-    }, [inputURL]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [inputURL]);
 
 	useEffect(() => { document.title = `${mainInfo.name ?? 'Error'} - Wapp` }, [mainInfo]);
 
@@ -94,7 +98,7 @@ export function AppHome() {
 					<CardDisplay posts={postCollection} />
 					</>
 					: null}
-				
+
 				{pageCollection.length > 0 ?
 					<>
 					<Typography variant="h2">Pages</Typography>
