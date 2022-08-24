@@ -31,7 +31,7 @@ export function MainHome() {
 	};
 
 	const changeForm = (e:any) => {
-		setInputURL(e.target.value);
+		setInputURL(e.target.value.replace(/(?:https?):\/\//g, '').match(/([^\/,\s]+\.[^\/,\s]+?)(?=\/|,|\s|$|\?|#)/g)[0]);
 	};
 
 	useEffect(() => {
