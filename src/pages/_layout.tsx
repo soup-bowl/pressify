@@ -3,7 +3,7 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { CssBaseline, ThemeProvider, Toolbar, IconButton, Typography,
 	Container, styled, Drawer, Divider, Box, List, ListItemIcon,
 	ListItemText, useMediaQuery, ListItemButton, alpha, InputBase} from '@mui/material';
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import theme from '../theme';
 import { ISiteInfo } from "../interfaces";
 import WPAPI from "wpapi";
@@ -18,6 +18,8 @@ import CoPresentIcon from '@mui/icons-material/CoPresent';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 
 const drawerWidth = 240;
+
+export const WordPressContext = createContext(new WPAPI({ endpoint: '' }));
 
 interface AppBarProps extends MuiAppBarProps {
 	open?: boolean;
@@ -152,119 +154,121 @@ export function Layout() {
 	}, [inputURL]);
 
 	return(
-		<ThemeProvider theme={theme}>
-			<Box sx={{ display: 'flex' }}>
-				<CssBaseline />
-				<AppBar
-					position="fixed"
-					open={open}
-					sx={{zIndex: (theme) => ( desktop ? theme.zIndex.drawer + 1 : 1)}}>
-					<Toolbar>
-						{ ! desktop ?
-						<IconButton
-							color="inherit"
-							aria-label="open drawer"
-							onClick={handleDrawerOpen}
-							edge="start"
-							sx={{ mr: 2, ...(open && { display: 'none' }) }}
-						>
-							<MenuIcon />
-						</IconButton>
-						: null }
-						<Typography
-							variant="h6"
-							noWrap
-							component="div"
-							sx={{ flexGrow: 1, display: { xs: 'block', sm: 'block' } }}
-						>
-							{mainInfo.name}
-						</Typography>
-						<form onSubmit={submitForm}>
-							<Search>
-								<SearchIconWrapper>
-									<SearchIcon />
-								</SearchIconWrapper>
-								<StyledInputBase
-									placeholder="Search…"
-									inputProps={{ 'aria-label': 'search' }}
-								/>
-							</Search>
-						</form>
-					</Toolbar>
-				</AppBar>
-				<Drawer
-					sx={{
-					width: drawerWidth,
-					flexShrink: 0,
-					'& .MuiDrawer-paper': {
+		<WordPressContext.Provider value={wp}>
+			<ThemeProvider theme={theme}>
+				<Box sx={{ display: 'flex' }}>
+					<CssBaseline />
+					<AppBar
+						position="fixed"
+						open={open}
+						sx={{zIndex: (theme) => ( desktop ? theme.zIndex.drawer + 1 : 1)}}>
+						<Toolbar>
+							{ ! desktop ?
+							<IconButton
+								color="inherit"
+								aria-label="open drawer"
+								onClick={handleDrawerOpen}
+								edge="start"
+								sx={{ mr: 2, ...(open && { display: 'none' }) }}
+							>
+								<MenuIcon />
+							</IconButton>
+							: null }
+							<Typography
+								variant="h6"
+								noWrap
+								component="div"
+								sx={{ flexGrow: 1, display: { xs: 'block', sm: 'block' } }}
+							>
+								{mainInfo.name}
+							</Typography>
+							<form onSubmit={submitForm}>
+								<Search>
+									<SearchIconWrapper>
+										<SearchIcon />
+									</SearchIconWrapper>
+									<StyledInputBase
+										placeholder="Search…"
+										inputProps={{ 'aria-label': 'search' }}
+									/>
+								</Search>
+							</form>
+						</Toolbar>
+					</AppBar>
+					<Drawer
+						sx={{
 						width: drawerWidth,
-						boxSizing: 'border-box',
-					},
-					}}
-					variant={(desktop) ? "permanent" : "temporary"}
-					anchor="left"
-					open={open}
-					onClose={handleDrawerClose}
-				>
-					<DrawerHeader>
-						<IconButton onClick={handleDrawerClose}>
-							<MenuIcon />
-						</IconButton>
-					</DrawerHeader>
-					<Divider />
-					<List>
-						<ListItemButton
-							onClick={() => {navigate(`/${inputURL}`);handleDrawerClose();}}
-							selected={(window.location.hash.replace(`/${inputURL}`, '') === "#")}
-						>
-							<ListItemIcon><HomeIcon /></ListItemIcon>
-							<ListItemText primary="Home" />
-						</ListItemButton>
-					</List>
-					<Divider />
-					<List>
-						<ListItemButton
-							onClick={() => {navigate(`/${inputURL}/posts`);handleDrawerClose();}}
-							selected={window.location.hash.includes("/posts")}
-						>
-							<ListItemIcon><PushPinIcon /></ListItemIcon>
-							<ListItemText primary="Posts" />
-						</ListItemButton>
-						<ListItemButton
-							onClick={() => {navigate(`/${inputURL}/pages`);handleDrawerClose();}}
-							selected={window.location.hash.includes("/pages")}
-						>
-							<ListItemIcon><DescriptionIcon /></ListItemIcon>
-							<ListItemText primary="Pages" />
-						</ListItemButton>
-					</List>
-					<Divider />
-					<List>
-						<ListItemButton onClick={() => {navigate('/');handleDrawerClose();}}>
-							<ListItemIcon><KeyboardReturnIcon /></ListItemIcon>
-							<ListItemText primary="Change Site" />
-						</ListItemButton>
-						<ListItemButton
-							onClick={() => {navigate(`/${inputURL}/about`);handleDrawerClose();}}
-							selected={window.location.hash.includes("/about")}
-						>
-							<ListItemIcon><CoPresentIcon /></ListItemIcon>
-							<ListItemText primary="About" />
-						</ListItemButton>
-					</List>
-				</Drawer>
-				<Main open={open}>
-					<DrawerHeader />
-					<Container maxWidth="md">
-						{apiError === '' ?
-						<Outlet context={[mainInfo]}  />
-						:
-						<PrincipalAPIError message={apiError} />
-						}
-					</Container>
-				</Main>
-			</Box>
-		</ThemeProvider>
+						flexShrink: 0,
+						'& .MuiDrawer-paper': {
+							width: drawerWidth,
+							boxSizing: 'border-box',
+						},
+						}}
+						variant={(desktop) ? "permanent" : "temporary"}
+						anchor="left"
+						open={open}
+						onClose={handleDrawerClose}
+					>
+						<DrawerHeader>
+							<IconButton onClick={handleDrawerClose}>
+								<MenuIcon />
+							</IconButton>
+						</DrawerHeader>
+						<Divider />
+						<List>
+							<ListItemButton
+								onClick={() => {navigate(`/${inputURL}`);handleDrawerClose();}}
+								selected={(window.location.hash.replace(`/${inputURL}`, '') === "#")}
+							>
+								<ListItemIcon><HomeIcon /></ListItemIcon>
+								<ListItemText primary="Home" />
+							</ListItemButton>
+						</List>
+						<Divider />
+						<List>
+							<ListItemButton
+								onClick={() => {navigate(`/${inputURL}/posts`);handleDrawerClose();}}
+								selected={window.location.hash.includes("/posts")}
+							>
+								<ListItemIcon><PushPinIcon /></ListItemIcon>
+								<ListItemText primary="Posts" />
+							</ListItemButton>
+							<ListItemButton
+								onClick={() => {navigate(`/${inputURL}/pages`);handleDrawerClose();}}
+								selected={window.location.hash.includes("/pages")}
+							>
+								<ListItemIcon><DescriptionIcon /></ListItemIcon>
+								<ListItemText primary="Pages" />
+							</ListItemButton>
+						</List>
+						<Divider />
+						<List>
+							<ListItemButton onClick={() => {navigate('/');handleDrawerClose();}}>
+								<ListItemIcon><KeyboardReturnIcon /></ListItemIcon>
+								<ListItemText primary="Change Site" />
+							</ListItemButton>
+							<ListItemButton
+								onClick={() => {navigate(`/${inputURL}/about`);handleDrawerClose();}}
+								selected={window.location.hash.includes("/about")}
+							>
+								<ListItemIcon><CoPresentIcon /></ListItemIcon>
+								<ListItemText primary="About" />
+							</ListItemButton>
+						</List>
+					</Drawer>
+					<Main open={open}>
+						<DrawerHeader />
+						<Container maxWidth="md">
+							{apiError === '' ?
+							<Outlet context={[mainInfo]}  />
+							:
+							<PrincipalAPIError message={apiError} />
+							}
+						</Container>
+					</Main>
+				</Box>
+			</ThemeProvider>
+		</WordPressContext.Provider>
 	);
 }
 

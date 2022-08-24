@@ -1,12 +1,12 @@
 import { Button, TextField, Typography, Box, Grid, Link, CircularProgress, Paper } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { IPost, ISiteInfo } from '../interfaces';
 
 import GitHubIcon from '@mui/icons-material/GitHub';
 import { CardDisplay } from '../components/cards';
-import WPAPI from 'wpapi';
 import { GeneralAPIError } from '../components/error';
+import { WordPressContext } from './_layout';
 
 export function MainHome() {
 	const navigate = useNavigate();
@@ -102,7 +102,7 @@ export function AppHome() {
 	const [loadingContent, setLoadingContent] = useState<boolean>(true);
 	const [postCollection, setPostCollection] = useState<IPost[]>([]);
 	const [pageCollection, setPageCollection] = useState<IPost[]>([]);
-	const wp = new WPAPI({ endpoint: `https://${inputURL}/wp-json` });
+	const wp = useContext(WordPressContext);
 
 	useEffect(() => {
 		Promise.all([

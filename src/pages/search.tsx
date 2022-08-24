@@ -1,17 +1,17 @@
 import { Box, CircularProgress, Grid, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import WPAPI from "wpapi";
 import { CardDisplay } from "../components/cards";
 import { GeneralAPIError } from "../components/error";
 import { IPost, ISearch } from "../interfaces";
+import { WordPressContext } from "./_layout";
 
 export default function Search() {
 	const { inputURL, seachTerms } = useParams();
 	const [loadingContent, setLoadingContent] = useState<boolean>(true);
 	const [searchResults, setSearchResults] = useState<IPost[]>([]);
 	const [apiError, setApiError] = useState<string>('');
-	const wp = new WPAPI({ endpoint: `https://${inputURL}/wp-json` });
+	const wp = useContext(WordPressContext);
 
 	useEffect(() => {
 		setLoadingContent(true);

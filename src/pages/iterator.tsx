@@ -1,10 +1,10 @@
 import { Box, CircularProgress, Grid, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
-import WPAPI from "wpapi";
 import { CardDisplay } from "../components/cards";
 import { GeneralAPIError } from "../components/error";
 import { IPost, ISiteInfo } from "../interfaces";
+import { WordPressContext } from "./_layout";
 
 interface PostProps {
 	posts?: boolean;
@@ -15,11 +15,11 @@ interface PostProps {
 
 export function PostListings({posts = false, pages = false, categories = false, tax = false}: PostProps) {
 	const [mainInfo] = useOutletContext<[ISiteInfo]>();
-	const { inputURL, searchID } = useParams();
+	const { searchID } = useParams();
 	const [loadingContent, setLoadingContent] = useState<boolean>(true);
 	const [postCollection, setPostCollection] = useState<IPost[]>([]);
 	const [apiError, setApiError] = useState<string>('');
-	const wp = new WPAPI({ endpoint: `https://${inputURL}/wp-json` });
+	const wp = useContext(WordPressContext);
 
 	const CommonInterface = {
 		posts: () => wp.posts().embed().get(),

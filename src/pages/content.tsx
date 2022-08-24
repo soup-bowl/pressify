@@ -1,12 +1,12 @@
 import { Box, Chip, CircularProgress, Grid, Typography } from "@mui/material";
 import DOMPurify from "dompurify";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import WPAPI from "wpapi";
 import { degubbins } from "../components/cards";
 import { GeneralAPIError } from "../components/error";
 import { IPost, ITag } from "../interfaces";
 import "./content.css";
+import { WordPressContext } from "./_layout";
 
 interface Props {
 	posts?: boolean;
@@ -19,7 +19,7 @@ export default function Content({posts, pages}: Props) {
 	const [loadingContent, setLoadingContent] = useState<boolean>(true);
 	const [post, setPost] = useState<IPost>({} as IPost);
 	const [apiError, setApiError] = useState<string>('');
-	const wp = new WPAPI({ endpoint: `https://${inputURL}/wp-json` });
+	const wp = useContext(WordPressContext);
 
 	const saveResponse = (post:any) => {
 		//console.log(post as IPost);
