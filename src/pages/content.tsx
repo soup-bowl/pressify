@@ -3,7 +3,7 @@ import { AxiosError } from "axios";
 import DOMPurify from "dompurify";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import agent from "../agent";
+import { WPPosts } from "../agent";
 import { IPost } from "../interfaces";
 import "./content.css";
 
@@ -20,7 +20,7 @@ export default function Content({posts, pages}: Props) {
 
 	useEffect(() => {
 		if (postID !== undefined) {
-			agent.Posts.individual(`https://${inputURL}`, parseInt(postID), (pages) ? true : false)
+			WPPosts.getOne(`https://${inputURL}`, parseInt(postID), (pages) ? true : false)
 			.then((response:IPost) => {
 				//console.log((pages) ? 'Page' : 'Post', response);
 				setPost(response);

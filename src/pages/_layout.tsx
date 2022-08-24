@@ -6,7 +6,7 @@ import { CssBaseline, ThemeProvider, Toolbar, IconButton, Typography,
 import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import theme from '../theme';
-import agent from "../agent";
+import { WPMain } from "../agent";
 import { ISiteInformation } from "../interfaces";
 
 import MenuIcon from '@mui/icons-material/Menu';
@@ -131,7 +131,7 @@ export function Layout() {
 	};
 
 	useEffect(() => {
-		agent.Info.full(`https://${inputURL}`)
+		WPMain.info(`https://${inputURL}`)
         .then((response:any) => {
 			//console.log('Info Reply', response);
 			setApiError('');

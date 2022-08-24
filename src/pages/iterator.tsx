@@ -2,7 +2,7 @@ import { Box, CircularProgress, Grid, Typography } from "@mui/material";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
-import agent from "../agent";
+import { WPPosts } from "../agent";
 import { CardDisplay } from "../components/cards";
 import { IPost, ISiteInformation } from "../interfaces";
 
@@ -20,7 +20,7 @@ export default function Directory({posts, pages}: Props) {
 
 	useEffect(() => {
 		setLoadingContent(true);
-		agent.Posts.list(`https://${inputURL}`, (pages) ? true : false)
+		WPPosts.getMany(`https://${inputURL}`, (pages) ? true : false)
         .then((response:IPost[]) => {
 			//console.log((pages) ? 'Pages' : 'Posts', response);
 			setPostCollection(response);

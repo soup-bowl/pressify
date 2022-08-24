@@ -2,7 +2,7 @@ import { Box, CircularProgress, Grid, Typography } from "@mui/material";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import agent from "../agent";
+import { WPMain } from "../agent";
 import { CardDisplay } from "../components/cards";
 import { IPost, ISearch } from "../interfaces";
 
@@ -14,7 +14,7 @@ export default function Search() {
 
 	useEffect(() => {
 		setLoadingContent(true);
-		agent.Posts.search(`https://${inputURL}`, seachTerms ?? '')
+		WPMain.search(`https://${inputURL}`, seachTerms ?? '')
         .then((response:ISearch[]) => {
 			//console.log('Search Result', response);
 			let collection:IPost[] = [];

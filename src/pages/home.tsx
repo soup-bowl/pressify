@@ -4,7 +4,7 @@ import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { IPost, ISiteInformation } from '../interfaces';
 
 import GitHubIcon from '@mui/icons-material/GitHub';
-import agent from '../agent';
+import { WPPosts } from '../agent';
 import { CardDisplay } from '../components/cards';
 
 export function MainHome() {
@@ -71,8 +71,8 @@ export function AppHome() {
 
 	useEffect(() => {
 		Promise.all([
-			agent.Posts.list(`https://${inputURL}`, false, 3),
-			agent.Posts.list(`https://${inputURL}`, true, 3),
+			WPPosts.getMany(`https://${inputURL}`, false, 3),
+			WPPosts.getMany(`https://${inputURL}`, true, 3),
 		]).then(values => {
 			setPostCollection(values[0]);
 			setPageCollection(values[1]);
