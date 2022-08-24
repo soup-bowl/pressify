@@ -6,6 +6,7 @@ import { IPost, ISiteInfo } from '../interfaces';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import { CardDisplay } from '../components/cards';
 import WPAPI from 'wpapi';
+import { GeneralAPIError } from '../components/error';
 
 export function MainHome() {
 	const [inputURL, setInputURL] = useState('');
@@ -65,6 +66,7 @@ export function MainHome() {
 export function AppHome() {
 	const [mainInfo] = useOutletContext<[ISiteInfo]>();
 	const { inputURL } = useParams();
+	const [apiError, setApiError] = useState<string>('');
 	const [loadingContent, setLoadingContent] = useState<boolean>(true);
 	const [postCollection, setPostCollection] = useState<IPost[]>([]);
 	const [pageCollection, setPageCollection] = useState<IPost[]>([]);
@@ -80,6 +82,9 @@ export function AppHome() {
 			setPostCollection(values[0]);
 			setPageCollection(values[1]);
 			setLoadingContent(false);
+		}).catch((err) => {
+			setApiError(`[${err.code}] ${err.message}`);
+			setLoadingContent(false);
 		});
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [inputURL]);
@@ -92,19 +97,25 @@ export function AppHome() {
 			<Typography my={2}>{mainInfo.description}</Typography>
 			{!loadingContent ?
 				<>
-				{postCollection.length > 0 ?
+				{apiError === '' ?
 					<>
-					<Typography variant="h2">Posts</Typography>
-					<CardDisplay posts={postCollection} />
-					</>
-					: null}
+					{postCollection.length > 0 ?
+						<>
+						<Typography variant="h2">Posts</Typography>
+						<CardDisplay posts={postCollection} />
+						</>
+						: null}
 
-				{pageCollection.length > 0 ?
-					<>
-					<Typography variant="h2">Pages</Typography>
-					<CardDisplay posts={pageCollection} />
+					{pageCollection.length > 0 ?
+						<>
+						<Typography variant="h2">Pages</Typography>
+						<CardDisplay posts={pageCollection} />
+						</>
+						: null}
 					</>
-					: null}
+				:
+					<GeneralAPIError endpoint="Posts/Pages" message={apiError} noheader />
+				}
 				</>
 			:
 				<CircularProgress />

@@ -3,6 +3,8 @@ import DOMPurify from "dompurify";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import WPAPI from "wpapi";
+import { degubbins } from "../components/cards";
+import { GeneralAPIError } from "../components/error";
 import { IPost } from "../interfaces";
 import "./content.css";
 
@@ -55,37 +57,28 @@ export default function Content({posts, pages}: Props) {
 		}
 	}, [post]);
 
+	if (apiError !== '') {
+		return( <GeneralAPIError endpoint={posts ? 'Posts' : 'Pages'} message={apiError} /> );
+	}
+
 	return(
 		<Box>
 			{!loadingContent ?
-			<>
-			{apiError === '' ?
 				<Box>
 					<Typography variant="h1">
-						<div dangerouslySetInnerHTML={{__html:DOMPurify.sanitize(post.title.rendered)}}></div>
+						{degubbins(post.title.rendered)}
 					</Typography>
 					<div dangerouslySetInnerHTML={{__html:DOMPurify.sanitize(post.content.rendered)}}></div>
 				</Box>
-				:
-				<>
-					<Typography my={2}>
-						We were unable to access the requested content. The website owner may have blocked access
-						to the {posts ? 'Posts' : 'Pages'} endpoint, or required authentication to access
-						the {posts ? 'Posts' : 'Pages'} API.
-					</Typography>
-					<Typography my={2} sx={{fontFamily: 'monospace'}}>{apiError}</Typography>
-				</>
-			}
-			</>
 			:
-			<Grid container spacing={0} my={2} direction="column" alignItems="center">
-				<Grid item xs={3}>
-					<CircularProgress />
+				<Grid container spacing={0} my={2} direction="column" alignItems="center">
+					<Grid item xs={3}>
+						<CircularProgress />
+					</Grid>
+					<Grid item xs={3}>
+						<Typography>Loading content</Typography>
+					</Grid>
 				</Grid>
-				<Grid item xs={3}>
-					<Typography>Loading content</Typography>
-				</Grid>
-			</Grid>
 			}
 		</Box>
 	);

@@ -6,13 +6,10 @@ interface Props {
 	posts: IPost[];
 }
 
-export function descriptionSanitiser(input:string) {
-	return input.replace(/<[^>]*>?/gm, '') // Remove HTML tags.
-		.replaceAll('&#8220;', '"')
-		.replaceAll('&#8221;', '"')
-		.replaceAll('&#8216;', '\'')
-		.replaceAll('&#8217;', '\'')
-		.replaceAll('&hellip;', '...');
+export function degubbins(input:string) {
+	return input.replace(/<[^>]*>?/gm, '').replace(/&hellip;/g, '...').replace(
+		/&#[0-9]{1,5};/g, x => String.fromCharCode( parseInt( x.substring( 2, x.length - 1 ) ) )
+	);
 }
 
 export function CardDisplay({posts}:Props) {
@@ -34,10 +31,10 @@ export function CardDisplay({posts}:Props) {
 							: null }
 							<CardContent>
 								<Typography gutterBottom variant="h5" component="div">
-									{descriptionSanitiser(post.title.rendered)}
+									{degubbins(post.title.rendered)}
 								</Typography>
 								<Typography variant="body2" color="text.secondary">
-									{descriptionSanitiser(post.excerpt.rendered)}
+									{degubbins(post.excerpt.rendered)}
 								</Typography>
 							</CardContent>
 						</CardActionArea>

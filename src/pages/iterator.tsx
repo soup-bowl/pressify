@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 import WPAPI from "wpapi";
 import { CardDisplay } from "../components/cards";
+import { GeneralAPIError } from "../components/error";
 import { IPost, ISiteInfo } from "../interfaces";
 
 interface Props {
@@ -30,7 +31,7 @@ export default function Directory({posts, pages}: Props) {
 				setLoadingContent(false);
 			})
 			.catch((err) => {
-				setApiError(`${err}`);
+				setApiError(`[${err.code}] ${err.message}`);
 				setLoadingContent(false);
 			});
 		}
@@ -44,7 +45,7 @@ export default function Directory({posts, pages}: Props) {
 				setLoadingContent(false);
 			})
 			.catch((err) => {
-				setApiError(`${err}`);
+				setApiError(`[${err.code}] ${err.message}`);
 				setLoadingContent(false);
 			});
 		}
@@ -55,24 +56,15 @@ export default function Directory({posts, pages}: Props) {
 		document.title = `${mainInfo.name ?? 'Error'} ${posts ? 'Posts' : 'Pages'} - Wapp`;
 	}, [mainInfo, posts]);
 
+	if (apiError !== '') {
+		return( <GeneralAPIError endpoint={posts ? 'Posts' : 'Pages'} message={apiError} /> );
+	}
+
 	return(
 		<Box>
 			<Typography variant="h1">{posts ? 'Posts' : 'Pages'}</Typography>
 			{!loadingContent ?
-				<>
-				{apiError === '' ?
-					<CardDisplay posts={postCollection} />
-				:
-					<>
-						<Typography my={2}>
-							We were unable to access the requested content. The website owner may have blocked access
-							to the {posts ? 'Posts' : 'Pages'} endpoint, or required authentication to access
-							the {posts ? 'Posts' : 'Pages'} API.
-						</Typography>
-						<Typography my={2} sx={{fontFamily: 'monospace'}}>{apiError}</Typography>
-					</>
-				}
-				</>
+				<CardDisplay posts={postCollection} />
 			:
 			<Grid container spacing={0} my={2} direction="column" alignItems="center">
 				<Grid item xs={3}>

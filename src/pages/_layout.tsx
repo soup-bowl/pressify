@@ -4,7 +4,6 @@ import { CssBaseline, ThemeProvider, Toolbar, IconButton, Typography,
 	Container, styled, Drawer, Divider, Box, List, ListItemIcon,
 	ListItemText, useMediaQuery, ListItemButton, alpha, InputBase} from '@mui/material';
 import { useEffect, useState } from "react";
-import { AxiosError } from "axios";
 import theme from '../theme';
 import { ISiteInfo } from "../interfaces";
 
@@ -15,6 +14,7 @@ import PushPinIcon from '@mui/icons-material/PushPin';
 import DescriptionIcon from '@mui/icons-material/Description';
 import CoPresentIcon from '@mui/icons-material/CoPresent';
 import WPAPI from "wpapi";
+import { PrincipalAPIError } from "../components/error";
 
 const drawerWidth = 240;
 
@@ -143,8 +143,8 @@ export function Layout() {
 				namespaces: response.namespaces,
 			});
 		})
-		.catch((err:AxiosError) => {
-			setApiError(`${err}`);
+		.catch((err) => {
+			setApiError(`[${err.code}] ${err.message}`);
 			setMainInfo({} as ISiteInfo);
 		});
 	// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -254,23 +254,7 @@ export function Layout() {
 						{apiError === '' ?
 						<Outlet context={[mainInfo]}  />
 						:
-						<>
-							<Typography variant="h1">Unable to Display Website</Typography>
-							<Typography my={2}>
-								We've made a request to the website's JSON API (if it exists), and have not had the
-								expected response returned.
-							</Typography>
-							<Typography my={2}>
-								This can be due to the following reasons:
-							</Typography>
-							<ul>
-								<li>The website you requested is not a WordPress site.</li>
-								<li>The website has blocked or disabled their REST API endpoint(s).</li>
-								<li>The API is behind a strict CORS policy disabling us from seeing it.</li>
-							</ul>
-							<Typography variant="h5" component="h2">Technical Details</Typography>
-							<Typography my={2} sx={{fontFamily: 'monospace'}}>{apiError}</Typography>
-						</>
+						<PrincipalAPIError message={apiError} />
 						}
 					</Container>
 				</Main>
