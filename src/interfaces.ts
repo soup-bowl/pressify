@@ -98,3 +98,13 @@ export interface IStorage {
 	quota: number;
 	usage: number;
 }
+
+export interface IWPIndexing {
+	total: number;
+	totalPages: number;
+	links: IWPIndexingLinks;
+}
+
+export interface IWPIndexingLinks {
+	next: string;
+}
