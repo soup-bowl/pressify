@@ -1,4 +1,4 @@
-import { Box, Chip, CircularProgress, Grid, Stack, Typography } from "@mui/material";
+import { Avatar, Box, Chip, CircularProgress, Grid, Stack, Typography } from "@mui/material";
 import DOMPurify from "dompurify";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -62,7 +62,7 @@ export default function Content({posts, pages}: Props) {
 		return( <GeneralAPIError endpoint={posts ? 'Posts' : 'Pages'} message={apiError} /> );
 	}
 
-	const postDate = new Date(post.modified);
+	const postDate = new Date(post.modified);console.log(post._embedded?.author?.[0] ?? '');
 
 	return(
 		<Box>
@@ -75,9 +75,18 @@ export default function Content({posts, pages}: Props) {
 						<Typography>
 							<AccessTimeIcon fontSize="inherit" /> {postDate.toLocaleDateString()}
 						</Typography>
-						{post._embedded !== undefined && post._embedded["author"] !== undefined ?
+						{post._embedded !== undefined && post._embedded["author"] !== undefined
+						&& post._embedded["author"][0].name !== undefined ?
 							<Typography>
-								<AccountCircleIcon fontSize="inherit" /> By {post._embedded["author"][0].name}
+								{post._embedded.author[0].avatar_urls?.[24] !== undefined ?
+								<Avatar
+									alt={post._embedded["author"][0].name}
+									src={post._embedded.author[0].avatar_urls[24]}
+									sx={{ width: 18, height: 18, display: 'inline-block' }}
+								/>
+								:
+								<AccountCircleIcon fontSize="inherit" />
+								} By {post._embedded["author"][0].name}
 							</Typography>
 						: null}
 					</Stack>
