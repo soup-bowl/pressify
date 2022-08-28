@@ -1,4 +1,4 @@
-import { Avatar, Box, Chip, CircularProgress, Grid, Stack, Typography } from "@mui/material";
+import { Avatar, Box, Chip, CircularProgress, Grid, Link, Stack, Typography } from "@mui/material";
 import DOMPurify from "dompurify";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -10,6 +10,8 @@ import { WordPressContext } from "./_layout";
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import OpenInBrowserIcon from '@mui/icons-material/OpenInBrowser';
+import ShareIcon from '@mui/icons-material/Share';
 
 interface Props {
 	posts?: boolean;
@@ -73,7 +75,7 @@ export default function Content({posts, pages}: Props) {
 					</Typography>
 					<Stack my={2} spacing={2} color="darkgrey" direction="row">
 						<Typography>
-							<AccessTimeIcon fontSize="inherit" /> {postDate.toLocaleDateString()}
+							<AccessTimeIcon fontSize="inherit" />&nbsp;{postDate.toLocaleDateString()}
 						</Typography>
 						{post._embedded !== undefined && post._embedded["author"] !== undefined
 						&& post._embedded["author"][0].name !== undefined ?
@@ -86,8 +88,25 @@ export default function Content({posts, pages}: Props) {
 								/>
 								:
 								<AccountCircleIcon fontSize="inherit" />
-								} By {post._embedded["author"][0].name}
+								}&nbsp;By {post._embedded["author"][0].name}
 							</Typography>
+						: null}
+						{post.link !== undefined ?
+							<>
+								<Typography>
+									<OpenInBrowserIcon fontSize="inherit" />&nbsp;
+									<Link color="inherit" href={post.link} target="_blank">Open Original</Link>
+								</Typography>
+								{navigator.share !== undefined ?
+									<Typography>
+										<ShareIcon fontSize="inherit" />&nbsp;
+										<Link color="inherit" onClick={() => navigator.share({
+											title: degubbins(post.title.rendered),
+											url: post.link
+										})} sx={{ cursor: 'pointer' }}>Share</Link>
+									</Typography>
+								: null}
+							</>
 						: null}
 					</Stack>
 					<div dangerouslySetInnerHTML={{__html:DOMPurify.sanitize(post.content.rendered)}}></div>
