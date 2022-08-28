@@ -1,4 +1,4 @@
-import { Box, Chip, CircularProgress, Grid, Typography } from "@mui/material";
+import { Box, Chip, CircularProgress, Grid, Stack, Typography } from "@mui/material";
 import DOMPurify from "dompurify";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -7,6 +7,9 @@ import { GeneralAPIError } from "../components/error";
 import { IPost, ITag } from "../interfaces";
 import "./content.css";
 import { WordPressContext } from "./_layout";
+
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 interface Props {
 	posts?: boolean;
@@ -59,6 +62,8 @@ export default function Content({posts, pages}: Props) {
 		return( <GeneralAPIError endpoint={posts ? 'Posts' : 'Pages'} message={apiError} /> );
 	}
 
+	const postDate = new Date(post.modified);
+
 	return(
 		<Box>
 			{!loadingContent ?
@@ -66,6 +71,16 @@ export default function Content({posts, pages}: Props) {
 					<Typography variant="h1">
 						{degubbins(post.title.rendered)}
 					</Typography>
+					<Stack my={2} spacing={2} color="darkgrey" direction="row">
+						<Typography>
+							<AccessTimeIcon fontSize="inherit" /> {postDate.toLocaleDateString()}
+						</Typography>
+						{post._embedded !== undefined && post._embedded["author"] !== undefined ?
+							<Typography>
+								<AccountCircleIcon fontSize="inherit" /> By {post._embedded["author"][0].name}
+							</Typography>
+						: null}
+					</Stack>
 					<div dangerouslySetInnerHTML={{__html:DOMPurify.sanitize(post.content.rendered)}}></div>
 					<Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 						{post._embedded !== undefined && post._embedded["wp:term"] !== undefined

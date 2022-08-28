@@ -21,8 +21,8 @@ export interface IPost {
 	content: IPostRendered;
 	author: number;
 	type: string;
-	modified: Date;
-	created: Date;
+	modified: string;
+	created: string;
 	link?: string;
 	categories?: number[];
 	tags?: number[];
