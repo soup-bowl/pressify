@@ -54,7 +54,14 @@ export interface IUser {
 	id: number;
 	name: string;
 	description: string;
+	avatar_urls?: IAvatar;
 	link: string;
+}
+
+export interface IAvatar {
+	'24'?: string;
+	'48'?: string;
+	'96'?: string;
 }
 
 export interface IMedia {
