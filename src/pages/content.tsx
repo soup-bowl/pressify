@@ -64,7 +64,7 @@ export default function Content({posts, pages}: Props) {
 		return( <GeneralAPIError endpoint={posts ? 'Posts' : 'Pages'} message={apiError} /> );
 	}
 
-	const postDate = new Date(post.modified);console.log(post._embedded?.author?.[0] ?? '');
+	const postDate = new Date(post.modified);
 
 	return(
 		<Box>

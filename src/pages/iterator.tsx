@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 import { CardDisplay } from "../components/cards";
 import { GeneralAPIError } from "../components/error";
-import { IPost, ISiteInfo } from "../interfaces";
+import { IPost, ISiteInfo, ITag } from "../interfaces";
 import { WordPressContext } from "./_layout";
 
 interface PostProps {
@@ -17,6 +17,7 @@ export function PostListings({posts = false, pages = false, categories = false, 
 	const [mainInfo] = useOutletContext<[ISiteInfo]>();
 	const { searchID } = useParams();
 	const [loadingContent, setLoadingContent] = useState<boolean>(true);
+	const [iterDef, setIterDef] = useState<string>();
 	const [postCollection, setPostCollection] = useState<IPost[]>([]);
 	const [apiError, setApiError] = useState<string>('');
 	const wp = useContext(WordPressContext);
@@ -46,6 +47,7 @@ export function PostListings({posts = false, pages = false, categories = false, 
 		setLoadingContent(true);
 
 		if (posts) {
+			setIterDef('Posts');
 			if (categories) {
 				CommonInterface.postsByCategory(parseInt(searchID ?? '0'))
 					.then((posts:any) => saveResponse(posts))
@@ -62,6 +64,7 @@ export function PostListings({posts = false, pages = false, categories = false, 
 		}
 
 		if (pages) {
+			setIterDef('Pages');
 			if (categories) {
 				CommonInterface.pagesByCategory(parseInt(searchID ?? '0'))
 					.then((posts:any) => saveResponse(posts))
@@ -77,7 +80,20 @@ export function PostListings({posts = false, pages = false, categories = false, 
 			}
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [posts, pages]);
+	}, [searchID, categories, tax, posts, pages]);
+
+	useEffect(() => {
+		if (categories && searchID !== undefined) {
+			wp.categories().id(parseInt(searchID)).get()
+			.then((catdef:ITag) => (setIterDef(catdef.name ?? iterDef)));
+		}
+
+		if (tax && searchID !== undefined) {
+			wp.tags().id(parseInt(searchID)).get()
+			.then((catdef:ITag) => (setIterDef(catdef.name ?? iterDef)));
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [searchID, iterDef, postCollection, categories, tax]);
 
 	useEffect(() => {
 		document.title = `${mainInfo.name ?? 'Error'} ${posts ? 'Posts' : 'Pages'} - Wapp`;
@@ -89,7 +105,7 @@ export function PostListings({posts = false, pages = false, categories = false, 
 
 	return(
 		<Box>
-			<Typography variant="h1">{posts ? 'Posts' : 'Pages'}</Typography>
+			<Typography variant="h1">{iterDef}</Typography>
 			{!loadingContent ?
 				<CardDisplay posts={postCollection} />
 			:
