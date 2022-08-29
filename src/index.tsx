@@ -4,7 +4,7 @@ import { HashRouter, Routes, Route } from 'react-router-dom';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import { AppHome, MainHome } from './pages/home';
-import { Layout, LayoutLight } from './pages/_layout';
+import Layout from './pages/_layout';
 import { PostListings } from './pages/iterator';
 import Content from './pages/content';
 import { AboutPage } from './pages/info';
@@ -17,7 +17,7 @@ root.render(
 	<StrictMode>
 		<HashRouter>
 			<Routes>
-				<Route path="/" element={<LayoutLight />}>
+				<Route path="/" element={<Layout simple />}>
 					<Route index element={<MainHome />} />
 				</Route>
 				<Route path="/:inputURL/" element={<Layout />}>

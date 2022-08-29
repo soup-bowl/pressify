@@ -2,15 +2,18 @@ import { Outlet, useNavigate, useParams } from "react-router-dom";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { CssBaseline, ThemeProvider, Toolbar, IconButton, Typography,
 	Container, styled, Drawer, Divider, Box, List, ListItemIcon,
-	ListItemText, useMediaQuery, ListItemButton, alpha, InputBase} from '@mui/material';
-import { createContext, useEffect, useState } from "react";
-import theme from '../theme';
+	ListItemText, useMediaQuery, ListItemButton, alpha, InputBase,
+	createTheme} from '@mui/material';
+import { createContext, useEffect, useMemo, useState } from "react";
+import { green } from '@mui/material/colors';
 import { ISiteInfo } from "../interfaces";
 import WPAPI from "wpapi";
 import { PrincipalAPIError } from "../components/error";
 
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 import HomeIcon from '@mui/icons-material/Home';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -19,7 +22,22 @@ import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 
 const drawerWidth = 240;
 
+export const ColorModeContext = createContext({ toggleColorMode: () => {} });
 export const WordPressContext = createContext(new WPAPI({ endpoint: '' }));
+
+declare module '@mui/material/styles' {
+	interface Theme {
+		status: {
+			danger: string;
+		};
+	}
+
+	interface ThemeOptions {
+		status?: {
+			danger?: string;
+		};
+	}
+}
 
 interface AppBarProps extends MuiAppBarProps {
 	open?: boolean;
@@ -112,7 +130,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 	},
 }));
 
-export function Layout() {
+interface Props {
+	simple?: boolean;
+}
+
+export default function Layout({simple = false}:Props) {
 	const navigate = useNavigate();
 	const { inputURL } = useParams();
 	const [open, setOpen] = useState(false);
@@ -120,6 +142,34 @@ export function Layout() {
 	const [mainInfo, setMainInfo] = useState<ISiteInfo>({} as ISiteInfo);
 	const [apiError, setApiError] = useState<string>('');
 	const wp = new WPAPI({ endpoint: `https://${inputURL}/wp-json` });
+
+	const [mode, setMode] = useState<'light' | 'dark'>('dark');
+	const colorMode = useMemo(() => ({
+		toggleColorMode: () => {
+			setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+		},
+	}), []);
+
+	const theme = useMemo(() => createTheme({
+		palette: {
+			primary: green,
+			mode: mode
+		},
+		typography: {
+			button: {
+				textTransform: 'none'
+			},
+			h1: {
+				fontSize: '3.25rem'
+			},
+			h2: {
+				fontSize: '2.75rem'
+			},
+			h3: {
+				fontSize: '2rem'
+			}
+		}
+	}), [mode]);
 
 	const submitForm = (e:any) => {
 		e.preventDefault();
@@ -158,6 +208,8 @@ export function Layout() {
 			<ThemeProvider theme={theme}>
 				<Box sx={{ display: 'flex' }}>
 					<CssBaseline />
+					{!simple ?
+					<>
 					<AppBar
 						position="fixed"
 						open={open}
@@ -247,6 +299,12 @@ export function Layout() {
 								<ListItemIcon><KeyboardReturnIcon /></ListItemIcon>
 								<ListItemText primary="Change Site" />
 							</ListItemButton>
+							<ListItemButton onClick={colorMode.toggleColorMode}>
+								<ListItemIcon>
+									{theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+								</ListItemIcon>
+								<ListItemText primary={theme.palette.mode === 'dark' ? 'Light Mode' : 'Dark Mode'} />
+							</ListItemButton>
 							<ListItemButton
 								onClick={() => {navigate(`/${inputURL}/about`);handleDrawerClose();}}
 								selected={window.location.hash.includes("/about")}
@@ -256,6 +314,9 @@ export function Layout() {
 							</ListItemButton>
 						</List>
 					</Drawer>
+					</>
+					: null }
+					{!simple ?
 					<Main open={open}>
 						<DrawerHeader />
 						<Container maxWidth="md">
@@ -266,21 +327,13 @@ export function Layout() {
 							}
 						</Container>
 					</Main>
+					:
+					<Container maxWidth="md">
+						<Outlet />
+					</Container>
+					}
 				</Box>
 			</ThemeProvider>
 		</WordPressContext.Provider>
-	);
-}
-
-export function LayoutLight() {
-	return(
-		<ThemeProvider theme={theme}>
-			<Box sx={{ display: 'flex' }}>
-				<CssBaseline />
-				<Container maxWidth="md">
-					<Outlet />
-				</Container>
-			</Box>
-		</ThemeProvider>
 	);
 }
