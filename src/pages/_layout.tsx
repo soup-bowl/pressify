@@ -3,7 +3,7 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { CssBaseline, ThemeProvider, Toolbar, IconButton, Typography,
 	Container, styled, Drawer, Divider, Box, List, ListItemIcon,
 	ListItemText, useMediaQuery, ListItemButton, alpha, InputBase,
-	createTheme} from '@mui/material';
+	createTheme, PaletteMode } from '@mui/material';
 import { createContext, useEffect, useMemo, useState } from "react";
 import { green } from '@mui/material/colors';
 import { ISiteInfo } from "../interfaces";
@@ -143,17 +143,21 @@ export default function Layout({simple = false}:Props) {
 	const [apiError, setApiError] = useState<string>('');
 	const wp = new WPAPI({ endpoint: `https://${inputURL}/wp-json` });
 
-	const [mode, setMode] = useState<'light' | 'dark'>('dark');
+	const [mode, setMode] = useState<string>(localStorage.getItem('ColourPref') ?? 'dark');
 	const colorMode = useMemo(() => ({
 		toggleColorMode: () => {
-			setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+			setMode((prevMode:string) => {
+				let cmode = (prevMode === 'light') ? 'dark' : 'light';
+				localStorage.setItem('ColourPref', cmode);
+				return cmode;
+			});
 		},
 	}), []);
 
 	const theme = useMemo(() => createTheme({
 		palette: {
 			primary: green,
-			mode: mode
+			mode: mode as PaletteMode
 		},
 		typography: {
 			button: {
