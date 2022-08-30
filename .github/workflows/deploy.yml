@@ -32,14 +32,11 @@ jobs:
           version: ${{ steps.get_version.outputs.version-without-v  }}-${{ steps.commit.outputs.short }}
           git-tag-version: 'false'
 
-      - name: 🏗 Build Site
+      - name: npm ci, build and test
         run: npm i && npm run build
-        
-      - name: 🚀 Deploy Site
-        uses: cloudflare/pages-action@1
+
+      - name: deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          projectName: wordpress-pwa
-          directory: ./build
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
