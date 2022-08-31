@@ -63,10 +63,10 @@ export function CardDisplay({posts, page = 1, pagination = undefined, returnURI 
 }
 
 interface LoadProps {
-	amount?: number;
+	amount: number;
 }
 
-export function CardLoad({amount = 10}:LoadProps) {
+export function CardLoad({amount}:LoadProps) {
 	let collection = Array(amount).fill("");
 
 	return(

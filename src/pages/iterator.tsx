@@ -6,6 +6,8 @@ import { GeneralAPIError } from "../components/error";
 import { IPost, ISiteInfo, ITag, IWPIndexing } from "../interfaces";
 import { WordPressContext } from "./_layout";
 
+const displayedLimit:number = 12;
+
 interface PostProps {
 	posts?: boolean;
 	pages?: boolean;
@@ -25,12 +27,12 @@ export function PostListings({posts = false, pages = false, categories = false, 
 	const wp = useContext(WordPressContext);
 
 	const CommonInterface = {
-		posts: () => wp.posts().page(parseInt(pageID ?? '1')).embed().get(),
-		postsByCategory: (cat:number) => wp.posts().categories(cat).page(parseInt(pageID ?? '1')).embed().get(),
-		postsByTag: (cat:number) => wp.posts().tags(cat).page(parseInt(pageID ?? '1')).embed().get(),
-		pages: () => wp.pages().page(parseInt(pageID ?? '1')).embed().get(),
-		pagesByCategory: (cat:number) => wp.pages().categories(cat).page(parseInt(pageID ?? '1')).embed().get(),
-		pagesByTag: (cat:number) => wp.pages().tags(cat).page(parseInt(pageID ?? '1')).embed().get(),
+		posts: () => wp.posts().perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get(),
+		postsByCategory: (cat:number) => wp.posts().categories(cat).perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get(),
+		postsByTag: (cat:number) => wp.posts().tags(cat).perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get(),
+		pages: () => wp.pages().perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get(),
+		pagesByCategory: (cat:number) => wp.pages().categories(cat).perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get(),
+		pagesByTag: (cat:number) => wp.pages().tags(cat).perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get(),
 	}
 
 	const saveResponse = (posts:any) => {
@@ -118,7 +120,7 @@ export function PostListings({posts = false, pages = false, categories = false, 
 			{!loadingContent ?
 				<CardDisplay posts={postCollection} page={parseInt(pageID ?? '1')} pagination={paging} returnURI={pagingURL} />
 			:
-				<CardLoad />
+				<CardLoad amount={displayedLimit} />
 			}
 		</Box>
 	);

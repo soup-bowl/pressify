@@ -6,6 +6,8 @@ import { GeneralAPIError } from "../components/error";
 import { IPost, ISearch, IWPIndexing } from "../interfaces";
 import { WordPressContext } from "./_layout";
 
+const displayedLimit:number = 12;
+
 export default function Search() {
 	const { inputURL, seachTerms, pageID } = useParams();
 	const [loadingContent, setLoadingContent] = useState<boolean>(true);
@@ -17,7 +19,7 @@ export default function Search() {
 
 	useEffect(() => {
 		setLoadingContent(true);
-		wp.search().search(seachTerms ?? '').page(parseInt(pageID ?? '1')).embed().get()
+		wp.search().search(seachTerms ?? '').perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get()
 		.then((response:any) => {
 			setPaging(response._paging);
 			delete response['_paging'];
@@ -49,7 +51,7 @@ export default function Search() {
 			{!loadingContent ?
 				<CardDisplay posts={searchResults} page={parseInt(pageID ?? '1')} pagination={paging} returnURI={pagingURL} />
 			:
-				<CardLoad />
+				<CardLoad amount={displayedLimit} />
 			}
 		</Box>
 	);
