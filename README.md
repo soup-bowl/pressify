@@ -1,4 +1,4 @@
-<h1 align="center"><a href="https://wapp.soupbowl.io">WordPress PWA App (Wapp)</a></h1>
+<h1 align="center"><a href="https://pressify.app">WordPress PWA App (Wapp)</a></h1>
 <p align="center">
   <a href="https://www.codefactor.io/repository/github/soup-bowl/wordpress-pwa"><img src="https://www.codefactor.io/repository/github/soup-bowl/wordpress-pwa/badge" alt="CodeFactor" /></a>
   <a href="https://gitpod.io/#https://github.com/soup-bowl/wordpress-pwa"><img src="https://img.shields.io/badge/open%20in-Gitpod-orange?logo=gitpod&logoColor=white" /></a>
@@ -58,7 +58,7 @@ This has been ignored on the UseEffect commands where the WP API is called. This
 dependency array, an infinite loop is triggered. I welcome thoughts and suggestions to fix this, but until then (and it
 causing no foreseeable bugs), it has been disabled.
 
-[live]: https://soup-bowl.github.io/wordpress-pwa/
+[live]: https://pressify.app
 [wapi]: https://developer.wordpress.org/rest-api/
 [wapj]: https://github.com/WP-API/node-wpapi
 [pwa]:  https://web.dev/progressive-web-apps/
