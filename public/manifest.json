@@ -1,6 +1,6 @@
 {
-	"short_name": "WP PWA Generator",
-	"name": "WordPress Web App Generator",
+	"short_name": "Pressify",
+	"name": "Pressify",
 	"description": "Turns a WordPress blog into a mobile app.",
 	"categories": ["productivity"],
 	"icons": [
