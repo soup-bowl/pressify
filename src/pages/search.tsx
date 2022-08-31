@@ -1,7 +1,7 @@
-import { Box, CircularProgress, Grid, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { CardDisplay } from "../components/cards";
+import { CardDisplay, CardLoad } from "../components/cards";
 import { GeneralAPIError } from "../components/error";
 import { IPost, ISearch, IWPIndexing } from "../interfaces";
 import { WordPressContext } from "./_layout";
@@ -49,14 +49,7 @@ export default function Search() {
 			{!loadingContent ?
 				<CardDisplay posts={searchResults} page={parseInt(pageID ?? '1')} pagination={paging} returnURI={pagingURL} />
 			:
-				<Grid container spacing={0} my={2} direction="column" alignItems="center">
-					<Grid item xs={3}>
-						<CircularProgress />
-					</Grid>
-					<Grid item xs={3}>
-						<Typography>Loading content</Typography>
-					</Grid>
-				</Grid>
+				<CardLoad />
 			}
 		</Box>
 	);

@@ -1,4 +1,4 @@
-import { Box, Card, CardActionArea, CardContent, CardMedia, Grid, Pagination, Typography } from "@mui/material";
+import { Box, Card, CardActionArea, CardContent, CardMedia, Grid, Pagination, Skeleton, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { IPost, IWPIndexing } from "../interfaces";
 
@@ -59,5 +59,35 @@ export function CardDisplay({posts, page = 1, pagination = undefined, returnURI 
 			</Box>
 			: null}
 		</>
+	);
+}
+
+interface LoadProps {
+	amount?: number;
+}
+
+export function CardLoad({amount = 10}:LoadProps) {
+	let collection = Array(amount).fill("");
+
+	return(
+		<Grid container spacing={2} my={2}>
+			{collection.map((content:string, i:number) => (
+				<Grid key={i} item xs={12} sm={6} md={4}>
+					<Card sx={{ maxWidth: 345 }}>
+						<CardActionArea>
+							<Skeleton sx={{ height: 140 }} variant="rectangular" />
+							<CardContent>
+								<Typography gutterBottom variant="h5" component="div">
+									<Skeleton variant="rounded" />
+								</Typography>
+								<Typography variant="body2" color="text.secondary">
+									<Skeleton variant="rounded" />
+								</Typography>
+							</CardContent>
+						</CardActionArea>
+					</Card>
+				</Grid>
+			))}
+		</Grid>
 	);
 }

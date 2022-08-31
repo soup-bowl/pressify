@@ -1,10 +1,10 @@
-import { Button, TextField, Typography, Box, Grid, Link, CircularProgress, Paper } from '@mui/material';
+import { Button, TextField, Typography, Box, Grid, Link, Paper, Skeleton } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { IPost, ISiteInfo } from '../interfaces';
 
 import GitHubIcon from '@mui/icons-material/GitHub';
-import { CardDisplay } from '../components/cards';
+import { CardDisplay, CardLoad } from '../components/cards';
 import { GeneralAPIError } from '../components/error';
 import { WordPressContext } from './_layout';
 
@@ -125,8 +125,8 @@ export function AppHome() {
 
 	return(
 		<Box>
-			<Typography variant="h1">{mainInfo.name}</Typography>
-			<Typography my={2}>{mainInfo.description}</Typography>
+			<Typography variant="h1">{mainInfo.name ?? <Skeleton variant="rounded" />}</Typography>
+			<Typography my={2}>{mainInfo.description ?? <Skeleton variant="rounded" />}</Typography>
 			{!loadingContent ?
 				<>
 				{apiError === '' ?
@@ -150,7 +150,12 @@ export function AppHome() {
 				}
 				</>
 			:
-				<CircularProgress />
+				<>
+				<Typography variant="h2">Posts</Typography>
+				<CardLoad amount={3} />
+				<Typography variant="h2">Pages</Typography>
+				<CardLoad amount={3} />
+				</>
 			}
 		</Box>
 	);

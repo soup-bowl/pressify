@@ -1,4 +1,4 @@
-import { Avatar, Box, Chip, CircularProgress, Grid, Link, Stack, Typography } from "@mui/material";
+import { Avatar, Box, Chip, Grid, Link, Skeleton, Stack, Typography } from "@mui/material";
 import DOMPurify from "dompurify";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -65,6 +65,8 @@ export default function Content({posts, pages}: Props) {
 	}
 
 	const postDate = new Date(post.modified);
+
+	const mockLines = Array(25).fill("");
 
 	return(
 		<Box>
@@ -142,14 +144,14 @@ export default function Content({posts, pages}: Props) {
 					</Grid>
 				</Box>
 			:
-				<Grid container spacing={0} my={2} direction="column" alignItems="center">
-					<Grid item xs={3}>
-						<CircularProgress />
-					</Grid>
-					<Grid item xs={3}>
-						<Typography>Loading content</Typography>
-					</Grid>
-				</Grid>
+				<Box>
+					<Typography variant="h1"><Skeleton /></Typography>
+					<div>
+						{mockLines.map((content:string, i:number) => (
+							<Skeleton height={120} />
+						))}
+					</div>
+				</Box>
 			}
 		</Box>
 	);
