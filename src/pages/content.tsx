@@ -178,10 +178,21 @@ export default function Content({posts, pages}: Props) {
 				</Box>
 			:
 				<Box>
-					<Typography variant="h1"><Skeleton /></Typography>
+					<Typography variant="h1"><Skeleton height={120} /></Typography>
+					<Grid container spacing={2} my={2}>
+						<Grid item md={2}><Skeleton /></Grid>
+						<Grid item md={2}><Skeleton /></Grid>
+						<Grid item md={2}><Skeleton /></Grid>
+						<Grid item md={2}><Skeleton /></Grid>
+						<Grid item md={4}></Grid>
+					</Grid>
 					<div>
 						{mockLines.map((content:string, i:number) => (
-							<Skeleton height={120} />
+							<Box sx={{ marginBottom: 1 }}>
+								<Skeleton />
+								<Skeleton />
+								<Skeleton width="40%" />
+							</Box>
 						))}
 					</div>
 				</Box>
