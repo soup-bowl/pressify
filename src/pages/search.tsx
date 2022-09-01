@@ -39,7 +39,7 @@ export default function Search() {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [inputURL, seachTerms, pageID]);
 
-	useEffect(() => { document.title = `Search: ${seachTerms} - Wapp` }, [seachTerms]);
+	useEffect(() => { document.title = `Search: ${seachTerms} - Pressify` }, [seachTerms]);
 
 	if (apiError !== '') {
 		return( <GeneralAPIError endpoint="Search" message={apiError} /> );

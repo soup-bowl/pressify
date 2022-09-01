@@ -107,7 +107,7 @@ export function PostListings({posts = false, pages = false, categories = false, 
 	}, [searchID, iterDef, postCollection, categories, tax]);
 
 	useEffect(() => {
-		document.title = `${mainInfo.name ?? 'Error'} ${posts ? 'Posts' : 'Pages'} - Wapp`;
+		document.title = `${mainInfo.name ?? 'Error'} ${posts ? 'Posts' : 'Pages'} - Pressify`;
 	}, [mainInfo, posts]);
 
 	if (apiError !== '') {

@@ -74,7 +74,7 @@ export default function Content({posts, pages}: Props) {
 
 	useEffect(() => {
 		if (post !== undefined && post.title !== undefined) {
-			document.title = `${degubbins(post.title.rendered) ?? 'Error'} - Wapp`;
+			document.title = `${degubbins(post.title.rendered) ?? 'Error'} - Pressify`;
 		}
 	}, [post]);
 

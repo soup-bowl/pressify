@@ -23,7 +23,7 @@ export function AboutPage() {
 
 	const [storageInfo, setStorageInfo] = useState<IStorage>({} as IStorage);
 
-	useEffect(() => { document.title = `${siteTitle} - Wapp` });
+	useEffect(() => { document.title = `${siteTitle} - Pressify` });
 
 	useEffect(() => {
 		if ('storage' in navigator && 'estimate' in navigator.storage) {

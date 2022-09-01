@@ -35,9 +35,7 @@ export function MainHome() {
 		setInputURL(e.target.value.match(/([^/,\s]+\.[^/,\s]+?)(?=\/|,|\s|$|\?|#)/g)[0]);
 	};
 
-	useEffect(() => {
-		document.title = `Choose a site - Wapp`;
-	}, []);
+	useEffect(() => { document.title = `Choose a site - Pressify` }, []);
 
 	let historic = JSON.parse(localStorage.getItem('URLHistory') ?? '[]').reverse();
 
@@ -51,9 +49,9 @@ export function MainHome() {
 			style={{ minHeight: '80vh' }}
 		>
 			<Grid item xs={3} textAlign="center">
-				<Typography variant="h1">WordPress App Generator</Typography>
+				<Typography variant="h1">Pressify That Site!</Typography>
 				<Typography my={2}>
-					If the URL you specify is a WordPress site with an exposed&nbsp;
+					If the URL you specify is a <strong>WordPress</strong> site with an exposed&nbsp;
 					<Link href="https://developer.wordpress.org/rest-api/">WordPress REST API</Link>, we can generate a
 					basic web application from the API contents.
 				</Typography>
@@ -66,7 +64,7 @@ export function MainHome() {
 						onChange={changeForm}
 					/>
 					<Box my={2}>
-						<Button type="submit" variant="contained">Appify!</Button>
+						<Button type="submit" variant="contained">Pressify!</Button>
 					</Box>
 				</form>
 				<Box>
@@ -121,7 +119,7 @@ export function AppHome() {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [inputURL]);
 
-	useEffect(() => { document.title = `${mainInfo.name ?? 'Error'} - Wapp` }, [mainInfo]);
+	useEffect(() => { document.title = `${mainInfo.name ?? 'Error'} - Pressify` }, [mainInfo]);
 
 	return(
 		<Box>
