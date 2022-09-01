@@ -1,5 +1,17 @@
 tasks:
-  - init: |
+  - name: WordPress Mock Site
+    before: |
+      docker-compose -f .github/docker-compose.yml build
+    command: |
+      docker-compose -f .github/docker-compose.yml up -d
+      echo "Pausing for MySQL to complete..." && sleep 30
+      docker-compose -f .github/docker-compose.yml exec wp wp core install --url="$(gp url 8080)" --title="Dummy Site" \
+        --admin_user="admin" --admin_password="password" --admin_email="site@example.com" --allow-root
+      docker-compose -f .github/docker-compose.yml exec wp wp rewrite structure '/%year%/%monthnum%/%postname%' \
+        --allow-root
+      docker-compose -f .github/docker-compose.yml logs -f
+  - name: WordPress App
+    before: |
       npm install
     command: |
       echo "PUBLIC_URL=$(gp url 3000)" > .env.development.local
@@ -8,8 +20,13 @@ tasks:
       npm start
 
 ports:
-  - port: 3000
-    name: Frontend
+  - name: Frontend
+    port: 3000
     description: React PWA app
     visibility: public
     onOpen: open-browser
+  - name: Mock WordPress
+    port: 8080
+    description: To run tests against.
+    visibility: public
+    onOpen: ignore
