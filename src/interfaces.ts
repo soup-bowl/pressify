@@ -23,6 +23,7 @@ export interface IPost {
 	type: string;
 	modified: string;
 	created: string;
+	parent?: number;
 	link?: string;
 	categories?: number[];
 	tags?: number[];

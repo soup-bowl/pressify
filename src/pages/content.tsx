@@ -2,7 +2,7 @@ import { Avatar, Box, Chip, Grid, Link, Skeleton, Stack, Typography } from "@mui
 import DOMPurify from "dompurify";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { degubbins } from "../components/cards";
+import { CardDisplay, degubbins } from "../components/cards";
 import { GeneralAPIError } from "../components/error";
 import { IPost, ITag } from "../interfaces";
 import "./content.css";
@@ -23,12 +23,30 @@ export default function Content({posts, pages}: Props) {
 	const { inputURL, postID } = useParams();
 	const [loadingContent, setLoadingContent] = useState<boolean>(true);
 	const [post, setPost] = useState<IPost>({} as IPost);
+	const [children, setChildren] = useState<IPost[]>([]);
+	const [parent, setParent] = useState<IPost|undefined>(undefined);
 	const [apiError, setApiError] = useState<string>('');
 	const wp = useContext(WordPressContext);
 
-	const saveResponse = (post:any) => {
-		//console.log(post as IPost);
-		setPost(post as IPost);
+	const saveResponse = (p:any) => {
+		//console.log(p as IPost);
+		setPost(p as IPost);
+	
+		if (p.type === 'page') {
+			wp.pages().param('parent', p.id).embed().get()
+				.then((c:any) => {
+					delete c['_paging'];
+					setChildren(c);
+				});
+			
+			if (p.parent !== undefined && p.parent !== 0) {
+				wp.pages().id(p.parent).embed().get()
+				.then((c:any) => {
+					setParent(c as IPost);
+				});
+			}
+		}
+
 		setLoadingContent(false);
 	}
 
@@ -111,7 +129,22 @@ export default function Content({posts, pages}: Props) {
 							</>
 						: null}
 					</Stack>
+
 					<div dangerouslySetInnerHTML={{__html:DOMPurify.sanitize(post.content.rendered)}}></div>
+
+					{parent !== undefined ?
+						<>
+							<Typography variant="h4">Parent</Typography>
+							<CardDisplay posts={[parent]} />
+						</>
+					: null}
+					{children.length > 0 ?
+						<>
+							<Typography variant="h4">Sub-pages</Typography>
+							<CardDisplay posts={children} />
+						</>
+					: null}
+
 					<Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 						{post._embedded !== undefined && post._embedded["wp:term"] !== undefined
 						&& post._embedded["wp:term"][0] !== undefined  ?
