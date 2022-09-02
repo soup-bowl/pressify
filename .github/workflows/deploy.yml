@@ -31,7 +31,7 @@ jobs:
 
       - name: 🏗 Build Site
         run: npm i && npm run build
-        
+
       - name: 🚀 Deploy Site
         uses: cloudflare/pages-action@1
         with:
