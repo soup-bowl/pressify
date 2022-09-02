@@ -1,4 +1,4 @@
-import { Button, TextField, Typography, Box, Grid, Link, Paper, Skeleton } from '@mui/material';
+import { Button, TextField, Typography, Box, Grid, Link, Paper, Skeleton, Chip } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { IPost, ISiteInfo } from '../interfaces';
@@ -49,7 +49,7 @@ export function MainHome() {
 			style={{ minHeight: '80vh' }}
 		>
 			<Grid item xs={3} textAlign="center">
-				<Typography variant="h1">Pressify That Site!</Typography>
+				<Typography variant="h1">Pressify That Site! <Chip label="Beta" color="primary" /></Typography>
 				<Typography my={2}>
 					If the URL you specify is a <strong>WordPress</strong> site with an exposed&nbsp;
 					<Link href="https://developer.wordpress.org/rest-api/">WordPress REST API</Link>, we can generate a

@@ -2,7 +2,7 @@ import { Outlet, useNavigate, useParams } from "react-router-dom";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { CssBaseline, ThemeProvider, Toolbar, IconButton, Typography,
 	Container, styled, Drawer, Divider, Box, useMediaQuery, alpha, InputBase,
-	createTheme, PaletteMode } from '@mui/material';
+	createTheme, PaletteMode, Chip } from '@mui/material';
 import { createContext, useEffect, useMemo, useState } from "react";
 import { green } from '@mui/material/colors';
 import { ISiteInfo } from "../interfaces";
@@ -229,7 +229,7 @@ export default function Layout({simple = false}:Props) {
 								component="div"
 								sx={{ flexGrow: 1, display: { xs: 'block', sm: 'block' } }}
 							>
-								{mainInfo.name}
+								{mainInfo.name} <Chip label="Beta" color="primary" size="small" />
 							</Typography>
 							<form onSubmit={submitForm}>
 								<Search>

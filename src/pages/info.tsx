@@ -1,4 +1,4 @@
-import { Box, Button, Link, Stack, Typography } from "@mui/material";
+import { Box, Button, Chip, Link, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { IStorage } from "../interfaces";
 
@@ -41,7 +41,10 @@ export function AboutPage() {
 				on <Link style={{fontWeight: 'bold'}} href="https://pages.cloudflare.com/">Cloudflare Pages</Link>.
 			</Typography>
 			<Stack my={2}>
-				<Typography>App Version: <Box component="span" fontWeight='700'>{process.env.REACT_APP_VERSION}</Box></Typography>
+				<Typography>
+					App Version: <Box component="span" fontWeight='700'>{process.env.REACT_APP_VERSION}</Box>
+					&nbsp;<Chip label="Beta" color="primary" size="small" />
+				</Typography>
 
 				{ storageInfo.quota !== undefined && storageInfo.quota !== 0 ?
 					<Typography>
