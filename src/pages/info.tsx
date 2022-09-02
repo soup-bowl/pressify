@@ -43,7 +43,7 @@ export function AboutPage() {
 			<Stack my={2}>
 				<Typography>
 					App Version: <Box component="span" fontWeight='700'>{process.env.REACT_APP_VERSION}</Box>
-					&nbsp;<Chip label="Beta" color="primary" size="small" />
+					&nbsp;<Chip label="Beta" color="info" size="small" />
 				</Typography>
 
 				{ storageInfo.quota !== undefined && storageInfo.quota !== 0 ?
