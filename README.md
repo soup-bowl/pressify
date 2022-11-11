@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/11209477/186022119-a471780d-6047-43af-88f3-b17a06d727ac.png" />
+  <img src="https://user-images.githubusercontent.com/11209477/201402525-f4354a53-52fe-4abc-8737-c0cbb32c2bae.png" />
 </p>
 
 Uses the power of the **[WordPress REST API][wapi]** ([JS library][wapj]) and **[Progressive Web Apps][pwa]** to form a portable app viewer for WordPress-based sites.
