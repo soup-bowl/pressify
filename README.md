@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/11209477/201402525-f4354a53-52fe-4abc-8737-c0cbb32c2bae.png" />
+  <img src="https://soupbowl.io/assets/img/devices-pressify.webp" />
 </p>
 
 Uses the power of the **[WordPress REST API][wapi]** ([JS library][wapj]) and **[Progressive Web Apps][pwa]** to form a portable app viewer for WordPress-based sites.
