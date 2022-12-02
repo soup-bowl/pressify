@@ -7,5 +7,6 @@
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
 	},
 	"postCreateCommand": "./.devcontainer/postCreateCommand.sh",
-	"postStartCommand": "npm start"
+	"postStartCommand": "./.devcontainer/postStartCommand.sh",
+	"forwardPorts": [3000]
 }

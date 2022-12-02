@@ -1,5 +1,4 @@
 #! /bin/bash
+docker-compose -f .github/docker-compose.yml pull
+docker-compose -f .github/docker-compose.yml build
 npm install
-echo "https://${CODESPACE_NAME}-8080.github.dev" > .env.development.local
-echo "REACT_APP_VERSION=\$npm_package_version" >> .env.development.local
-cp .env.development.local .env.production.local
