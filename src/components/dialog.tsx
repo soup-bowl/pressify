@@ -47,13 +47,16 @@ interface AppDialogProps {
 	title: string;
 	open: boolean;
 	onClose: () => void;
+	size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
-export function AppDialog({children, title, open, onClose}:AppDialogProps) {
+export function AppDialog({children, title, open, onClose, size}:AppDialogProps) {
 	return(
 		<BootstrapDialog
 			open={open}
 			onClose={onClose}
+			fullWidth={true}
+			maxWidth={size}
 			aria-labelledby="conn-modal-modal-title"
 			aria-describedby="conn-modal-modal-description"
 		>
