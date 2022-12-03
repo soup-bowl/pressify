@@ -51,14 +51,15 @@ interface AppDialogProps {
 }
 
 export function AppDialog({children, title, open, onClose, size}:AppDialogProps) {
+	const ariaGen = title.toLowerCase().replace(/ /g, '-');
 	return(
 		<BootstrapDialog
 			open={open}
 			onClose={onClose}
 			fullWidth={true}
 			maxWidth={size}
-			aria-labelledby="conn-modal-modal-title"
-			aria-describedby="conn-modal-modal-description"
+			aria-labelledby={`${ariaGen}-modal-title`}
+			aria-describedby={`${ariaGen}-modal-description`}
 		>
 			<BootstrapDialogTitle id="conn-modal-modal-title" onClose={onClose}>
 				{title}
