@@ -1,4 +1,7 @@
-import { Button, Grid, Link, Paper, TextField, Typography } from "@mui/material";
+import {
+	FormControl, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, Paper, Typography
+} from "@mui/material";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppDialog } from "./dialog";
@@ -69,20 +72,22 @@ export function SiteSelectorDialog({open, onClose}:SiteSelectorProps) {
 	return(
 		<AppDialog title="Select Site" open={open} onClose={onClose} size="sm">
 			<form onSubmit={submitForm} noValidate>
-				<Grid container rowSpacing={1}>
-					<Grid item xs={12} sm={10}>
-						<TextField fullWidth
-							id="url"
-							type="url"
-							label="URL"
-							variant="outlined"
-							onChange={changeForm}
-						/>
-					</Grid>
-					<Grid item xs={12} sm={2} textAlign="center">
-						<Button type="submit" variant="contained">Pressify!</Button>
-					</Grid>
-				</Grid>
+				<FormControl sx={{ width: '100%' }} variant="outlined">
+					<InputLabel htmlFor="url">URL</InputLabel>
+					<OutlinedInput fullWidth
+						id="url"
+						type="url"
+						label="URL"
+						onChange={changeForm}
+						endAdornment={
+							<InputAdornment position="end">
+								<IconButton aria-label="submit" onClick={submitForm} edge="end">
+									<ArrowForwardIosIcon />
+								</IconButton>
+							</InputAdornment>
+						}
+					/>
+				</FormControl>
 			</form>
 			<div>
 				{historic.length > 0 ?
