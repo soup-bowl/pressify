@@ -8,6 +8,8 @@ import PushPinIcon from '@mui/icons-material/PushPin';
 import DescriptionIcon from '@mui/icons-material/Description';
 import CoPresentIcon from '@mui/icons-material/CoPresent';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
+import { useState } from "react";
+import { SiteSelectorDialog } from "./siteSelector";
 
 interface Props {
 	onClose: any;
@@ -19,8 +21,13 @@ export default function MenuItems({onClose, theme, colorMode}:Props) {
 	const navigate = useNavigate();
 	const { inputURL } = useParams();
 
+	const [open, setOpen] = useState(false);
+	const handleOpen = () => setOpen(true);
+	const handleClose = () => setOpen(false);
+
 	return(
 		<>
+		<SiteSelectorDialog open={open} onClose={handleClose}/>
 		<List>
 			<ListItemButton
 				onClick={() => {navigate(`/${inputURL}`);onClose();}}
@@ -49,7 +56,7 @@ export default function MenuItems({onClose, theme, colorMode}:Props) {
 		</List>
 		<Divider />
 		<List>
-			<ListItemButton onClick={() => {navigate('/');onClose();}}>
+			<ListItemButton onClick={handleOpen}>
 				<ListItemIcon><KeyboardReturnIcon /></ListItemIcon>
 				<ListItemText primary="Change Site" />
 			</ListItemButton>

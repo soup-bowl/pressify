@@ -1,4 +1,4 @@
-import { Button, TextField, Typography, Box, Grid, Link, Paper, Skeleton, Alert, AlertTitle } from '@mui/material';
+import { Button, TextField, Typography, Box, Grid, Link, Skeleton, Alert, AlertTitle } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { IPost, ISiteInfo } from '../interfaces';
@@ -7,6 +7,7 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import { CardDisplay, CardLoad } from '../components/cards';
 import { GeneralAPIError } from '../components/error';
 import { WordPressContext } from './_layout';
+import { saveSite, SiteSelector } from '../components/siteSelector';
 
 export function MainHome() {
 	const navigate = useNavigate();
@@ -15,17 +16,7 @@ export function MainHome() {
 	const submitForm = (e:any) => {
 		e.preventDefault();
 
-		let history:string[] = JSON.parse(localStorage.getItem('URLHistory') ?? '[]');
-		if (!(history.indexOf(inputURL) > -1)) {
-			history.push(inputURL);
-
-			if (history.length > 6) {
-				history.shift();
-			}
-
-			localStorage.setItem('URLHistory', JSON.stringify(history));
-		}
-		
+		saveSite(inputURL);
 
 		return navigate('/' + inputURL);
 	};
@@ -36,8 +27,6 @@ export function MainHome() {
 	};
 
 	useEffect(() => { document.title = `Choose a site - Pressify` }, []);
-
-	let historic = JSON.parse(localStorage.getItem('URLHistory') ?? '[]').reverse();
 
 	return(
 		<Grid
@@ -75,19 +64,7 @@ export function MainHome() {
 				</form>
 				<Box>
 					<Typography variant="h2">Recent History</Typography>
-					<Paper sx={{ padding: 2, my: 1, mx: 8 }}>
-						{historic.length > 0 ?
-							<>
-							{historic.map((item:string, index:number) => (
-								<Typography key={index} textAlign="left" my={1}>
-									<Link onClick={() => navigate(`/${item}`)} sx={{ cursor: 'pointer' }}>{item}</Link>
-								</Typography>
-							))}
-							</>
-						: 
-							<Typography textAlign="left" >No recent URLs.</Typography>
-						}
-					</Paper>
+					<SiteSelector />
 				</Box>
 				<Typography my={2}>
 					🧪 A <Link href="https://soupbowl.io">Soupbowl</Link> experiment&nbsp;
