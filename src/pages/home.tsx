@@ -1,4 +1,4 @@
-import { Button, TextField, Typography, Box, Grid, Link, Paper, Skeleton, Alert, AlertTitle } from '@mui/material';
+import { Button, TextField, Typography, Box, Grid, Link, Skeleton, Alert, AlertTitle, Stack } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { IPost, ISiteInfo } from '../interfaces';
@@ -7,25 +7,22 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import { CardDisplay, CardLoad } from '../components/cards';
 import { GeneralAPIError } from '../components/error';
 import { WordPressContext } from './_layout';
+import { saveSiteToHistory, SiteSelectorDialog } from '../components/siteSelector';
 
 export function MainHome() {
 	const navigate = useNavigate();
 	const [inputURL, setInputURL] = useState('');
 
+	const [open, setOpen] = useState(false);
+	const handleOpen = () => setOpen(true);
+	const handleClose = () => {
+		setOpen(false);
+	}
+
 	const submitForm = (e:any) => {
 		e.preventDefault();
 
-		let history:string[] = JSON.parse(localStorage.getItem('URLHistory') ?? '[]');
-		if (!(history.indexOf(inputURL) > -1)) {
-			history.push(inputURL);
-
-			if (history.length > 6) {
-				history.shift();
-			}
-
-			localStorage.setItem('URLHistory', JSON.stringify(history));
-		}
-		
+		saveSiteToHistory(inputURL);
 
 		return navigate('/' + inputURL);
 	};
@@ -36,8 +33,6 @@ export function MainHome() {
 	};
 
 	useEffect(() => { document.title = `Choose a site - Pressify` }, []);
-
-	let historic = JSON.parse(localStorage.getItem('URLHistory') ?? '[]').reverse();
 
 	return(
 		<Grid
@@ -70,25 +65,13 @@ export function MainHome() {
 						onChange={changeForm}
 					/>
 					<Box my={2}>
-						<Button type="submit" variant="contained">Pressify!</Button>
+						<Stack my={2} spacing={2} direction="row" justifyContent="center">
+							<Button variant="contained" type="submit">Pressify!</Button>
+							<Button variant="outlined" onClick={handleOpen}>Show Selector</Button>
+						</Stack>
 					</Box>
 				</form>
-				<Box>
-					<Typography variant="h2">Recent History</Typography>
-					<Paper sx={{ padding: 2, my: 1, mx: 8 }}>
-						{historic.length > 0 ?
-							<>
-							{historic.map((item:string, index:number) => (
-								<Typography key={index} textAlign="left" my={1}>
-									<Link onClick={() => navigate(`/${item}`)} sx={{ cursor: 'pointer' }}>{item}</Link>
-								</Typography>
-							))}
-							</>
-						: 
-							<Typography textAlign="left" >No recent URLs.</Typography>
-						}
-					</Paper>
-				</Box>
+				<SiteSelectorDialog open={open} onClose={handleClose} disableInput />
 				<Typography my={2}>
 					🧪 A <Link href="https://soupbowl.io">Soupbowl</Link> experiment&nbsp;
 					<GitHubIcon fontSize='inherit' /> <Link href="https://github.com/soup-bowl/project-wordpress-pwa">

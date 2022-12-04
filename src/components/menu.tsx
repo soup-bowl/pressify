@@ -8,6 +8,8 @@ import PushPinIcon from '@mui/icons-material/PushPin';
 import DescriptionIcon from '@mui/icons-material/Description';
 import CoPresentIcon from '@mui/icons-material/CoPresent';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
+import { useState } from "react";
+import { SiteSelectorDialog } from "./siteSelector";
 
 interface Props {
 	onClose: any;
@@ -19,11 +21,24 @@ export default function MenuItems({onClose, theme, colorMode}:Props) {
 	const navigate = useNavigate();
 	const { inputURL } = useParams();
 
+	const [open, setOpen] = useState(false);
+	const handleOpen = () => setOpen(true);
+	const handleClose = () => {
+		setOpen(false);
+		onClose();
+	}
+
+	function nav(site:string) {
+		navigate(site);
+		onClose();
+	}
+
 	return(
 		<>
+		<SiteSelectorDialog open={open} onClose={handleClose}/>
 		<List>
 			<ListItemButton
-				onClick={() => {navigate(`/${inputURL}`);onClose();}}
+				onClick={() => nav(`/${inputURL}`)}
 				selected={(window.location.hash.replace(`/${inputURL}`, '') === "#")}
 			>
 				<ListItemIcon><HomeIcon /></ListItemIcon>
@@ -33,14 +48,14 @@ export default function MenuItems({onClose, theme, colorMode}:Props) {
 		<Divider />
 		<List>
 			<ListItemButton
-				onClick={() => {navigate(`/${inputURL}/posts`);onClose();}}
+				onClick={() => nav(`/${inputURL}/posts`)}
 				selected={window.location.hash.includes("/posts")}
 			>
 				<ListItemIcon><PushPinIcon /></ListItemIcon>
 				<ListItemText primary="Posts" />
 			</ListItemButton>
 			<ListItemButton
-				onClick={() => {navigate(`/${inputURL}/pages`);onClose();}}
+				onClick={() => nav(`/${inputURL}/pages`)}
 				selected={window.location.hash.includes("/pages")}
 			>
 				<ListItemIcon><DescriptionIcon /></ListItemIcon>
@@ -49,7 +64,7 @@ export default function MenuItems({onClose, theme, colorMode}:Props) {
 		</List>
 		<Divider />
 		<List>
-			<ListItemButton onClick={() => {navigate('/');onClose();}}>
+			<ListItemButton onClick={handleOpen}>
 				<ListItemIcon><KeyboardReturnIcon /></ListItemIcon>
 				<ListItemText primary="Change Site" />
 			</ListItemButton>
@@ -60,7 +75,7 @@ export default function MenuItems({onClose, theme, colorMode}:Props) {
 				<ListItemText primary={theme.palette.mode === 'dark' ? 'Light Mode' : 'Dark Mode'} />
 			</ListItemButton>
 			<ListItemButton
-				onClick={() => {navigate(`/${inputURL}/about`);onClose();}}
+				onClick={() => nav(`/${inputURL}/about`)}
 				selected={window.location.hash.includes("/about")}
 			>
 				<ListItemIcon><CoPresentIcon /></ListItemIcon>
