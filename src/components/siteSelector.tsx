@@ -1,7 +1,9 @@
 import {
-	FormControl, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, Paper, Typography
+	FormControl, Grid, IconButton, InputAdornment, InputLabel, Link, List,
+	ListItemButton, ListItemText, OutlinedInput, Paper, Typography
 } from "@mui/material";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+// import StarIcon from '@mui/icons-material/Star';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppDialog } from "./dialog";
@@ -63,6 +65,7 @@ export function SiteSelectorDialog({open, onClose}:SiteSelectorProps) {
 	};
 
 	let historic = JSON.parse(localStorage.getItem('URLHistory') ?? '[]').reverse();
+	let saved    = JSON.parse(localStorage.getItem('URLSaved') ?? '[]').reverse();
 
 	function selectSite(site:string) {
 		navigate(`/${site}`);
@@ -89,21 +92,36 @@ export function SiteSelectorDialog({open, onClose}:SiteSelectorProps) {
 					/>
 				</FormControl>
 			</form>
-			<div>
-				{historic.length > 0 ?
-					<>
-					{historic.map((item:string, index:number) => (
-						<Typography key={index} my={1}>
-							<Link onClick={() => selectSite(item)} sx={{ cursor: 'pointer' }}>
-								{item}
-							</Link>
-						</Typography>
-					))}
-					</>
-				: 
-					<Typography>No recent URLs.</Typography>
-				}
-			</div>
+			<Grid container sx={{ paddingTop: 2 }}>
+				<Grid item xs={12} sm={6}>
+					<Typography variant="h5" component="h2">History</Typography>
+					{historic.length > 0 ?
+						<List component="nav">
+							{historic.map((item:string, index:number) => (
+								<ListItemButton key={index} onClick={() => selectSite(item)}>
+									<ListItemText primary={item} />
+								</ListItemButton>
+							))}
+						</List>
+					: 
+						<Typography>No recent URLs.</Typography>
+					}
+				</Grid>
+				<Grid item xs={12} sm={6}>
+					<Typography variant="h5" component="h2">Saved</Typography>
+					{saved.length > 0 ?
+						<List component="nav">
+							{saved.map((item:string, index:number) => (
+								<ListItemButton key={index} onClick={() => selectSite(item)}>
+									<ListItemText primary={item} />
+								</ListItemButton>
+							))}
+						</List>
+					: 
+						<Typography>No saved URLs.</Typography>
+					}
+				</Grid>
+			</Grid>
 		</AppDialog>
 	);
 }
