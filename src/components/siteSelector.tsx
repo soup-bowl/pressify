@@ -1,15 +1,21 @@
 import {
-	FormControl, Grid, IconButton, InputAdornment, InputLabel, Link, List,
-	ListItemButton, ListItemText, OutlinedInput, Paper, Typography
+	FormControl, Grid, IconButton, InputAdornment, InputLabel, List, ListItem,
+	ListItemButton, ListItemText, OutlinedInput, Typography
 } from "@mui/material";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-// import StarIcon from '@mui/icons-material/Star';
+import StarIcon from '@mui/icons-material/Star';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppDialog } from "./dialog";
 
+const localStorageRefs = {
+	history: 'URLHistory',
+	saved: 'URLSaved',
+};
+
 export function saveSiteToHistory(input: string) {
-	let history:string[] = JSON.parse(localStorage.getItem('URLHistory') ?? '[]');
+	let history:string[] = JSON.parse(localStorage.getItem(localStorageRefs.history) ?? '[]');
 	if (!(history.indexOf(input) > -1)) {
 		history.push(input);
 
@@ -17,30 +23,8 @@ export function saveSiteToHistory(input: string) {
 			history.shift();
 		}
 
-		localStorage.setItem('URLHistory', JSON.stringify(history));
+		localStorage.setItem(localStorageRefs.history, JSON.stringify(history));
 	}
-}
-
-export function SiteSelector() {
-	const navigate = useNavigate();
-
-	let historic = JSON.parse(localStorage.getItem('URLHistory') ?? '[]').reverse();
-
-	return(
-		<Paper sx={{ padding: 2, my: 1, mx: 8 }}>
-			{historic.length > 0 ?
-				<>
-				{historic.map((item:string, index:number) => (
-					<Typography key={index} textAlign="left" my={1}>
-						<Link onClick={() => navigate(`/${item}`)} sx={{ cursor: 'pointer' }}>{item}</Link>
-					</Typography>
-				))}
-				</>
-			: 
-				<Typography textAlign="left" >No recent URLs.</Typography>
-			}
-		</Paper>
-	);
 }
 
 interface SiteSelectorProps {
@@ -51,6 +35,13 @@ interface SiteSelectorProps {
 export function SiteSelectorDialog({open, onClose}:SiteSelectorProps) {
 	const navigate = useNavigate();
 	const [inputURL, setInputURL] = useState('');
+
+	const [historic, setHistoric] = useState<string[]>(
+		JSON.parse(localStorage.getItem(localStorageRefs.history) ?? '[]').reverse()
+	);
+	const [saved, setSaved] = useState<string[]>(
+		JSON.parse(localStorage.getItem(localStorageRefs.saved) ?? '[]').reverse()
+	);
 
 	const submitForm = (e:any) => {
 		e.preventDefault();
@@ -64,9 +55,28 @@ export function SiteSelectorDialog({open, onClose}:SiteSelectorProps) {
 		setInputURL(e.target.value.match(/([^/,\s]+\.[^/,\s]+?)(?=\/|,|\s|$|\?|#)/g)[0]);
 	};
 
-	let historic = JSON.parse(localStorage.getItem('URLHistory') ?? '[]').reverse();
-	let saved    = JSON.parse(localStorage.getItem('URLSaved') ?? '[]').reverse();
+	//let historic = JSON.parse(localStorage.getItem(localStorageRefs.history) ?? '[]').reverse();
+	//let saved    = JSON.parse(localStorage.getItem(localStorageRefs.saved) ?? '[]').reverse();
 
+	function saveSiteToSaved(input: string) {
+		let saved:string[] = JSON.parse(localStorage.getItem(localStorageRefs.saved) ?? '[]');
+		saved.push(input);
+		localStorage.setItem(localStorageRefs.saved, JSON.stringify(saved));
+		updateStores();
+	}
+	
+	function removeSiteFromSaved(input: string) {
+		let saved:string[] = JSON.parse(localStorage.getItem(localStorageRefs.saved) ?? '[]');
+		saved.splice(saved.indexOf(input), 1);
+		localStorage.setItem(localStorageRefs.saved, JSON.stringify(saved));
+		updateStores();
+	}
+
+	function updateStores() {
+		setHistoric(JSON.parse(localStorage.getItem(localStorageRefs.history) ?? '[]').reverse());
+		setSaved(JSON.parse(localStorage.getItem(localStorageRefs.saved) ?? '[]').reverse());
+	}
+	
 	function selectSite(site:string) {
 		navigate(`/${site}`);
 		onClose();
@@ -93,28 +103,40 @@ export function SiteSelectorDialog({open, onClose}:SiteSelectorProps) {
 				</FormControl>
 			</form>
 			<Grid container sx={{ paddingTop: 2 }}>
-				<Grid item xs={12} sm={6}>
+				<Grid item xs={12} sm={6} sx={{ padding: 2 }}>
 					<Typography variant="h5" component="h2">History</Typography>
 					{historic.length > 0 ?
 						<List component="nav">
 							{historic.map((item:string, index:number) => (
-								<ListItemButton key={index} onClick={() => selectSite(item)}>
-									<ListItemText primary={item} />
-								</ListItemButton>
+								<ListItem key={index} disablePadding secondaryAction={
+									<IconButton onClick={() => saveSiteToSaved(item)}>
+										<StarIcon />
+									</IconButton>
+								}>
+									<ListItemButton onClick={() => selectSite(item)}>
+										<ListItemText primary={item} />
+									</ListItemButton>
+								</ListItem>
 							))}
 						</List>
 					: 
 						<Typography>No recent URLs.</Typography>
 					}
 				</Grid>
-				<Grid item xs={12} sm={6}>
+				<Grid item xs={12} sm={6} sx={{ padding: 2 }}>
 					<Typography variant="h5" component="h2">Saved</Typography>
 					{saved.length > 0 ?
 						<List component="nav">
 							{saved.map((item:string, index:number) => (
-								<ListItemButton key={index} onClick={() => selectSite(item)}>
-									<ListItemText primary={item} />
-								</ListItemButton>
+								<ListItem key={index} disablePadding secondaryAction={
+									<IconButton onClick={() => removeSiteFromSaved(item)}>
+										<DeleteIcon />
+									</IconButton>
+								}>
+									<ListItemButton onClick={() => selectSite(item)}>
+										<ListItemText primary={item} />
+									</ListItemButton>
+								</ListItem>
 							))}
 						</List>
 					: 

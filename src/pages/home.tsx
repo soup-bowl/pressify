@@ -7,7 +7,7 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import { CardDisplay, CardLoad } from '../components/cards';
 import { GeneralAPIError } from '../components/error';
 import { WordPressContext } from './_layout';
-import { saveSiteToHistory, SiteSelector } from '../components/siteSelector';
+import { saveSiteToHistory } from '../components/siteSelector';
 
 export function MainHome() {
 	const navigate = useNavigate();
@@ -62,10 +62,6 @@ export function MainHome() {
 						<Button type="submit" variant="contained">Pressify!</Button>
 					</Box>
 				</form>
-				<Box>
-					<Typography variant="h2">Recent History</Typography>
-					<SiteSelector />
-				</Box>
 				<Typography my={2}>
 					🧪 A <Link href="https://soupbowl.io">Soupbowl</Link> experiment&nbsp;
 					<GitHubIcon fontSize='inherit' /> <Link href="https://github.com/soup-bowl/project-wordpress-pwa">
