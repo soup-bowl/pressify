@@ -55,9 +55,6 @@ export function SiteSelectorDialog({open, onClose}:SiteSelectorProps) {
 		setInputURL(e.target.value.match(/([^/,\s]+\.[^/,\s]+?)(?=\/|,|\s|$|\?|#)/g)[0]);
 	};
 
-	//let historic = JSON.parse(localStorage.getItem(localStorageRefs.history) ?? '[]').reverse();
-	//let saved    = JSON.parse(localStorage.getItem(localStorageRefs.saved) ?? '[]').reverse();
-
 	function saveSiteToSaved(input: string) {
 		let saved:string[] = JSON.parse(localStorage.getItem(localStorageRefs.saved) ?? '[]');
 		saved.push(input);
