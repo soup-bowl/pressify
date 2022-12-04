@@ -1,4 +1,4 @@
-import { Button, TextField, Typography, Box, Grid, Link, Skeleton, Alert, AlertTitle } from '@mui/material';
+import { Button, TextField, Typography, Box, Grid, Link, Skeleton, Alert, AlertTitle, Stack } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { IPost, ISiteInfo } from '../interfaces';
@@ -7,11 +7,17 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import { CardDisplay, CardLoad } from '../components/cards';
 import { GeneralAPIError } from '../components/error';
 import { WordPressContext } from './_layout';
-import { saveSiteToHistory } from '../components/siteSelector';
+import { saveSiteToHistory, SiteSelectorDialog } from '../components/siteSelector';
 
 export function MainHome() {
 	const navigate = useNavigate();
 	const [inputURL, setInputURL] = useState('');
+
+	const [open, setOpen] = useState(false);
+	const handleOpen = () => setOpen(true);
+	const handleClose = () => {
+		setOpen(false);
+	}
 
 	const submitForm = (e:any) => {
 		e.preventDefault();
@@ -59,9 +65,13 @@ export function MainHome() {
 						onChange={changeForm}
 					/>
 					<Box my={2}>
-						<Button type="submit" variant="contained">Pressify!</Button>
+						<Stack my={2} spacing={2} direction="row" justifyContent="center">
+							<Button variant="contained" type="submit">Pressify!</Button>
+							<Button variant="outlined" onClick={handleOpen}>Show Selector</Button>
+						</Stack>
 					</Box>
 				</form>
+				<SiteSelectorDialog open={open} onClose={handleClose} disableInput />
 				<Typography my={2}>
 					🧪 A <Link href="https://soupbowl.io">Soupbowl</Link> experiment&nbsp;
 					<GitHubIcon fontSize='inherit' /> <Link href="https://github.com/soup-bowl/project-wordpress-pwa">

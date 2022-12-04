@@ -30,9 +30,10 @@ export function saveSiteToHistory(input: string) {
 interface SiteSelectorProps {
 	open: boolean;
 	onClose: () => void;
+	disableInput?: boolean;
 }
 
-export function SiteSelectorDialog({open, onClose}:SiteSelectorProps) {
+export function SiteSelectorDialog({open, onClose, disableInput = false}:SiteSelectorProps) {
 	const navigate = useNavigate();
 	const [inputURL, setInputURL] = useState('');
 
@@ -81,6 +82,7 @@ export function SiteSelectorDialog({open, onClose}:SiteSelectorProps) {
 
 	return(
 		<AppDialog title="Select Site" open={open} onClose={onClose} size="sm">
+			{!disableInput ?
 			<form onSubmit={submitForm} noValidate>
 				<FormControl sx={{ width: '100%' }} variant="outlined">
 					<InputLabel htmlFor="url">URL</InputLabel>
@@ -98,7 +100,7 @@ export function SiteSelectorDialog({open, onClose}:SiteSelectorProps) {
 						}
 					/>
 				</FormControl>
-			</form>
+			</form> : null}
 			<Grid container sx={{ paddingTop: 2 }}>
 				<Grid item xs={12} sm={6} sx={{ padding: 2 }}>
 					<Typography variant="h5" component="h2">History</Typography>
