@@ -84,7 +84,7 @@ export function SiteSelectorDialog({open, onClose, disableInput = false}:SiteSel
 		<AppDialog title="Select Site" open={open} onClose={onClose} size="sm">
 			{!disableInput ?
 			<form onSubmit={submitForm} noValidate>
-				<FormControl sx={{ width: '100%' }} variant="outlined">
+				<FormControl sx={{ width: '100%', marginTop: 1 }} variant="outlined">
 					<InputLabel htmlFor="url">URL</InputLabel>
 					<OutlinedInput fullWidth
 						id="url"
