@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppDialog } from "./dialog";
 
-export function saveSite(input: string) {
+export function saveSiteToHistory(input: string) {
 	let history:string[] = JSON.parse(localStorage.getItem('URLHistory') ?? '[]');
 	if (!(history.indexOf(input) > -1)) {
 		history.push(input);
@@ -54,7 +54,7 @@ export function SiteSelectorDialog({open, onClose}:SiteSelectorProps) {
 
 	const submitForm = (e:any) => {
 		e.preventDefault();
-		saveSite(inputURL);
+		saveSiteToHistory(inputURL);
 		navigate('/' + inputURL);
 		onClose();
 	};

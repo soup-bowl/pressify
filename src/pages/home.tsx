@@ -7,7 +7,7 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import { CardDisplay, CardLoad } from '../components/cards';
 import { GeneralAPIError } from '../components/error';
 import { WordPressContext } from './_layout';
-import { saveSite, SiteSelector } from '../components/siteSelector';
+import { saveSiteToHistory, SiteSelector } from '../components/siteSelector';
 
 export function MainHome() {
 	const navigate = useNavigate();
@@ -16,7 +16,7 @@ export function MainHome() {
 	const submitForm = (e:any) => {
 		e.preventDefault();
 
-		saveSite(inputURL);
+		saveSiteToHistory(inputURL);
 
 		return navigate('/' + inputURL);
 	};
