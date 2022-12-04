@@ -111,7 +111,9 @@ export function SiteSelectorDialog({open, onClose}:SiteSelectorProps) {
 									</IconButton>
 								}>
 									<ListItemButton onClick={() => selectSite(item)}>
-										<ListItemText primary={item} />
+										<Typography variant="inherit" noWrap>
+											{item}
+										</Typography>
 									</ListItemButton>
 								</ListItem>
 							))}
