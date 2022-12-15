@@ -4,8 +4,22 @@ on:
   release:
     types: [published]
 
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
 jobs:
   build_test:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     runs-on: ubuntu-latest
 
     steps:
@@ -30,14 +44,13 @@ jobs:
           git-tag-version: 'false'
 
       - name: 🏗 Build Site
-        run: npm i && npm run build
+        run: npm ci && npm run build
+
+      - name: 🚀 Pre-Deploy Site
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: './build'
 
       - name: 🚀 Deploy Site
-        uses: cloudflare/pages-action@1
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          projectName: wordpress-pwa
-          directory: ./build
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
+        id: deployment
+        uses: actions/deploy-pages@v1
