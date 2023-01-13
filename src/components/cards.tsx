@@ -31,7 +31,7 @@ export function CardDisplay({posts, page = 1, pagination = undefined, returnURI 
 								<CardMedia
 									component="img"
 									height="140"
-									image={post._embedded?.["wp:featuredmedia"]?.[0].media_details.sizes.full.source_url ?? ''}
+									image={post._embedded?.["wp:featuredmedia"]?.[0].media_details?.sizes?.full?.source_url ?? ''}
 								/>
 								: null }
 								<CardContent>
