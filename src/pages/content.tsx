@@ -169,7 +169,7 @@ export default function Content({ posts, pages }: Props) {
 					</Grid>
 					<div>
 						{mockLines.map((content: string, i: number) => (
-							<Box sx={{ marginBottom: 1 }}>
+							<Box key={i} sx={{ marginBottom: 1 }}>
 								<Skeleton />
 								<Skeleton />
 								<Skeleton width="40%" />
