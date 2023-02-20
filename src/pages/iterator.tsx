@@ -6,7 +6,7 @@ import { GeneralAPIError } from "../components/error";
 import { IPost, ISiteInfo, ITag, IWPIndexing } from "../interfaces";
 import { WordPressContext } from "./_layout";
 
-const displayedLimit:number = 12;
+const displayedLimit: number = 12;
 
 interface PostProps {
 	posts?: boolean;
@@ -15,7 +15,7 @@ interface PostProps {
 	tax?: boolean;
 }
 
-export function PostListings({posts = false, pages = false, categories = false, tax = false}: PostProps) {
+export function PostListings({ posts = false, pages = false, categories = false, tax = false }: PostProps) {
 	const [mainInfo] = useOutletContext<[ISiteInfo]>();
 	const { inputURL, searchID, pageID } = useParams();
 	const [loadingContent, setLoadingContent] = useState<boolean>(true);
@@ -28,14 +28,14 @@ export function PostListings({posts = false, pages = false, categories = false, 
 
 	const CommonInterface = {
 		posts: () => wp.posts().perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get(),
-		postsByCategory: (cat:number) => wp.posts().categories(cat).perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get(),
-		postsByTag: (cat:number) => wp.posts().tags(cat).perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get(),
+		postsByCategory: (cat: number) => wp.posts().categories(cat).perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get(),
+		postsByTag: (cat: number) => wp.posts().tags(cat).perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get(),
 		pages: () => wp.pages().perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get(),
-		pagesByCategory: (cat:number) => wp.pages().categories(cat).perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get(),
-		pagesByTag: (cat:number) => wp.pages().tags(cat).perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get(),
+		pagesByCategory: (cat: number) => wp.pages().categories(cat).perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get(),
+		pagesByTag: (cat: number) => wp.pages().tags(cat).perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get(),
 	}
 
-	const saveResponse = (posts:any) => {
+	const saveResponse = (posts: any) => {
 		setPaging(posts._paging);
 		delete posts['_paging'];
 		//console.log(posts as IPost[], paging);
@@ -43,7 +43,7 @@ export function PostListings({posts = false, pages = false, categories = false, 
 		setLoadingContent(false);
 	}
 
-	const errResponse = (err:any) => {
+	const errResponse = (err: any) => {
 		setApiError(`[${err.code}] ${err.message}`);
 		setLoadingContent(false);
 	}
@@ -56,18 +56,18 @@ export function PostListings({posts = false, pages = false, categories = false, 
 			if (categories) {
 				setPagingURL(`/${inputURL}/posts/category/${searchID}`);
 				CommonInterface.postsByCategory(parseInt(searchID ?? '0'))
-					.then((posts:any) => saveResponse(posts))
-					.catch((err:any) => errResponse(err));
+					.then((posts: any) => saveResponse(posts))
+					.catch((err: any) => errResponse(err));
 			} else if (tax) {
 				setPagingURL(`/${inputURL}/posts/tag/${searchID}`);
 				CommonInterface.postsByTag(parseInt(searchID ?? '0'))
-					.then((posts:any) => saveResponse(posts))
-					.catch((err:any) => errResponse(err));
+					.then((posts: any) => saveResponse(posts))
+					.catch((err: any) => errResponse(err));
 			} else {
 				setPagingURL(`/${inputURL}/posts`);
 				CommonInterface.posts()
-					.then((posts:any) => saveResponse(posts))
-					.catch((err:any) => errResponse(err));
+					.then((posts: any) => saveResponse(posts))
+					.catch((err: any) => errResponse(err));
 			}
 		}
 
@@ -76,34 +76,34 @@ export function PostListings({posts = false, pages = false, categories = false, 
 			if (categories) {
 				setPagingURL(`/${inputURL}/pages/category/${searchID}`);
 				CommonInterface.pagesByCategory(parseInt(searchID ?? '0'))
-					.then((posts:any) => saveResponse(posts))
-					.catch((err:any) => errResponse(err));
+					.then((posts: any) => saveResponse(posts))
+					.catch((err: any) => errResponse(err));
 			} else if (tax) {
 				setPagingURL(`/${inputURL}/pages/tag/${searchID}`);
 				CommonInterface.pagesByTag(parseInt(searchID ?? '0'))
-					.then((posts:any) => saveResponse(posts))
-					.catch((err:any) => errResponse(err));
+					.then((posts: any) => saveResponse(posts))
+					.catch((err: any) => errResponse(err));
 			} else {
 				setPagingURL(`/${inputURL}/pages`);
 				CommonInterface.pages()
-					.then((posts:any) => saveResponse(posts))
-					.catch((err:any) => errResponse(err));
+					.then((posts: any) => saveResponse(posts))
+					.catch((err: any) => errResponse(err));
 			}
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchID, pageID, categories, tax, posts, pages]);
 
 	useEffect(() => {
 		if (categories && searchID !== undefined) {
 			wp.categories().id(parseInt(searchID)).get()
-			.then((catdef:ITag) => (setIterDef(catdef.name ?? iterDef)));
+				.then((catdef: ITag) => (setIterDef(catdef.name ?? iterDef)));
 		}
 
 		if (tax && searchID !== undefined) {
 			wp.tags().id(parseInt(searchID)).get()
-			.then((catdef:ITag) => (setIterDef(catdef.name ?? iterDef)));
+				.then((catdef: ITag) => (setIterDef(catdef.name ?? iterDef)));
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchID, iterDef, postCollection, categories, tax]);
 
 	useEffect(() => {
@@ -111,15 +111,15 @@ export function PostListings({posts = false, pages = false, categories = false, 
 	}, [mainInfo, posts]);
 
 	if (apiError !== '') {
-		return( <GeneralAPIError endpoint={posts ? 'Posts' : 'Pages'} message={apiError} /> );
+		return (<GeneralAPIError endpoint={posts ? 'Posts' : 'Pages'} message={apiError} />);
 	}
 
-	return(
+	return (
 		<Box>
 			<Typography variant="h1">{iterDef}</Typography>
 			{!loadingContent ?
 				<CardDisplay posts={postCollection} page={parseInt(pageID ?? '1')} pagination={paging} returnURI={pagingURL} />
-			:
+				:
 				<CardLoad amount={displayedLimit} />
 			}
 		</Box>

@@ -91,36 +91,36 @@ export default function Content({ posts, pages }: Props) {
 					</Typography>
 					<Stack my={2} spacing={2} color="darkgrey" direction="row">
 						<CreatedDate date={postDate} />
-						{post._embedded !== undefined && post._embedded["author"] !== undefined
-							&& post._embedded["author"][0].name !== undefined ?
+						{(post._embedded !== undefined && post._embedded["author"] !== undefined
+							&& post._embedded["author"][0].name !== undefined) &&
 							<Author avatar={post._embedded.author[0].avatar_urls?.[24]} name={post._embedded["author"][0].name} />
-							: null}
-						{post.link !== undefined ?
+						}
+						{post.link !== undefined &&
 							<OriginalContentLink url={post.link} />
-							: null}
-						{post.link !== undefined && navigator.share !== undefined ?
+						}
+						{(post.link !== undefined && navigator.share !== undefined) &&
 							<NativeShare title={degubbins(post.title.rendered)} url={post.link} />
-							: null}
+						}
 					</Stack>
 
 					<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content.rendered) }}></div>
 
-					{parent !== undefined ?
+					{parent !== undefined &&
 						<>
 							<Typography variant="h4">Parent</Typography>
 							<CardDisplay posts={[parent]} />
 						</>
-						: null}
-					{children.length > 0 ?
+					}
+					{children.length > 0 &&
 						<>
 							<Typography variant="h4">Sub-pages</Typography>
 							<CardDisplay posts={children} />
 						</>
-						: null}
+					}
 
 					<Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-						{post._embedded !== undefined && post._embedded["wp:term"] !== undefined
-							&& post._embedded["wp:term"][0] !== undefined ?
+						{(post._embedded !== undefined && post._embedded["wp:term"] !== undefined
+							&& post._embedded["wp:term"][0] !== undefined) &&
 							<Grid item xs={12} sm={6}>
 								<Typography variant="h4">Categories</Typography>
 								{post._embedded?.["wp:term"]?.[0].map((cat: ITag) => (
@@ -132,9 +132,9 @@ export default function Content({ posts, pages }: Props) {
 									/>
 								))}
 							</Grid>
-							: null}
-						{post._embedded !== undefined && post._embedded["wp:term"] !== undefined
-							&& post._embedded["wp:term"][1] !== undefined ?
+						}
+						{(post._embedded !== undefined && post._embedded["wp:term"] !== undefined
+							&& post._embedded["wp:term"][1] !== undefined) &&
 							<Grid item xs={12} sm={6}>
 								<Typography variant="h4">Tags</Typography>
 								{post._embedded?.["wp:term"]?.[1].map((cat: ITag) => (
@@ -146,7 +146,7 @@ export default function Content({ posts, pages }: Props) {
 									/>
 								))}
 							</Grid>
-							: null}
+						}
 					</Grid>
 				</Box>
 				:

@@ -4,14 +4,14 @@ import { ReactNode } from "react";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 	'& .MuiDialogContent-root': {
-	
-	padding: theme.spacing(2),
+
+		padding: theme.spacing(2),
 	},
 	'& .MuiDialogActions-root': {
 		padding: theme.spacing(1),
 	},
 }));
-  
+
 interface DialogTitleProps {
 	id: string;
 	children?: React.ReactNode;
@@ -20,24 +20,24 @@ interface DialogTitleProps {
 
 function BootstrapDialogTitle(props: DialogTitleProps) {
 	const { children, onClose, ...other } = props;
-  
+
 	return (
 		<DialogTitle sx={{ m: 0, p: 2 }} {...other}>
 			{children}
-			{onClose ? (
+			{onClose &&
 				<IconButton
-				aria-label="close"
-				onClick={onClose}
-				sx={{
-					position: 'absolute',
-					right: 8,
-					top: 8,
-					color: (theme) => theme.palette.grey[500],
-				}}
+					aria-label="close"
+					onClick={onClose}
+					sx={{
+						position: 'absolute',
+						right: 8,
+						top: 8,
+						color: (theme) => theme.palette.grey[500],
+					}}
 				>
-				<CloseIcon />
+					<CloseIcon />
 				</IconButton>
-			) : null}
+			}
 		</DialogTitle>
 	);
 }
@@ -50,9 +50,9 @@ interface AppDialogProps {
 	size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
-export function AppDialog({children, title, open, onClose, size}:AppDialogProps) {
+export function AppDialog({ children, title, open, onClose, size }: AppDialogProps) {
 	const ariaGen = title.toLowerCase().replace(/ /g, '-');
-	return(
+	return (
 		<BootstrapDialog
 			open={open}
 			onClose={onClose}

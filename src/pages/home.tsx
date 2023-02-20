@@ -19,7 +19,7 @@ export function MainHome() {
 		setOpen(false);
 	}
 
-	const submitForm = (e:any) => {
+	const submitForm = (e: any) => {
 		e.preventDefault();
 
 		saveSiteToHistory(inputURL);
@@ -27,14 +27,14 @@ export function MainHome() {
 		return navigate('/' + inputURL);
 	};
 
-	const changeForm = (e:any) => {
+	const changeForm = (e: any) => {
 		// Thanks to https://stackoverflow.com/a/31941978.
 		setInputURL(e.target.value.match(/([^/,\s]+\.[^/,\s]+?)(?=\/|,|\s|$|\?|#)/g)[0]);
 	};
 
 	useEffect(() => { document.title = `Choose a site - Pressify` }, []);
 
-	return(
+	return (
 		<Grid
 			container
 			spacing={0}
@@ -75,7 +75,7 @@ export function MainHome() {
 				<Typography my={2}>
 					🧪 A <Link href="https://soupbowl.io">Soupbowl</Link> experiment&nbsp;
 					<GitHubIcon fontSize='inherit' /> <Link href="https://github.com/soup-bowl/project-wordpress-pwa">
-					source code</Link>
+						source code</Link>
 				</Typography>
 			</Grid>
 		</Grid>
@@ -105,43 +105,43 @@ export function AppHome() {
 			setApiError(`[${err.code}] ${err.message}`);
 			setLoadingContent(false);
 		});
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [inputURL]);
 
 	useEffect(() => { document.title = `${mainInfo.name ?? 'Error'} - Pressify` }, [mainInfo]);
 
-	return(
+	return (
 		<Box>
 			<Typography variant="h1">{mainInfo.name ?? <Skeleton variant="rounded" />}</Typography>
 			<Typography my={2}>{mainInfo.description ?? <Skeleton variant="rounded" />}</Typography>
 			{!loadingContent ?
 				<>
-				{apiError === '' ?
-					<>
-					{postCollection.length > 0 ?
+					{apiError === '' ?
 						<>
-						<Typography variant="h2">Posts</Typography>
-						<CardDisplay posts={postCollection} />
-						</>
-						: null}
+							{postCollection.length > 0 &&
+								<>
+									<Typography variant="h2">Posts</Typography>
+									<CardDisplay posts={postCollection} />
+								</>
+							}
 
-					{pageCollection.length > 0 ?
-						<>
-						<Typography variant="h2">Pages</Typography>
-						<CardDisplay posts={pageCollection} />
+							{pageCollection.length > 0 &&
+								<>
+									<Typography variant="h2">Pages</Typography>
+									<CardDisplay posts={pageCollection} />
+								</>
+							}
 						</>
-						: null}
-					</>
-				:
-					<GeneralAPIError endpoint="Posts/Pages" message={apiError} noheader />
-				}
+						:
+						<GeneralAPIError endpoint="Posts/Pages" message={apiError} noheader />
+					}
 				</>
-			:
+				:
 				<>
-				<Typography variant="h2">Posts</Typography>
-				<CardLoad amount={3} />
-				<Typography variant="h2">Pages</Typography>
-				<CardLoad amount={3} />
+					<Typography variant="h2">Posts</Typography>
+					<CardLoad amount={3} />
+					<Typography variant="h2">Pages</Typography>
+					<CardLoad amount={3} />
 				</>
 			}
 		</Box>

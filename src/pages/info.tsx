@@ -27,18 +27,18 @@ export function AboutPage() {
 
 	useEffect(() => {
 		if ('storage' in navigator && 'estimate' in navigator.storage) {
-			navigator.storage.estimate().then(({usage, quota}) => {
+			navigator.storage.estimate().then(({ usage, quota }) => {
 				setStorageInfo({ usage: usage ?? 0, quota: quota ?? 0 });
 			});
 		}
 	}, []);
 
-	return(
+	return (
 		<Box textAlign="center">
 			<Typography variant="h1" my={2}>WordPress App Generator</Typography>
 			<Typography my={2}>
-				Developed by <Link style={{fontWeight: 'bold'}} href="https://soupbowl.io">soup-bowl</Link> and hosted
-				on <Link style={{fontWeight: 'bold'}} href="https://pages.github.com/">GitHub Pages</Link>.
+				Developed by <Link style={{ fontWeight: 'bold' }} href="https://soupbowl.io">soup-bowl</Link> and hosted
+				on <Link style={{ fontWeight: 'bold' }} href="https://pages.github.com/">GitHub Pages</Link>.
 			</Typography>
 			<Stack my={2}>
 				<Typography>
@@ -46,12 +46,12 @@ export function AboutPage() {
 					&nbsp;<Chip label="Beta" color="info" size="small" />
 				</Typography>
 
-				{ storageInfo.quota !== undefined && storageInfo.quota !== 0 ?
+				{storageInfo.quota !== undefined && storageInfo.quota !== 0 ?
 					<Typography>
 						Using <Box component="span" fontWeight='700'>{formatBytes(storageInfo.usage)}</Box> of&nbsp;
 						<Box component="span" fontWeight='700'>{formatBytes(storageInfo.quota)}</Box> available local storage.
 					</Typography>
-				:
+					:
 					<Typography color="darkgrey">Storage API is not supported.</Typography>
 				}
 			</Stack>

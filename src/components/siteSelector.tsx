@@ -15,7 +15,7 @@ const localStorageRefs = {
 };
 
 export function saveSiteToHistory(input: string) {
-	let history:string[] = JSON.parse(localStorage.getItem(localStorageRefs.history) ?? '[]');
+	let history: string[] = JSON.parse(localStorage.getItem(localStorageRefs.history) ?? '[]');
 	if (!(history.indexOf(input) > -1)) {
 		history.push(input);
 
@@ -33,7 +33,7 @@ interface SiteSelectorProps {
 	disableInput?: boolean;
 }
 
-export function SiteSelectorDialog({open, onClose, disableInput = false}:SiteSelectorProps) {
+export function SiteSelectorDialog({ open, onClose, disableInput = false }: SiteSelectorProps) {
 	const navigate = useNavigate();
 	const [inputURL, setInputURL] = useState('');
 
@@ -44,27 +44,27 @@ export function SiteSelectorDialog({open, onClose, disableInput = false}:SiteSel
 		JSON.parse(localStorage.getItem(localStorageRefs.saved) ?? '[]').reverse()
 	);
 
-	const submitForm = (e:any) => {
+	const submitForm = (e: any) => {
 		e.preventDefault();
 		saveSiteToHistory(inputURL);
 		navigate('/' + inputURL);
 		onClose();
 	};
 
-	const changeForm = (e:any) => {
+	const changeForm = (e: any) => {
 		// Thanks to https://stackoverflow.com/a/31941978.
 		setInputURL(e.target.value.match(/([^/,\s]+\.[^/,\s]+?)(?=\/|,|\s|$|\?|#)/g)[0]);
 	};
 
 	function saveSiteToSaved(input: string) {
-		let saved:string[] = JSON.parse(localStorage.getItem(localStorageRefs.saved) ?? '[]');
+		let saved: string[] = JSON.parse(localStorage.getItem(localStorageRefs.saved) ?? '[]');
 		saved.push(input);
 		localStorage.setItem(localStorageRefs.saved, JSON.stringify(saved));
 		updateStores();
 	}
-	
+
 	function removeSiteFromSaved(input: string) {
-		let saved:string[] = JSON.parse(localStorage.getItem(localStorageRefs.saved) ?? '[]');
+		let saved: string[] = JSON.parse(localStorage.getItem(localStorageRefs.saved) ?? '[]');
 		saved.splice(saved.indexOf(input), 1);
 		localStorage.setItem(localStorageRefs.saved, JSON.stringify(saved));
 		updateStores();
@@ -74,39 +74,39 @@ export function SiteSelectorDialog({open, onClose, disableInput = false}:SiteSel
 		setHistoric(JSON.parse(localStorage.getItem(localStorageRefs.history) ?? '[]').reverse());
 		setSaved(JSON.parse(localStorage.getItem(localStorageRefs.saved) ?? '[]').reverse());
 	}
-	
-	function selectSite(site:string) {
+
+	function selectSite(site: string) {
 		navigate(`/${site}`);
 		onClose();
 	}
 
-	return(
+	return (
 		<AppDialog title="Select Site" open={open} onClose={onClose} size="sm">
-			{!disableInput ?
-			<form onSubmit={submitForm} noValidate>
-				<FormControl sx={{ width: '100%', marginTop: 1 }} variant="outlined">
-					<InputLabel htmlFor="url">URL</InputLabel>
-					<OutlinedInput fullWidth
-						id="url"
-						type="url"
-						label="URL"
-						onChange={changeForm}
-						endAdornment={
-							<InputAdornment position="end">
-								<IconButton aria-label="submit" onClick={submitForm} edge="end">
-									<ArrowForwardIosIcon />
-								</IconButton>
-							</InputAdornment>
-						}
-					/>
-				</FormControl>
-			</form> : null}
+			{!disableInput &&
+				<form onSubmit={submitForm} noValidate>
+					<FormControl sx={{ width: '100%', marginTop: 1 }} variant="outlined">
+						<InputLabel htmlFor="url">URL</InputLabel>
+						<OutlinedInput fullWidth
+							id="url"
+							type="url"
+							label="URL"
+							onChange={changeForm}
+							endAdornment={
+								<InputAdornment position="end">
+									<IconButton aria-label="submit" onClick={submitForm} edge="end">
+										<ArrowForwardIosIcon />
+									</IconButton>
+								</InputAdornment>
+							}
+						/>
+					</FormControl>
+				</form>}
 			<Grid container sx={{ paddingTop: 2 }}>
 				<Grid item xs={12} sm={6} sx={{ padding: 2 }}>
 					<Typography variant="h5" component="h2">History</Typography>
 					{historic.length > 0 ?
 						<List component="nav">
-							{historic.map((item:string, index:number) => (
+							{historic.map((item: string, index: number) => (
 								<ListItem key={index} disablePadding secondaryAction={
 									<IconButton onClick={() => saveSiteToSaved(item)}>
 										<StarIcon />
@@ -120,7 +120,7 @@ export function SiteSelectorDialog({open, onClose, disableInput = false}:SiteSel
 								</ListItem>
 							))}
 						</List>
-					: 
+						:
 						<Typography>No recent URLs.</Typography>
 					}
 				</Grid>
@@ -128,7 +128,7 @@ export function SiteSelectorDialog({open, onClose, disableInput = false}:SiteSel
 					<Typography variant="h5" component="h2">Saved</Typography>
 					{saved.length > 0 ?
 						<List component="nav">
-							{saved.map((item:string, index:number) => (
+							{saved.map((item: string, index: number) => (
 								<ListItem key={index} disablePadding secondaryAction={
 									<IconButton onClick={() => removeSiteFromSaved(item)}>
 										<DeleteIcon />
@@ -140,7 +140,7 @@ export function SiteSelectorDialog({open, onClose, disableInput = false}:SiteSel
 								</ListItem>
 							))}
 						</List>
-					: 
+						:
 						<Typography>No saved URLs.</Typography>
 					}
 				</Grid>

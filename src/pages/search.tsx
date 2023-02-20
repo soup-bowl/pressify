@@ -6,7 +6,7 @@ import { GeneralAPIError } from "../components/error";
 import { IPost, ISearch, IWPIndexing } from "../interfaces";
 import { WordPressContext } from "./_layout";
 
-const displayedLimit:number = 12;
+const displayedLimit: number = 12;
 
 export default function Search() {
 	const { inputURL, seachTerms, pageID } = useParams();
@@ -20,37 +20,37 @@ export default function Search() {
 	useEffect(() => {
 		setLoadingContent(true);
 		wp.search().search(seachTerms ?? '').perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get()
-		.then((response:any) => {
-			setPaging(response._paging);
-			delete response['_paging'];
-			//console.log('Search Result', response);
-			let collection:IPost[] = [];
-			response.forEach((e:ISearch) => {
-				collection.push(e._embedded.self[0]);
+			.then((response: any) => {
+				setPaging(response._paging);
+				delete response['_paging'];
+				//console.log('Search Result', response);
+				let collection: IPost[] = [];
+				response.forEach((e: ISearch) => {
+					collection.push(e._embedded.self[0]);
+				});
+				setPagingURL(`/${inputURL}/search/${seachTerms}`);
+				setSearchResults(collection);
+				setLoadingContent(false);
+			})
+			.catch((err: any) => {
+				setApiError(`[${err.code}] ${err.message}`);
+				setLoadingContent(false);
 			});
-			setPagingURL(`/${inputURL}/search/${seachTerms}`);
-			setSearchResults(collection);
-			setLoadingContent(false);
-		})
-		.catch((err:any) => {
-			setApiError(`[${err.code}] ${err.message}`);
-			setLoadingContent(false);
-		});
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [inputURL, seachTerms, pageID]);
 
 	useEffect(() => { document.title = `Search: ${seachTerms} - Pressify` }, [seachTerms]);
 
 	if (apiError !== '') {
-		return( <GeneralAPIError endpoint="Search" message={apiError} /> );
+		return (<GeneralAPIError endpoint="Search" message={apiError} />);
 	}
 
-	return(
+	return (
 		<Box>
 			<Typography variant="h1">Search Results: {seachTerms}</Typography>
 			{!loadingContent ?
 				<CardDisplay posts={searchResults} page={parseInt(pageID ?? '1')} pagination={paging} returnURI={pagingURL} />
-			:
+				:
 				<CardLoad amount={displayedLimit} />
 			}
 		</Box>
