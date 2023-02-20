@@ -1,4 +1,4 @@
-import { Box, Chip, Grid, Skeleton, Stack, Typography } from "@mui/material";
+import { Box, Chip, Grid, Skeleton, Stack, styled, Typography } from "@mui/material";
 import DOMPurify from "dompurify";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -8,6 +8,14 @@ import { IPost, ITag } from "../interfaces";
 import { WordPressContext } from "./_layout";
 import { Author, CreatedDate, NativeShare, OriginalContentLink } from "../components/contentDetails";
 import "./content.css";
+
+const StyledStack = styled(Stack)(({ theme }) => ({
+	[theme.breakpoints.down('sm')]: {
+		justifyContent: 'space-around',
+	},
+	flexDirection: 'row',
+	gap: 10
+}));
 
 interface Props {
 	posts?: boolean;
@@ -89,7 +97,7 @@ export default function Content({ posts, pages }: Props) {
 					<Typography variant="h1">
 						{degubbins(post.title.rendered)}
 					</Typography>
-					<Stack my={2} spacing={2} color="darkgrey" direction="row">
+					<StyledStack my={2} spacing={2} color="darkgrey">
 						<CreatedDate date={postDate} />
 						{(post._embedded !== undefined && post._embedded["author"] !== undefined
 							&& post._embedded["author"][0].name !== undefined) &&
@@ -101,7 +109,7 @@ export default function Content({ posts, pages }: Props) {
 						{(post.link !== undefined && navigator.share !== undefined) &&
 							<NativeShare title={degubbins(post.title.rendered)} url={post.link} />
 						}
-					</Stack>
+					</StyledStack>
 
 					<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content.rendered) }}></div>
 
