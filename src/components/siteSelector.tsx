@@ -81,7 +81,7 @@ export function SiteSelectorDialog({ open, onClose, disableInput = false }: Site
 	}
 
 	return (
-		<AppDialog title="Select Site" open={open} onClose={onClose} size="sm">
+		<AppDialog title="Select Site" open={open} onClose={onClose} size="md">
 			{!disableInput &&
 				<form onSubmit={submitForm} noValidate>
 					<FormControl sx={{ width: '100%', marginTop: 1 }} variant="outlined">
@@ -135,7 +135,9 @@ export function SiteSelectorDialog({ open, onClose, disableInput = false }: Site
 									</IconButton>
 								}>
 									<ListItemButton onClick={() => selectSite(item)}>
-										<ListItemText primary={item} />
+										<Typography variant="inherit" noWrap>
+											{item}
+										</Typography>
 									</ListItemButton>
 								</ListItem>
 							))}
