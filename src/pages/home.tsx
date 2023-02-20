@@ -1,4 +1,4 @@
-import { Button, TextField, Typography, Box, Grid, Link, Skeleton, Alert, AlertTitle, Stack } from '@mui/material';
+import { Button, TextField, Typography, Box, Grid, Link, Skeleton, Alert, AlertTitle, Stack, useMediaQuery, Theme } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { IPost, ISiteInfo } from '../interfaces';
@@ -91,6 +91,8 @@ export function AppHome() {
 	const [pageCollection, setPageCollection] = useState<IPost[]>([]);
 	const wp = useContext(WordPressContext);
 
+	const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+
 	useEffect(() => {
 		Promise.all([
 			wp.posts().perPage(3).embed().get(),
@@ -112,8 +114,20 @@ export function AppHome() {
 
 	return (
 		<Box>
-			<Typography variant="h1">{mainInfo.name ?? <Skeleton variant="rounded" />}</Typography>
-			<Typography my={2}>{mainInfo.description ?? <Skeleton variant="rounded" />}</Typography>
+			<Grid container spacing={2} alignItems="center">
+				{(!isSmallScreen && mainInfo.site_icon_url !== undefined) &&
+					<Grid item>
+						<img src={mainInfo.site_icon_url} alt="" style={{
+							height: 100,
+							borderRadius: 5
+						}} />
+					</Grid>
+				}
+				<Grid item>
+					<Typography variant="h1">{mainInfo.name ?? <Skeleton variant="rounded" />}</Typography>
+					<Typography my={2}>{mainInfo.description ?? <Skeleton variant="rounded" />}</Typography>
+				</Grid>
+			</Grid>
 			{!loadingContent ?
 				<>
 					{apiError === '' ?

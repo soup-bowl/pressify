@@ -5,6 +5,7 @@ export interface ISiteInfo {
 	namespaces: string[];
 	site_logo?: string;
 	site_icon?: string;
+	site_icon_url?: string;
 	_embedded?: IEmbed;
 }
 

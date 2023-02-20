@@ -194,6 +194,7 @@ export default function Layout({ simple = false }: Props) {
 				setMainInfo({
 					name: response.name ?? 'N/A',
 					description: response.description ?? '',
+					site_icon_url: response.site_icon_url,
 					url: response.url,
 					namespaces: response.namespaces,
 				});
