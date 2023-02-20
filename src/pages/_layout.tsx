@@ -3,7 +3,7 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import {
 	CssBaseline, ThemeProvider, Toolbar, IconButton, Typography,
 	Container, styled, Drawer, Divider, Box, useMediaQuery, alpha, InputBase,
-	createTheme, PaletteMode, Chip
+	createTheme, PaletteMode, Chip, Avatar
 } from '@mui/material';
 import { createContext, useEffect, useMemo, useState } from "react";
 import { green } from '@mui/material/colors';
@@ -231,6 +231,7 @@ export default function Layout({ simple = false }: Props) {
 											<MenuIcon />
 										</IconButton>
 									}
+									<Avatar src={mainInfo.site_icon_url} sx={{ marginRight: 2 }} />
 									<Typography
 										variant="h6"
 										noWrap
