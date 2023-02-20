@@ -1,5 +1,5 @@
 import { Button, TextField, Typography, Box, Grid, Link, Skeleton, Alert, AlertTitle, Stack, useMediaQuery, Theme } from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
+import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { IPost, ISiteInfo } from '../interfaces';
 
@@ -8,10 +8,15 @@ import { CardDisplay, CardLoad } from '../components/cards';
 import { GeneralAPIError } from '../components/error';
 import { WordPressContext } from './_layout';
 import { saveSiteToHistory, SiteSelectorDialog } from '../components/siteSelector';
+import WPAPI from 'wpapi';
 
 export function MainHome() {
 	const navigate = useNavigate();
-	const [inputURL, setInputURL] = useState('');
+	const [searchValueValidated, setSearchValueValidated] = useState<string>('');
+	const [searchValue, setSearchValue] = useState<string>('');
+	const [isWP, setWP] = useState<boolean>(false);
+	const [isChanging, setChanging] = useState<boolean>(false);
+	const searchTimeout = useRef<NodeJS.Timeout | null>(null);
 
 	const [open, setOpen] = useState(false);
 	const handleOpen = () => setOpen(true);
@@ -22,15 +27,34 @@ export function MainHome() {
 	const submitForm = (e: any) => {
 		e.preventDefault();
 
-		saveSiteToHistory(inputURL);
+		saveSiteToHistory(searchValue);
 
-		return navigate('/' + inputURL);
+		return navigate('/' + searchValue);
 	};
 
-	const changeForm = (e: any) => {
-		// Thanks to https://stackoverflow.com/a/31941978.
-		setInputURL(e.target.value.match(/([^/,\s]+\.[^/,\s]+?)(?=\/|,|\s|$|\?|#)/g)[0]);
+	const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+		let parsedInput = event.target.value.match(/([^/,\s]+\.[^/,\s]+?)(?=\/|,|\s|$|\?|#)/g);
+		setChanging(true);
+		setSearchValue((parsedInput !== null) ? parsedInput[0] : '');
 	};
+
+	useEffect(() => {
+		if (searchValue !== '') {
+			if (searchTimeout.current) {
+				clearTimeout(searchTimeout.current);
+			}
+
+			searchTimeout.current = setTimeout(() => {
+				new WPAPI({ endpoint: `https://${searchValue}/wp-json` }).root().get()
+					.then((response: any) => {
+						setWP(true);
+						setSearchValueValidated(searchValue);
+					})
+					.catch((err) => setWP(false))
+					.finally(() => setChanging(false));
+			}, 1000);
+		}
+	}, [searchValue]);
 
 	useEffect(() => { document.title = `Choose a site - Pressify` }, []);
 
@@ -62,7 +86,12 @@ export function MainHome() {
 						type="url"
 						label="URL"
 						variant="outlined"
-						onChange={changeForm}
+						error={(searchValueValidated !== '') ? !isWP : false}
+						helperText={
+							(!isChanging ?
+								(isWP ? `${searchValueValidated} is a WordPress site!` : "No WordPress API detected.")
+								: 'Analysing...')}
+						onChange={handleInputChange}
 					/>
 					<Box my={2}>
 						<Stack my={2} spacing={2} direction="row" justifyContent="center">
