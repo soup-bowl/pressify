@@ -238,7 +238,7 @@ export default function Layout({ simple = false }: Props) {
 										component="div"
 										sx={{ flexGrow: 1, display: { xs: 'block', sm: 'block' } }}
 									>
-										{mainInfo.name} <Chip label="Beta" color="info" size="small" />
+										{mainInfo.name ?? 'Site'} <Chip label="Beta" color="info" size="small" />
 									</Typography>
 									<form onSubmit={submitForm}>
 										<Search>
