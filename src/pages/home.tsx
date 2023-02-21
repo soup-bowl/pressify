@@ -7,8 +7,9 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import { CardDisplay, CardLoad } from '../components/cards';
 import { GeneralAPIError } from '../components/error';
 import { WordPressContext } from './_layout';
-import { saveSiteToHistory, SiteSelectorDialog } from '../components/siteSelector';
+import { localStorageRefs, SiteSelectorDialog } from '../components/siteSelector';
 import WPAPI from 'wpapi';
+import { useLocalStorageJSON } from '../localStore';
 
 export function MainHome() {
 	const navigate = useNavigate();
@@ -18,11 +19,18 @@ export function MainHome() {
 	const [isChanging, setChanging] = useState<boolean>(false);
 	const searchTimeout = useRef<NodeJS.Timeout | null>(null);
 
+	const [historic, setHistoric] = useLocalStorageJSON<string[]>(localStorageRefs.history, []);
+
 	const [open, setOpen] = useState(false);
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => {
 		setOpen(false);
 	}
+
+	const saveSiteToHistory = (item: string) => {
+		const updatedItems: string[] = [...historic.slice(-4), item];
+		setHistoric(updatedItems);
+	};
 
 	const submitForm = (e: any) => {
 		e.preventDefault();

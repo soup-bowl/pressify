@@ -16,6 +16,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import { EStatus } from "../enums";
 import { Loading } from "../components/loading";
+import { useLocalStorage } from "../localStore";
 
 const drawerWidth = 240;
 
@@ -141,16 +142,16 @@ export default function Layout({ simple = false }: Props) {
 	const [apiError, setApiError] = useState<string>('');
 	const wp = new WPAPI({ endpoint: `https://${inputURL}/wp-json` });
 
-	const [mode, setMode] = useState<string>(localStorage.getItem('ColourPref') ?? 'dark');
+	const [mode, setMode] = useLocalStorage('ColourPref', 'dark');
 	const colorMode = useMemo(() => ({
 		toggleColorMode: () => {
 			setMode((prevMode: string) => {
-				let cmode = (prevMode === 'light') ? 'dark' : 'light';
-				localStorage.setItem('ColourPref', cmode);
+				let cmode = prevMode === 'light' ? 'dark' : 'light';
+				setMode(cmode);
 				return cmode;
 			});
 		},
-	}), []);
+	}), [setMode]);
 
 	const theme = useMemo(() => createTheme({
 		palette: {

@@ -9,24 +9,12 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppDialog } from "./dialog";
 import WPAPI from "wpapi";
+import { useLocalStorageJSON } from "../localStore";
 
-const localStorageRefs = {
+export const localStorageRefs = {
 	history: 'URLHistory',
 	saved: 'URLSaved',
 };
-
-export function saveSiteToHistory(input: string) {
-	let history: string[] = JSON.parse(localStorage.getItem(localStorageRefs.history) ?? '[]');
-	if (!(history.indexOf(input) > -1)) {
-		history.push(input);
-
-		if (history.length > 6) {
-			history.shift();
-		}
-
-		localStorage.setItem(localStorageRefs.history, JSON.stringify(history));
-	}
-}
 
 interface SiteSelectorProps {
 	open: boolean;
@@ -42,12 +30,8 @@ export function SiteSelectorDialog({ open, onClose, disableInput = false }: Site
 	const [isChanging, setChanging] = useState<boolean>(false);
 	const searchTimeout = useRef<NodeJS.Timeout | null>(null);
 
-	const [historic, setHistoric] = useState<string[]>(
-		JSON.parse(localStorage.getItem(localStorageRefs.history) ?? '[]').reverse()
-	);
-	const [saved, setSaved] = useState<string[]>(
-		JSON.parse(localStorage.getItem(localStorageRefs.saved) ?? '[]').reverse()
-	);
+	const [historic, setHistoric] = useLocalStorageJSON<string[]>(localStorageRefs.history, []);
+	const [saved, setSaved] = useLocalStorageJSON<string[]>(localStorageRefs.saved, []);
 
 	const submitForm = (e: any) => {
 		e.preventDefault();
@@ -81,24 +65,21 @@ export function SiteSelectorDialog({ open, onClose, disableInput = false }: Site
 		}
 	}, [searchValue]);
 
-	function saveSiteToSaved(input: string) {
-		let saved: string[] = JSON.parse(localStorage.getItem(localStorageRefs.saved) ?? '[]');
-		saved.push(input);
-		localStorage.setItem(localStorageRefs.saved, JSON.stringify(saved));
-		updateStores();
-	}
+	const saveSiteToHistory = (item: string) => {
+		const updatedItems: string[] = [...historic.slice(-4), item];
+		setHistoric(updatedItems);
+	};
 
-	function removeSiteFromSaved(input: string) {
-		let saved: string[] = JSON.parse(localStorage.getItem(localStorageRefs.saved) ?? '[]');
-		saved.splice(saved.indexOf(input), 1);
-		localStorage.setItem(localStorageRefs.saved, JSON.stringify(saved));
-		updateStores();
-	}
+	const saveSiteToSaved = (item: string) => {
+		if (!saved.includes(item)) {
+			setSaved([...saved, item]);
+		}
+	};
 
-	function updateStores() {
-		setHistoric(JSON.parse(localStorage.getItem(localStorageRefs.history) ?? '[]').reverse());
-		setSaved(JSON.parse(localStorage.getItem(localStorageRefs.saved) ?? '[]').reverse());
-	}
+	const removeSiteFromSaved = (item: string) => {
+		const filteredItems = saved.filter((i) => i !== item);
+		setSaved(filteredItems);
+	};
 
 	function selectSite(site: string) {
 		navigate(`/${site}`);
@@ -141,7 +122,7 @@ export function SiteSelectorDialog({ open, onClose, disableInput = false }: Site
 					<Typography variant="h5" component="h2">History</Typography>
 					{historic.length > 0 ?
 						<List component="nav">
-							{historic.map((item: string, index: number) => (
+							{historic.reverse().map((item: string, index: number) => (
 								<ListItem key={index} disablePadding secondaryAction={
 									<IconButton onClick={() => saveSiteToSaved(item)}>
 										<StarIcon />
@@ -163,7 +144,7 @@ export function SiteSelectorDialog({ open, onClose, disableInput = false }: Site
 					<Typography variant="h5" component="h2">Saved</Typography>
 					{saved.length > 0 ?
 						<List component="nav">
-							{saved.map((item: string, index: number) => (
+							{saved.reverse().map((item: string, index: number) => (
 								<ListItem key={index} disablePadding secondaryAction={
 									<IconButton onClick={() => removeSiteFromSaved(item)}>
 										<DeleteIcon />
