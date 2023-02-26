@@ -7,7 +7,6 @@ import { GeneralAPIError } from "../components/error";
 import { IPost, ITag } from "../interfaces";
 import { WordPressContext } from "./_layout";
 import { Author, CreatedDate, NativeShare, OriginalContentLink } from "../components/contentDetails";
-import "./content.css";
 
 const StyledStack = styled(Stack)(({ theme }) => ({
 	[theme.breakpoints.down('sm')]: {
@@ -111,7 +110,7 @@ export default function Content({ posts, pages }: Props) {
 						}
 					</StyledStack>
 
-					<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content.rendered) }}></div>
+					<div className="wp-content" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content.rendered) }}></div>
 
 					{parent !== undefined &&
 						<>

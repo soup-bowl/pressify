@@ -173,7 +173,16 @@ export default function Layout({ simple = false }: Props) {
 			},
 			h3: {
 				fontSize: '2rem'
-			}
+			},
+			body1: {
+				'& .wp-content a': {
+					color: primaryColor,
+				},
+				'& .wp-content img, & .wp-content video': {
+					maxWidth: '100%',
+					height: 'inherit',
+				}
+			},
 		}
 	}), [mode, primaryColor]);
 

@@ -1,9 +1,0 @@
-a {
-	color: green;
-}
-
-img,
-video {
-	max-width: 100%;
-	height: inherit;
-}
