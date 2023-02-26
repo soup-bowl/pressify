@@ -140,7 +140,7 @@ export default function Layout({ simple = false }: Props) {
 	const [mainInfo, setMainInfo] = useState<ISiteInfo>({} as ISiteInfo);
 	const [apiState, setApiState] = useState<EStatus>(EStatus.Loading);
 	const [apiError, setApiError] = useState<string>('');
-	const [primaryColor, setPrimaryColor] = useState('#008000');
+	const [primaryColor, setPrimaryColor] = useState('#30ad2a');
 	const wp = new WPAPI({ endpoint: `https://${inputURL}/wp-json` });
 
 	const [mode, setMode] = useLocalStorage('ColourPref', 'dark');
