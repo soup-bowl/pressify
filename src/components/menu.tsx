@@ -49,14 +49,14 @@ export default function MenuItems({ onClose, theme, colorMode }: Props) {
 			<List>
 				<ListItemButton
 					onClick={() => nav(`/${inputURL}/posts`)}
-					selected={window.location.hash.includes("/posts")}
+					selected={window.location.hash.includes("/post")}
 				>
 					<ListItemIcon><PushPinIcon /></ListItemIcon>
 					<ListItemText primary="Posts" />
 				</ListItemButton>
 				<ListItemButton
 					onClick={() => nav(`/${inputURL}/pages`)}
-					selected={window.location.hash.includes("/pages")}
+					selected={window.location.hash.includes("/page")}
 				>
 					<ListItemIcon><DescriptionIcon /></ListItemIcon>
 					<ListItemText primary="Pages" />

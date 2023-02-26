@@ -6,7 +6,6 @@ import {
 	createTheme, PaletteMode, Chip, Avatar
 } from '@mui/material';
 import { createContext, useEffect, useMemo, useState } from "react";
-import { green } from '@mui/material/colors';
 import { ISiteInfo } from "../interfaces";
 import WPAPI from "wpapi";
 import MenuItems from "../components/menu";
@@ -17,6 +16,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { EStatus } from "../enums";
 import { Loading } from "../components/loading";
 import { useLocalStorage } from "../localStore";
+import ColorThief from "colorthief";
 
 const drawerWidth = 240;
 
@@ -140,6 +140,7 @@ export default function Layout({ simple = false }: Props) {
 	const [mainInfo, setMainInfo] = useState<ISiteInfo>({} as ISiteInfo);
 	const [apiState, setApiState] = useState<EStatus>(EStatus.Loading);
 	const [apiError, setApiError] = useState<string>('');
+	const [primaryColor, setPrimaryColor] = useState('#008000');
 	const wp = new WPAPI({ endpoint: `https://${inputURL}/wp-json` });
 
 	const [mode, setMode] = useLocalStorage('ColourPref', 'dark');
@@ -155,7 +156,9 @@ export default function Layout({ simple = false }: Props) {
 
 	const theme = useMemo(() => createTheme({
 		palette: {
-			primary: green,
+			primary: {
+				main: primaryColor
+			},
 			mode: mode as PaletteMode
 		},
 		typography: {
@@ -172,7 +175,26 @@ export default function Layout({ simple = false }: Props) {
 				fontSize: '2rem'
 			}
 		}
-	}), [mode]);
+	}), [mode, primaryColor]);
+
+	useEffect(() => {
+		if (mainInfo.site_icon_url === undefined) { return; }
+
+		const image = new Image();
+		image.crossOrigin = 'anonymous';
+		image.src = mainInfo.site_icon_url;
+
+		image.onload = () => {
+			const colorThief = new ColorThief();
+			const [r, g, b] = colorThief.getColor(image);
+			const primaryColor = `rgb(${r}, ${g}, ${b})`;
+			setPrimaryColor(primaryColor);
+		};
+
+		image.onerror = (error) => {
+			console.error(error);
+		};
+	}, [mainInfo]);
 
 	const submitForm = (e: any) => {
 		e.preventDefault();

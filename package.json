@@ -16,6 +16,7 @@
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.3",
     "@types/wpapi": "^1.1.1",
+    "colorthief": "^2.3.2",
     "dompurify": "^2.3.10",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
