@@ -2,6 +2,7 @@ import { Button, TextField, Typography, Box, Grid, Link, Skeleton, Alert, AlertT
 import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { IPost, ISiteInfo } from '../interfaces';
+import "@fontsource/eb-garamond";
 
 import GitHubIcon from '@mui/icons-material/GitHub';
 import { CardDisplay, CardLoad } from '../components/cards';
@@ -76,7 +77,7 @@ export function MainHome() {
 			style={{ minHeight: '80vh' }}
 		>
 			<Grid item xs={3} textAlign="center">
-				<Typography variant="h1">Pressify That Site!</Typography>
+				<Typography variant="h1" sx={{ fontFamily: 'EB Garamond', fontSize: '6rem' }}>Pressify.</Typography>
 				<Typography my={2}>
 					If the URL you specify is a <strong>WordPress</strong> site with an exposed&nbsp;
 					<Link href="https://developer.wordpress.org/rest-api/">WordPress REST API</Link>, we can generate a

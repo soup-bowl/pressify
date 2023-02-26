@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.10.6",
+    "@fontsource/eb-garamond": "^4.5.11",
     "@mui/icons-material": "^5.11.9",
     "@mui/material": "^5.7.0",
     "@testing-library/jest-dom": "^5.16.4",
