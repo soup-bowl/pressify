@@ -77,7 +77,7 @@ export function MainHome() {
 			style={{ minHeight: '80vh' }}
 		>
 			<Grid item xs={3} textAlign="center">
-				<Typography variant="h1" sx={{ fontFamily: 'EB Garamond', fontSize: '6rem' }}>Pressify.</Typography>
+				<Typography variant="h1" sx={{ fontFamily: '"EB Garamond", serif', fontSize: '6rem' }}>Pressify.</Typography>
 				<Typography my={2}>
 					If the URL you specify is a <strong>WordPress</strong> site with an exposed&nbsp;
 					<Link href="https://developer.wordpress.org/rest-api/">WordPress REST API</Link>, we can generate a
