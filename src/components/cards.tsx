@@ -7,6 +7,7 @@ interface Props {
 	pagination?: IWPIndexing;
 	page?: number;
 	returnURI?: string;
+	listView?: boolean;
 }
 
 export function degubbins(input: string) {
@@ -15,7 +16,13 @@ export function degubbins(input: string) {
 	);
 }
 
-export function CardDisplay({ posts, page = 1, pagination = undefined, returnURI = '' }: Props) {
+export function CardDisplay({
+	posts,
+	page = 1,
+	pagination = undefined,
+	returnURI = '',
+	listView = false
+}: Props) {
 	const navigate = useNavigate();
 	const { inputURL } = useParams();
 	const location = `${process.env.PUBLIC_URL}/#/${inputURL}`;
@@ -24,8 +31,8 @@ export function CardDisplay({ posts, page = 1, pagination = undefined, returnURI
 		<>
 			<Grid container spacing={2} my={2}>
 				{posts.map((post: IPost) => (
-					<Grid key={post.id} item xs={12} sm={6} md={4}>
-						<Card sx={{ maxWidth: 345 }}>
+					<Grid key={post.id} item xs={12} sm={(listView) ? 12 : 6} md={(listView) ? 12: 4}>
+						<Card sx={{ maxWidth: (listView) ? 'inherit' : 345 }}>
 							<CardActionArea href={`${location}${((post.type === 'post') ? '/post' : '/page')}/${post.id}`}>
 								{(post._embedded !== undefined && post._embedded["wp:featuredmedia"] !== undefined) &&
 									<CardMedia
@@ -64,18 +71,19 @@ export function CardDisplay({ posts, page = 1, pagination = undefined, returnURI
 
 interface LoadProps {
 	amount: number;
+	listView?: boolean;
 }
 
-export function CardLoad({ amount }: LoadProps) {
+export function CardLoad({ amount, listView = false }: LoadProps) {
 	let collection = Array(amount).fill("");
 
 	return (
 		<Grid container spacing={2} my={2}>
 			{collection.map((content: string, i: number) => (
-				<Grid key={i} item xs={12} sm={6} md={4}>
-					<Card sx={{ maxWidth: 345 }}>
+				<Grid key={i} item xs={12} sm={(listView) ? 12 : 6} md={(listView) ? 12: 4}>
+					<Card sx={{ maxWidth: (listView) ? 'inherit' : 345 }}>
 						<CardActionArea>
-							<Skeleton sx={{ height: 140 }} variant="rectangular" />
+							{!listView && <Skeleton sx={{ height: 140 }} variant="rectangular" />}
 							<CardContent>
 								<Typography gutterBottom variant="h5" component="div">
 									<Skeleton variant="rounded" />

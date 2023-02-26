@@ -49,9 +49,9 @@ export default function Search() {
 		<Box>
 			<Typography variant="h1">Search Results: {seachTerms}</Typography>
 			{!loadingContent ?
-				<CardDisplay posts={searchResults} page={parseInt(pageID ?? '1')} pagination={paging} returnURI={pagingURL} />
+				<CardDisplay listView posts={searchResults} page={parseInt(pageID ?? '1')} pagination={paging} returnURI={pagingURL} />
 				:
-				<CardLoad amount={displayedLimit} />
+				<CardLoad listView amount={displayedLimit} />
 			}
 		</Box>
 	);
