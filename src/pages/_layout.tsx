@@ -3,7 +3,7 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import {
 	CssBaseline, ThemeProvider, Toolbar, IconButton, Typography,
 	Container, styled, Drawer, Divider, Box, useMediaQuery, alpha, InputBase,
-	createTheme, PaletteMode, Chip, Avatar
+	createTheme, PaletteMode, Chip, Avatar, Badge
 } from '@mui/material';
 import { createContext, FormEvent, useEffect, useMemo, useState } from "react";
 import { ISiteInfo } from "../interfaces";
@@ -219,6 +219,7 @@ export default function Layout({ simple = false }: Props) {
 	};
 
 	useEffect(() => {
+		setApiState(EStatus.Loading);
 		wp.root().get()
 			.then((response: any) => {
 				//console.log('Info Reply', response);
@@ -248,6 +249,7 @@ export default function Layout({ simple = false }: Props) {
 					{!simple &&
 						<>
 							<AppBar
+								enableColorOnDark
 								position="fixed"
 								open={open}
 								sx={{ zIndex: (theme) => (desktop ? theme.zIndex.drawer + 1 : 1) }}>
@@ -263,14 +265,28 @@ export default function Layout({ simple = false }: Props) {
 											<MenuIcon />
 										</IconButton>
 									}
-									<Avatar src={mainInfo.site_icon_url} sx={{ marginRight: 2 }} />
+									<Badge
+										overlap="circular"
+										anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+										badgeContent={
+											<Chip label="Beta" color="info" size="small" sx={{
+												fontSize: '0.6rem',
+												height: 16
+											}} />
+										}
+									>
+										<Avatar
+											src={mainInfo.site_icon_url}
+											sx={{ marginRight: 2 }}
+										/>
+									</Badge>
 									<Typography
 										variant="h6"
 										noWrap
 										component="div"
 										sx={{ flexGrow: 1, display: { xs: 'block', sm: 'block' } }}
 									>
-										{mainInfo.name ?? 'Site'} <Chip label="Beta" color="info" size="small" />
+										{mainInfo.name ?? 'Site'}
 									</Typography>
 									<form onSubmit={submitForm}>
 										<Search>
