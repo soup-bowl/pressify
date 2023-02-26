@@ -1,4 +1,4 @@
-import { Divider, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Divider, List, ListItemButton, ListItemIcon, ListItemText, Theme } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 
 import Brightness4Icon from '@mui/icons-material/Brightness4';
@@ -12,9 +12,9 @@ import { useState } from "react";
 import { SiteSelectorDialog } from "./siteSelector";
 
 interface Props {
-	onClose: any;
-	theme: any;
-	colorMode: any;
+	onClose: () => void;
+	theme: Theme;
+	colorMode: { toggleColorMode: () => void };
 }
 
 export default function MenuItems({ onClose, theme, colorMode }: Props) {

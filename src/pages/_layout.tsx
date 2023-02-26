@@ -5,7 +5,7 @@ import {
 	Container, styled, Drawer, Divider, Box, useMediaQuery, alpha, InputBase,
 	createTheme, PaletteMode, Chip, Avatar
 } from '@mui/material';
-import { createContext, useEffect, useMemo, useState } from "react";
+import { createContext, FormEvent, useEffect, useMemo, useState } from "react";
 import { ISiteInfo } from "../interfaces";
 import WPAPI from "wpapi";
 import MenuItems from "../components/menu";
@@ -205,9 +205,9 @@ export default function Layout({ simple = false }: Props) {
 		};
 	}, [mainInfo]);
 
-	const submitForm = (e: any) => {
+	const submitForm = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		return navigate(`/${inputURL}/search/${e.target[0].value}`);
+		return navigate(`/${inputURL}/search/${(e.currentTarget[0] as HTMLInputElement).value}`);
 	};
 
 	const handleDrawerOpen = () => {
