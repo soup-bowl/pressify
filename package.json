@@ -15,7 +15,7 @@
     "@types/jest": "^29.1.2",
     "@types/node": "^18.7.0",
     "@types/react": "^18.0.9",
-    "@types/react-dom": "^18.0.3",
+    "@types/react-dom": "^18.0.11",
     "@types/wpapi": "^1.1.1",
     "colorthief": "^2.3.2",
     "dompurify": "^2.3.10",
