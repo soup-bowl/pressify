@@ -3,12 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
-import { AppHome, MainHome } from './pages/home';
-import Layout from './pages/_layout';
-import { PostListings } from './pages/iterator';
-import Content from './pages/content';
-import { AboutPage } from './pages/info';
-import Search from './pages/search';
+import { AboutPage, AppHome, Content, Layout, MainHome, PostListings, Search } from './pages';
 
 const root = ReactDOM.createRoot(
 	document.getElementById('root') as HTMLElement

@@ -132,7 +132,7 @@ interface Props {
 	simple?: boolean;
 }
 
-export default function Layout({ simple = false }: Props) {
+export function Layout({ simple = false }: Props) {
 	const navigate = useNavigate();
 	const { inputURL } = useParams();
 	const [open, setOpen] = useState(false);
