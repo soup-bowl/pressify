@@ -10,7 +10,7 @@ interface PrinciProps {
 	message?: string;
 }
 
-export function GeneralAPIError({ endpoint = 'Unspecified', message = '', noheader = false }: Props) {
+export const GeneralAPIError = ({ endpoint = 'Unspecified', message = '', noheader = false }: Props) => {
 	return (
 		<Box>
 			{noheader ? null : <Typography variant="h1">Error Talking to the {endpoint} API</Typography>}
@@ -23,7 +23,7 @@ export function GeneralAPIError({ endpoint = 'Unspecified', message = '', nohead
 	);
 }
 
-export function PrincipalAPIError({ message = '' }: PrinciProps) {
+export const PrincipalAPIError = ({ message = '' }: PrinciProps) => {
 	return (
 		<Box>
 			<Typography variant="h1">Unable to Display Website</Typography>

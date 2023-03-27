@@ -6,7 +6,7 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import CachedIcon from '@mui/icons-material/Cached';
 
 // https://stackoverflow.com/a/35696506
-function formatBytes(bytes: number, decimals: number = 2) {
+const formatBytes = (bytes: number, decimals: number = 2) => {
 	if (bytes === 0) return '0 Bytes';
 
 	const k = 1024;
@@ -18,7 +18,7 @@ function formatBytes(bytes: number, decimals: number = 2) {
 	return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
-export function AboutPage() {
+export const AboutPage = () => {
 	const siteTitle = "About";
 
 	const [storageInfo, setStorageInfo] = useState<IStorage>({} as IStorage);
@@ -62,3 +62,5 @@ export function AboutPage() {
 		</Box>
 	);
 }
+
+export default AboutPage;

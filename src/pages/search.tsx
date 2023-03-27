@@ -8,7 +8,7 @@ import { WordPressContext } from "./_layout";
 
 const displayedLimit: number = 12;
 
-export default function Search() {
+const Search = () => {
 	const { inputURL, seachTerms, pageID } = useParams();
 	const [loadingContent, setLoadingContent] = useState<boolean>(true);
 	const [searchResults, setSearchResults] = useState<IPost[]>([]);
@@ -56,3 +56,5 @@ export default function Search() {
 		</Box>
 	);
 }
+
+export default Search;

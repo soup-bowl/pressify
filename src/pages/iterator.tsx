@@ -15,7 +15,7 @@ interface PostProps {
 	tax?: boolean;
 }
 
-export function PostListings({ posts = false, pages = false, categories = false, tax = false }: PostProps) {
+export const PostListings = ({ posts = false, pages = false, categories = false, tax = false }: PostProps) => {
 	const [mainInfo] = useOutletContext<[ISiteInfo]>();
 	const { inputURL, searchID, pageID } = useParams();
 	const [loadingContent, setLoadingContent] = useState<boolean>(true);

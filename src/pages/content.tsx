@@ -22,7 +22,7 @@ interface Props {
 	pages?: boolean;
 }
 
-export default function Content({ posts, pages }: Props) {
+const Content = ({ posts, pages }: Props) => {
 	const { inputURL, postID } = useParams();
 	const [loadingContent, setLoadingContent] = useState<boolean>(true);
 	const [post, setPost] = useState<IPost>({} as IPost);
@@ -172,3 +172,5 @@ export default function Content({ posts, pages }: Props) {
 		</Box>
 	);
 }
+
+export default Content;

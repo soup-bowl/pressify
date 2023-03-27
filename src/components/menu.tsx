@@ -17,7 +17,7 @@ interface Props {
 	colorMode: { toggleColorMode: () => void };
 }
 
-export default function MenuItems({ onClose, theme, colorMode }: Props) {
+const MenuItems = ({ onClose, theme, colorMode }: Props) => {
 	const navigate = useNavigate();
 	const { inputURL } = useParams();
 
@@ -28,7 +28,7 @@ export default function MenuItems({ onClose, theme, colorMode }: Props) {
 		onClose();
 	}
 
-	function nav(site: string) {
+	const nav = (site: string) => {
 		navigate(site);
 		onClose();
 	}
@@ -85,3 +85,5 @@ export default function MenuItems({ onClose, theme, colorMode }: Props) {
 		</>
 	);
 }
+
+export default MenuItems;

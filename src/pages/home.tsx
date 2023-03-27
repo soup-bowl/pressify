@@ -12,7 +12,7 @@ import { localStorageRefs, SiteSelectorDialog } from '../components/siteSelector
 import WPAPI from 'wpapi';
 import { useLocalStorageJSON } from '../localStore';
 
-export function MainHome() {
+export const MainHome = () => {
 	const navigate = useNavigate();
 	const [searchValueValidated, setSearchValueValidated] = useState<string>('');
 	const [searchValue, setSearchValue] = useState<string>('');
@@ -120,7 +120,7 @@ export function MainHome() {
 	);
 }
 
-export function AppHome() {
+export const AppHome = () => {
 	const [mainInfo] = useOutletContext<[ISiteInfo]>();
 	const { inputURL } = useParams();
 	const [apiError, setApiError] = useState<string>('');

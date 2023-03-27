@@ -10,19 +10,19 @@ interface Props {
 	listView?: boolean;
 }
 
-export function degubbins(input: string) {
+export const degubbins = (input: string) => {
 	return input.replace(/<[^>]*>?/gm, '').replace(/&hellip;/g, '...').replace(
 		/&#[0-9]{1,5};/g, x => String.fromCharCode(parseInt(x.substring(2, x.length - 1)))
 	);
 }
 
-export function CardDisplay({
+export const CardDisplay = ({
 	posts,
 	page = 1,
 	pagination = undefined,
 	returnURI = '',
 	listView = false
-}: Props) {
+}: Props) => {
 	const navigate = useNavigate();
 	const { inputURL } = useParams();
 	const location = `${process.env.PUBLIC_URL}/#/${inputURL}`;
@@ -74,7 +74,7 @@ interface LoadProps {
 	listView?: boolean;
 }
 
-export function CardLoad({ amount, listView = false }: LoadProps) {
+export const CardLoad = ({ amount, listView = false }: LoadProps) => {
 	let collection = Array(amount).fill("");
 
 	return (

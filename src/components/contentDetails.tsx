@@ -25,7 +25,7 @@ interface CreatedDateProps {
 	date: Date;
 }
 
-export function CreatedDate({ date }: CreatedDateProps) {
+export const CreatedDate = ({ date }: CreatedDateProps) => {
 	const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down(switchLimit));
 
 	return (
@@ -41,7 +41,7 @@ interface AuthorProps {
 	name?: string;
 }
 
-export function Author({ avatar, name }: AuthorProps) {
+export const Author = ({ avatar, name }: AuthorProps) => {
 	const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down(switchLimit));
 
 	return (
@@ -68,7 +68,7 @@ interface OriginalContentProps {
 	url: string;
 }
 
-export function OriginalContentLink({ url }: OriginalContentProps) {
+export const OriginalContentLink = ({ url }: OriginalContentProps) => {
 	const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down(switchLimit));
 
 	return (
@@ -86,7 +86,7 @@ interface NativeShareProps {
 	url: string;
 }
 
-export function NativeShare({ title, url }: NativeShareProps) {
+export const NativeShare = ({ title, url }: NativeShareProps) => {
 	const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down(switchLimit));
 
 	return (

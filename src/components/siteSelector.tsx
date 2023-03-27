@@ -22,7 +22,7 @@ interface SiteSelectorProps {
 	disableInput?: boolean;
 }
 
-export function SiteSelectorDialog({ open, onClose, disableInput = false }: SiteSelectorProps) {
+export const SiteSelectorDialog = ({ open, onClose, disableInput = false }: SiteSelectorProps) => {
 	const navigate = useNavigate();
 	const [searchValueValidated, setSearchValueValidated] = useState<string>('');
 	const [searchValue, setSearchValue] = useState<string>('');
@@ -81,7 +81,7 @@ export function SiteSelectorDialog({ open, onClose, disableInput = false }: Site
 		setSaved(filteredItems);
 	};
 
-	function selectSite(site: string) {
+	const selectSite = (site: string) => {
 		navigate(`/${site}`);
 		onClose();
 	}

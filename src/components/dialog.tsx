@@ -18,7 +18,7 @@ interface DialogTitleProps {
 	onClose: () => void;
 }
 
-function BootstrapDialogTitle(props: DialogTitleProps) {
+const BootstrapDialogTitle = (props: DialogTitleProps) => {
 	const { children, onClose, ...other } = props;
 
 	return (
@@ -50,7 +50,7 @@ interface AppDialogProps {
 	size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
-export function AppDialog({ children, title, open, onClose, size }: AppDialogProps) {
+export const AppDialog = ({ children, title, open, onClose, size }: AppDialogProps) => {
 	const ariaGen = title.toLowerCase().replace(/ /g, '-');
 	return (
 		<BootstrapDialog
