@@ -35,6 +35,10 @@ export const AboutPage = () => {
 
 	return (
 		<Box textAlign="center">
+			<img src="/logo-mask-512.png" alt="" style={{
+				borderRadius: "100%",
+				maxWidth: 150
+			}} />
 			<Typography variant="h1" my={2}>WordPress App Generator</Typography>
 			<Typography my={2}>
 				Developed by <Link style={{ fontWeight: 'bold' }} href="https://soupbowl.io">soup-bowl</Link> and hosted
