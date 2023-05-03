@@ -1,6 +1,6 @@
 import {
-	FormControl, Grid, IconButton, InputAdornment, InputLabel, List, ListItem,
-	ListItemButton, OutlinedInput, Typography
+	ButtonGroup, FormControl, Grid, IconButton, InputAdornment, InputLabel,
+	List, ListItem, ListItemButton, OutlinedInput, Typography
 } from "@mui/material";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import StarIcon from '@mui/icons-material/Star';
@@ -70,6 +70,11 @@ export const SiteSelectorDialog = ({ open, onClose, disableInput = false }: Site
 		setHistoric(updatedItems);
 	};
 
+	const removeSiteFromHistory = (item: string) => {
+		const filteredItems = historic.filter((i) => i !== item);
+		setHistoric(filteredItems);
+	};
+
 	const saveSiteToSaved = (item: string) => {
 		if (!saved.includes(item)) {
 			setSaved([...saved, item]);
@@ -124,9 +129,14 @@ export const SiteSelectorDialog = ({ open, onClose, disableInput = false }: Site
 						<List component="nav">
 							{historic.reverse().map((item: string, index: number) => (
 								<ListItem key={index} disablePadding secondaryAction={
-									<IconButton onClick={() => saveSiteToSaved(item)}>
-										<StarIcon />
-									</IconButton>
+									<ButtonGroup>
+										<IconButton onClick={() => removeSiteFromHistory(item)}>
+											<DeleteIcon />
+										</IconButton>
+										<IconButton onClick={() => saveSiteToSaved(item)}>
+											<StarIcon />
+										</IconButton>
+									</ButtonGroup>
 								}>
 									<ListItemButton onClick={() => selectSite(item)}>
 										<Typography variant="inherit" noWrap>
@@ -137,7 +147,7 @@ export const SiteSelectorDialog = ({ open, onClose, disableInput = false }: Site
 							))}
 						</List>
 						:
-						<Typography>No recent URLs.</Typography>
+						<Typography my={2} color="text.secondary">No recent URLs.</Typography>
 					}
 				</Grid>
 				<Grid item xs={12} sm={6} sx={{ padding: 2 }}>
@@ -159,7 +169,7 @@ export const SiteSelectorDialog = ({ open, onClose, disableInput = false }: Site
 							))}
 						</List>
 						:
-						<Typography>No saved URLs.</Typography>
+						<Typography my={2} color="text.secondary">No saved URLs.</Typography>
 					}
 				</Grid>
 			</Grid>
