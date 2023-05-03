@@ -1,6 +1,6 @@
-import { Button, TextField, Typography, Box, Grid, Link, Skeleton, Alert, AlertTitle, Stack, useMediaQuery, Theme } from '@mui/material';
-import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
-import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
+import { Typography, Box, Grid, Link, Skeleton, Alert, AlertTitle, useMediaQuery, Theme } from '@mui/material';
+import { useContext, useEffect, useState } from 'react';
+import { useOutletContext, useParams } from 'react-router-dom';
 import { IPost, ISiteInfo } from '../interfaces';
 import "@fontsource/eb-garamond";
 
@@ -8,74 +8,13 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import { CardDisplay, CardLoad } from '../components/cards';
 import { GeneralAPIError } from '../components/error';
 import { WordPressContext } from './_layout';
-import { localStorageRefs, SiteSelectorDialog } from '../components/siteSelector';
-import WPAPI from 'wpapi';
-import { useLocalStorageJSON } from '../localStore';
+import { SiteSelector } from '../components/siteSelector';
 
 export const MainHome = () => {
-	const navigate = useNavigate();
-	const [searchValueValidated, setSearchValueValidated] = useState<string>('');
-	const [searchValue, setSearchValue] = useState<string>('');
-	const [isWP, setWP] = useState<boolean>(false);
-	const [isChanging, setChanging] = useState<boolean>(false);
-	const searchTimeout = useRef<NodeJS.Timeout | null>(null);
-
-	const [historic, setHistoric] = useLocalStorageJSON<string[]>(localStorageRefs.history, []);
-
-	const [open, setOpen] = useState(false);
-	const handleOpen = () => setOpen(true);
-	const handleClose = () => {
-		setOpen(false);
-	}
-
-	const saveSiteToHistory = (item: string) => {
-		const updatedItems: string[] = [...historic.slice(-4), item];
-		setHistoric(updatedItems);
-	};
-
-	const submitForm = (e: any) => {
-		e.preventDefault();
-
-		saveSiteToHistory(searchValue);
-
-		return navigate('/' + searchValue);
-	};
-
-	const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-		let parsedInput = event.target.value.match(/([^/,\s]+\.[^/,\s]+?)(?=\/|,|\s|$|\?|#)/g);
-		setChanging(true);
-		setSearchValue((parsedInput !== null) ? parsedInput[0] : '');
-	};
-
-	useEffect(() => {
-		if (searchValue !== '') {
-			if (searchTimeout.current) {
-				clearTimeout(searchTimeout.current);
-			}
-
-			searchTimeout.current = setTimeout(() => {
-				new WPAPI({ endpoint: `https://${searchValue}/wp-json` }).root().get()
-					.then((response: any) => {
-						setWP(true);
-						setSearchValueValidated(searchValue);
-					})
-					.catch((err) => setWP(false))
-					.finally(() => setChanging(false));
-			}, 1000);
-		}
-	}, [searchValue]);
-
 	useEffect(() => { document.title = `Choose a site - Pressify` }, []);
 
 	return (
-		<Grid
-			container
-			spacing={0}
-			direction="column"
-			alignItems="center"
-			justifyContent="center"
-			style={{ minHeight: '80vh' }}
-		>
+		<Grid container spacing={0} direction="column" alignItems="center" justifyContent="center" style={{ minHeight: '80vh' }}>
 			<Grid item xs={3} textAlign="center">
 				<Typography variant="h1" sx={{ fontFamily: '"EB Garamond", serif', fontSize: '6rem' }}>Pressify.</Typography>
 				<Typography my={2}>
@@ -89,27 +28,7 @@ export const MainHome = () => {
 						This service is under active development. Please be aware that there may be bugs!
 					</Alert>
 				</Box>
-				<form onSubmit={submitForm} noValidate>
-					<TextField fullWidth
-						id="url"
-						type="url"
-						label="URL"
-						variant="outlined"
-						error={(searchValueValidated !== '') ? !isWP : false}
-						helperText={
-							(!isChanging ?
-								(isWP ? `${searchValueValidated} is a WordPress site!` : "No WordPress API detected.")
-								: 'Analysing...')}
-						onChange={handleInputChange}
-					/>
-					<Box my={2}>
-						<Stack my={2} spacing={2} direction="row" justifyContent="center">
-							<Button variant="contained" type="submit">Pressify!</Button>
-							<Button variant="outlined" onClick={handleOpen}>Show Selector</Button>
-						</Stack>
-					</Box>
-				</form>
-				<SiteSelectorDialog open={open} onClose={handleClose} disableInput />
+				<SiteSelector />
 				<Typography my={2}>
 					🧪 A <Link href="https://soupbowl.io">Soupbowl</Link> experiment&nbsp;
 					<GitHubIcon fontSize='inherit' /> <Link href="https://github.com/soup-bowl/project-wordpress-pwa">
