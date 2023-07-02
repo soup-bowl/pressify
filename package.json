@@ -37,7 +37,7 @@
     "workbox-range-requests": "^7.0.0",
     "workbox-routing": "^7.0.0",
     "workbox-strategies": "^6.5.3",
-    "workbox-streams": "^6.5.3",
+    "workbox-streams": "^7.0.0",
     "wpapi": "^1.2.2"
   },
   "overrides": {
