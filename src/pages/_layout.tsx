@@ -7,16 +7,14 @@ import {
 } from '@mui/material';
 import { createContext, FormEvent, useEffect, useMemo, useState } from "react";
 import { ISiteInfo } from "../interfaces";
+import { Loading, MenuItems, PrincipalAPIError } from "../components";
 import WPAPI from "wpapi";
-import MenuItems from "../components/menu";
-import { PrincipalAPIError } from "../components/error";
+import { EStatus } from "../enums";
+import { useLocalStorage } from "../localStore";
+import ColorThief from "colorthief";
 
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
-import { EStatus } from "../enums";
-import { Loading } from "../components/loading";
-import { useLocalStorage } from "../localStore";
-import ColorThief from "colorthief";
 
 const drawerWidth = 240;
 
@@ -200,9 +198,7 @@ export const Layout = ({ simple = false }: Props) => {
 			setPrimaryColor(primaryColor);
 		};
 
-		image.onerror = (error) => {
-			console.error(error);
-		};
+		image.onerror = (error) => console.error(error);
 	}, [mainInfo]);
 
 	const submitForm = (e: FormEvent<HTMLFormElement>) => {
@@ -222,7 +218,6 @@ export const Layout = ({ simple = false }: Props) => {
 		setApiState(EStatus.Loading);
 		wp.root().get()
 			.then((response: any) => {
-				//console.log('Info Reply', response);
 				setApiError('');
 				setMainInfo({
 					name: response.name ?? 'N/A',

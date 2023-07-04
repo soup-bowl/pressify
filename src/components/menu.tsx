@@ -1,5 +1,7 @@
 import { Divider, List, ListItemButton, ListItemIcon, ListItemText, Theme } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
+import { SiteSelectorDialog } from ".";
 
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
@@ -8,8 +10,6 @@ import PushPinIcon from '@mui/icons-material/PushPin';
 import DescriptionIcon from '@mui/icons-material/Description';
 import CoPresentIcon from '@mui/icons-material/CoPresent';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
-import { useState } from "react";
-import { SiteSelectorDialog } from "./siteSelector";
 
 interface Props {
 	onClose: () => void;

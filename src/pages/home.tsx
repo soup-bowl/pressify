@@ -1,13 +1,14 @@
-import { Typography, Box, Grid, Link, Skeleton, Alert, AlertTitle, useMediaQuery, Theme } from '@mui/material';
+import {
+	Typography, Box, Grid, Link, Skeleton, Alert, AlertTitle, useMediaQuery, Theme
+} from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { useOutletContext, useParams } from 'react-router-dom';
 import { IPost, ISiteInfo } from '../interfaces';
-import "@fontsource/eb-garamond";
+import { CardDisplay, CardLoad, GeneralAPIError } from '../components';
+import { WordPressContext } from './_layout';
 
 import GitHubIcon from '@mui/icons-material/GitHub';
-import { CardDisplay, CardLoad } from '../components/cards';
-import { GeneralAPIError } from '../components/error';
-import { WordPressContext } from './_layout';
+import "@fontsource/eb-garamond";
 import { SiteSelector } from '../components/siteSelector';
 
 export const MainHome = () => {

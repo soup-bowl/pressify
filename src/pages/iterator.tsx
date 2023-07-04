@@ -1,8 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
-import { CardDisplay, CardLoad } from "../components/cards";
-import { GeneralAPIError } from "../components/error";
+import { CardDisplay, CardLoad, GeneralAPIError } from "../components";
 import { IPost, ISiteInfo, ITag, IWPIndexing } from "../interfaces";
 import { WordPressContext } from "./_layout";
 
@@ -38,7 +37,6 @@ export const PostListings = ({ posts = false, pages = false, categories = false,
 	const saveResponse = (posts: any) => {
 		setPaging(posts._paging);
 		delete posts['_paging'];
-		//console.log(posts as IPost[], paging);
 		setPostCollection(posts);
 		setLoadingContent(false);
 	}
@@ -96,12 +94,12 @@ export const PostListings = ({ posts = false, pages = false, categories = false,
 	useEffect(() => {
 		if (categories && searchID !== undefined) {
 			wp.categories().id(parseInt(searchID)).get()
-				.then((catdef: ITag) => (setIterDef(catdef.name ?? iterDef)));
+				.then((catdef: ITag) => setIterDef(catdef.name ?? iterDef));
 		}
 
 		if (tax && searchID !== undefined) {
 			wp.tags().id(parseInt(searchID)).get()
-				.then((catdef: ITag) => (setIterDef(catdef.name ?? iterDef)));
+				.then((catdef: ITag) => setIterDef(catdef.name ?? iterDef));
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchID, iterDef, postCollection, categories, tax]);
