@@ -27,9 +27,7 @@ export const AboutPage = () => {
 
 	useEffect(() => {
 		if ('storage' in navigator && 'estimate' in navigator.storage) {
-			navigator.storage.estimate().then(({ usage, quota }) => {
-				setStorageInfo({ usage: usage ?? 0, quota: quota ?? 0 });
-			});
+			navigator.storage.estimate().then(({ usage, quota }) => setStorageInfo({ usage: usage ?? 0, quota: quota ?? 0 }));
 		}
 	}, []);
 

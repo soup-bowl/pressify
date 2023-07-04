@@ -2,12 +2,11 @@ import { Box, Grid, Skeleton, Stack, styled, Typography } from "@mui/material";
 import DOMPurify from "dompurify";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { CardDisplay, degubbins } from "../components/cards";
-import { GeneralAPIError } from "../components/error";
+import {
+	Author, CardDisplay, CreatedDate, degubbins, GeneralAPIError, NativeShare, OriginalContentLink, TagGrid
+} from "../components";
 import { IPost } from "../interfaces";
 import { WordPressContext } from "./_layout";
-import { Author, CreatedDate, NativeShare, OriginalContentLink } from "../components/contentDetails";
-import { TagGrid } from "../components/tags";
 
 const StyledStack = styled(Stack)(({ theme }) => ({
 	[theme.breakpoints.down('sm')]: {
@@ -32,7 +31,6 @@ const Content = ({ posts, pages }: Props) => {
 	const wp = useContext(WordPressContext);
 
 	const saveResponse = (p: any) => {
-		//console.log(p as IPost);
 		setPost(p as IPost);
 
 		if (p.type === 'page') {

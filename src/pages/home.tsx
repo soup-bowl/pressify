@@ -1,16 +1,16 @@
-import { Button, TextField, Typography, Box, Grid, Link, Skeleton, Alert, AlertTitle, Stack, useMediaQuery, Theme } from '@mui/material';
+import {
+	Button, TextField, Typography, Box, Grid, Link, Skeleton, Alert, AlertTitle, Stack, useMediaQuery, Theme
+} from '@mui/material';
 import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { IPost, ISiteInfo } from '../interfaces';
-import "@fontsource/eb-garamond";
-
-import GitHubIcon from '@mui/icons-material/GitHub';
-import { CardDisplay, CardLoad } from '../components/cards';
-import { GeneralAPIError } from '../components/error';
+import { CardDisplay, CardLoad, GeneralAPIError, SiteSelectorDialog, localStorageRefs } from '../components';
 import { WordPressContext } from './_layout';
-import { localStorageRefs, SiteSelectorDialog } from '../components/siteSelector';
 import WPAPI from 'wpapi';
 import { useLocalStorageJSON } from '../localStore';
+
+import GitHubIcon from '@mui/icons-material/GitHub';
+import "@fontsource/eb-garamond";
 
 export const MainHome = () => {
 	const navigate = useNavigate();
@@ -24,9 +24,7 @@ export const MainHome = () => {
 
 	const [open, setOpen] = useState(false);
 	const handleOpen = () => setOpen(true);
-	const handleClose = () => {
-		setOpen(false);
-	}
+	const handleClose = () => setOpen(false);
 
 	const saveSiteToHistory = (item: string) => {
 		const updatedItems: string[] = [...historic.slice(-4), item];

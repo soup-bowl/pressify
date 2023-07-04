@@ -59,9 +59,7 @@ export const CardDisplay = ({
 					<Pagination
 						page={page ?? 1}
 						count={pagination.totalPages}
-						onChange={(event: React.ChangeEvent<unknown>, value: number) => {
-							navigate(`${returnURI}/${value}`);
-						}}
+						onChange={(event: React.ChangeEvent<unknown>, value: number) => navigate(`${returnURI}/${value}`)}
 					/>
 				</Box>
 			}
