@@ -58,7 +58,7 @@ This has been ignored on the UseEffect commands where the WP API is called. This
 dependency array, an infinite loop is triggered. I welcome thoughts and suggestions to fix this, but until then (and it
 causing no foreseeable bugs), it has been disabled.
 
-[live]: https://pressify.app
+[live]: https://soupbowl.io/pressify
 [wapi]: https://developer.wordpress.org/rest-api/
 [wapj]: https://github.com/WP-API/node-wpapi
 [pwa]:  https://web.dev/progressive-web-apps/
