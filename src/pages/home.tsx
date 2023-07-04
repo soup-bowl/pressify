@@ -4,12 +4,11 @@ import {
 import { useContext, useEffect, useState } from 'react';
 import { useOutletContext, useParams } from 'react-router-dom';
 import { IPost, ISiteInfo } from '../interfaces';
-import { CardDisplay, CardLoad, GeneralAPIError } from '../components';
+import { CardDisplay, CardLoad, GeneralAPIError, SiteSelector } from '../components';
 import { WordPressContext } from './_layout';
 
 import GitHubIcon from '@mui/icons-material/GitHub';
 import "@fontsource/eb-garamond";
-import { SiteSelector } from '../components/siteSelector';
 
 export const MainHome = () => {
 	useEffect(() => { document.title = `Choose a site - Pressify` }, []);
