@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 import { AppDialog } from "./dialog";
 import WPAPI from "wpapi";
 import { useLocalStorageJSON } from "../localStore";
+import { ESelectorState } from "../enums";
+import ButtonStateAppearance from "./statusButton";
 
 export const localStorageRefs = {
 	history: 'URLHistory',
@@ -39,8 +41,7 @@ export const SiteSelector = ({ onClose = undefined }: SiteSelectorProps) => {
 	const navigate = useNavigate();
 	const [searchValueValidated, setSearchValueValidated] = useState<string>('');
 	const [searchValue, setSearchValue] = useState<string>('');
-	const [isWP, setWP] = useState<boolean>(false);
-	const [isChanging, setChanging] = useState<boolean>(false);
+	const [detectionState, setDetectionState] = useState<ESelectorState>(ESelectorState.Ready);
 	const searchTimeout = useRef<NodeJS.Timeout | null>(null);
 
 	const [historic, setHistoric] = useLocalStorageJSON<string[]>(localStorageRefs.history, []);
@@ -56,7 +57,7 @@ export const SiteSelector = ({ onClose = undefined }: SiteSelectorProps) => {
 	const changeForm = (event: ChangeEvent<HTMLInputElement>) => {
 		// Thanks to https://stackoverflow.com/a/31941978.
 		let parsedInput = event.target.value.match(/([^/,\s]+\.[^/,\s]+?)(?=\/|,|\s|$|\?|#)/g);
-		setChanging(true);
+		setDetectionState(ESelectorState.Detecting);
 		setSearchValue((parsedInput !== null) ? parsedInput[0] : '');
 	};
 
@@ -69,11 +70,10 @@ export const SiteSelector = ({ onClose = undefined }: SiteSelectorProps) => {
 			searchTimeout.current = setTimeout(() => {
 				new WPAPI({ endpoint: `https://${searchValue}/wp-json` }).root().get()
 					.then((response: any) => {
-						setWP(true);
+						setDetectionState(ESelectorState.Confirmed);
 						setSearchValueValidated(searchValue);
 					})
-					.catch((err) => setWP(false))
-					.finally(() => setChanging(false));
+					.catch((err) => setDetectionState(ESelectorState.Denied))
 			}, 1000);
 		}
 	}, [searchValue]);
@@ -116,22 +116,13 @@ export const SiteSelector = ({ onClose = undefined }: SiteSelectorProps) => {
 						onChange={changeForm}
 						endAdornment={
 							<InputAdornment position="end">
+								<ButtonStateAppearance state={detectionState} />
 								<IconButton aria-label="submit" onClick={submitForm} edge="end">
 									<ArrowForwardIosIcon />
 								</IconButton>
 							</InputAdornment>
 						}
 					/>
-					<Typography color="darkgrey" mx={2}>
-						{(!isChanging ?
-							<>
-								{(isWP ?
-									<>{searchValueValidated} is a WordPress site!</>
-									:
-									<>No WordPress API detected.</>)}
-							</>
-							: <>Analysing...</>)}
-					</Typography>
 				</FormControl>
 			</form>
 			<Grid container sx={{ paddingTop: 2 }}>
