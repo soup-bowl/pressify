@@ -41,7 +41,6 @@ interface SiteSelectorProps {
 
 export const SiteSelector = ({ onClose = undefined }: SiteSelectorProps) => {
 	const navigate = useNavigate();
-	const [searchValueValidated, setSearchValueValidated] = useState<string>('');
 	const [searchValue, setSearchValue] = useState<string>('');
 	const [detectionState, setDetectionState] = useState<ESelectorState>(ESelectorState.Ready);
 	const searchTimeout = useRef<NodeJS.Timeout | null>(null);
@@ -71,10 +70,7 @@ export const SiteSelector = ({ onClose = undefined }: SiteSelectorProps) => {
 
 			searchTimeout.current = setTimeout(() => {
 				new WPAPI({ endpoint: `https://${searchValue}/wp-json` }).root().get()
-					.then((response: any) => {
-						setDetectionState(ESelectorState.Confirmed);
-						setSearchValueValidated(searchValue);
-					})
+					.then((response) => setDetectionState(ESelectorState.Confirmed))
 					.catch((err) => setDetectionState(ESelectorState.Denied))
 			}, 1000);
 		}
