@@ -152,6 +152,10 @@ export const Layout = ({ simple = false }: Props) => {
 		},
 	}), [setMode]);
 
+	useEffect(() => {
+		document.querySelector('meta[name="theme-color"]')?.setAttribute('content', primaryColor);
+	}, [primaryColor]);
+
 	const theme = useMemo(() => createTheme({
 		palette: {
 			primary: {
