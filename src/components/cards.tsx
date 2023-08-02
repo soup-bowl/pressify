@@ -73,7 +73,7 @@ interface LoadProps {
 }
 
 export const CardLoad = ({ amount, listView = false }: LoadProps) => {
-	let collection = Array(amount).fill("");
+	const collection = Array(amount).fill("");
 
 	return (
 		<Grid container spacing={2} my={2}>

@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { CardDisplay, CardLoad, GeneralAPIError } from "../components";
-import { IPost, ISearch, IWPIndexing } from "../interfaces";
+import { IPost, ISearch, IWPAPIError, IWPIndexing } from "../interfaces";
 import { WordPressContext } from "./_layout";
 
 const displayedLimit: number = 12;
@@ -22,13 +22,13 @@ const Search = () => {
 			.then((response: any) => {
 				setPaging(response._paging);
 				delete response['_paging'];
-				let collection: IPost[] = [];
+				const collection: IPost[] = [];
 				response.forEach((e: ISearch) => collection.push(e._embedded.self[0]));
 				setPagingURL(`/${inputURL}/search/${seachTerms}`);
 				setSearchResults(collection);
 				setLoadingContent(false);
 			})
-			.catch((err: any) => {
+			.catch((err: IWPAPIError) => {
 				setApiError(`[${err.code}] ${err.message}`);
 				setLoadingContent(false);
 			});

@@ -145,7 +145,7 @@ export const Layout = ({ simple = false }: Props) => {
 	const colorMode = useMemo(() => ({
 		toggleColorMode: () => {
 			setMode((prevMode: string) => {
-				let cmode = prevMode === 'light' ? 'dark' : 'light';
+				const cmode = prevMode === 'light' ? 'dark' : 'light';
 				setMode(cmode);
 				return cmode;
 			});

@@ -3,7 +3,7 @@ import {
 } from '@mui/material';
 import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
-import { IPost, ISiteInfo } from '../interfaces';
+import { IPost, ISiteInfo, IWPAPIError } from '../interfaces';
 import { CardDisplay, CardLoad, GeneralAPIError, SiteSelectorDialog, localStorageRefs } from '../components';
 import { WordPressContext } from './_layout';
 import WPAPI from 'wpapi';
@@ -40,7 +40,7 @@ export const MainHome = () => {
 	};
 
 	const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-		let parsedInput = event.target.value.match(/([^/,\s]+\.[^/,\s]+?)(?=\/|,|\s|$|\?|#)/g);
+		const parsedInput = event.target.value.match(/([^/,\s]+\.[^/,\s]+?)(?=\/|,|\s|$|\?|#)/g);
 		setChanging(true);
 		setSearchValue((parsedInput !== null) ? parsedInput[0] : '');
 	};
@@ -53,11 +53,11 @@ export const MainHome = () => {
 
 			searchTimeout.current = setTimeout(() => {
 				new WPAPI({ endpoint: `https://${searchValue}/wp-json` }).root().get()
-					.then((response: any) => {
+					.then(() => {
 						setWP(true);
 						setSearchValueValidated(searchValue);
 					})
-					.catch((err) => setWP(false))
+					.catch(() => setWP(false))
 					.finally(() => setChanging(false));
 			}, 1000);
 		}
@@ -139,7 +139,7 @@ export const AppHome = () => {
 			setPostCollection(values[0]);
 			setPageCollection(values[1]);
 			setLoadingContent(false);
-		}).catch((err) => {
+		}).catch((err:IWPAPIError) => {
 			setApiError(`[${err.code}] ${err.message}`);
 			setLoadingContent(false);
 		});

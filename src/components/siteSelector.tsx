@@ -43,7 +43,7 @@ export const SiteSelectorDialog = ({ open, onClose, disableInput = false }: Site
 
 	const changeForm = (event: ChangeEvent<HTMLInputElement>) => {
 		// Thanks to https://stackoverflow.com/a/31941978.
-		let parsedInput = event.target.value.match(/([^/,\s]+\.[^/,\s]+?)(?=\/|,|\s|$|\?|#)/g);
+		const parsedInput = event.target.value.match(/([^/,\s]+\.[^/,\s]+?)(?=\/|,|\s|$|\?|#)/g);
 		setChanging(true);
 		setSearchValue((parsedInput !== null) ? parsedInput[0] : '');
 	};
@@ -56,11 +56,11 @@ export const SiteSelectorDialog = ({ open, onClose, disableInput = false }: Site
 
 			searchTimeout.current = setTimeout(() => {
 				new WPAPI({ endpoint: `https://${searchValue}/wp-json` }).root().get()
-					.then((response: any) => {
+					.then(() => {
 						setWP(true);
 						setSearchValueValidated(searchValue);
 					})
-					.catch((err) => setWP(false))
+					.catch(() => setWP(false))
 					.finally(() => setChanging(false));
 			}, 1000);
 		}

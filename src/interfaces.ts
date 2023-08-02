@@ -1,3 +1,8 @@
+export interface IWPAPIError {
+	code: string;
+	message: string;
+}
+
 export interface ISiteInfo {
 	name: string;
 	description: string;

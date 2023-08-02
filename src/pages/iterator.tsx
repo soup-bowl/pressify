@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 import { CardDisplay, CardLoad, GeneralAPIError } from "../components";
-import { IPost, ISiteInfo, ITag, IWPIndexing } from "../interfaces";
+import { IPost, ISiteInfo, ITag, IWPAPIError, IWPIndexing } from "../interfaces";
 import { WordPressContext } from "./_layout";
 
 const displayedLimit: number = 12;
@@ -41,7 +41,7 @@ export const PostListings = ({ posts = false, pages = false, categories = false,
 		setLoadingContent(false);
 	}
 
-	const errResponse = (err: any) => {
+	const errResponse = (err: IWPAPIError) => {
 		setApiError(`[${err.code}] ${err.message}`);
 		setLoadingContent(false);
 	}
@@ -55,17 +55,17 @@ export const PostListings = ({ posts = false, pages = false, categories = false,
 				setPagingURL(`/${inputURL}/posts/category/${searchID}`);
 				CommonInterface.postsByCategory(parseInt(searchID ?? '0'))
 					.then((posts: any) => saveResponse(posts))
-					.catch((err: any) => errResponse(err));
+					.catch((err: IWPAPIError) => errResponse(err));
 			} else if (tax) {
 				setPagingURL(`/${inputURL}/posts/tag/${searchID}`);
 				CommonInterface.postsByTag(parseInt(searchID ?? '0'))
 					.then((posts: any) => saveResponse(posts))
-					.catch((err: any) => errResponse(err));
+					.catch((err: IWPAPIError) => errResponse(err));
 			} else {
 				setPagingURL(`/${inputURL}/posts`);
 				CommonInterface.posts()
 					.then((posts: any) => saveResponse(posts))
-					.catch((err: any) => errResponse(err));
+					.catch((err: IWPAPIError) => errResponse(err));
 			}
 		}
 
@@ -75,17 +75,17 @@ export const PostListings = ({ posts = false, pages = false, categories = false,
 				setPagingURL(`/${inputURL}/pages/category/${searchID}`);
 				CommonInterface.pagesByCategory(parseInt(searchID ?? '0'))
 					.then((posts: any) => saveResponse(posts))
-					.catch((err: any) => errResponse(err));
+					.catch((err: IWPAPIError) => errResponse(err));
 			} else if (tax) {
 				setPagingURL(`/${inputURL}/pages/tag/${searchID}`);
 				CommonInterface.pagesByTag(parseInt(searchID ?? '0'))
 					.then((posts: any) => saveResponse(posts))
-					.catch((err: any) => errResponse(err));
+					.catch((err: IWPAPIError) => errResponse(err));
 			} else {
 				setPagingURL(`/${inputURL}/pages`);
 				CommonInterface.pages()
 					.then((posts: any) => saveResponse(posts))
-					.catch((err: any) => errResponse(err));
+					.catch((err: IWPAPIError) => errResponse(err));
 			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
