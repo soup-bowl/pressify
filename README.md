@@ -35,22 +35,24 @@ For more info, see [React docs on **dangerouslySetInnerHTML**](https://reactjs.o
 
 ### Without Gitpod
 
-This is a basic React-based project, so you can get up and going on a **Node** machine by running:
+This project requires NodeJS to develop, test and compile the code. The following will quickstart you.
 
 ```bash
 npm install
-npm run
+npm start
 ```
 
-## Testing Offline
+The API the system will communicate with is defined in the appropriate `.env`.
 
-To execute in production/PWA mode, run the following:
+### Testing Offline Capabilities
 
-```bash
-npm run buildstart
+If you want to test the PWA functionality locally, you can add the following to the `VitePWA()` segment in `vite.config.ts`:
+
+```js
+devOptions: {
+	enabled: true
+},
 ```
-
-This will compile a copy of the site, and run it marked 'Production' so that the service worker will work.
 
 ## react-hooks/exhaustive-deps
 
