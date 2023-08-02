@@ -44,7 +44,7 @@ export const AboutPage = () => {
 			</Typography>
 			<Stack my={2}>
 				<Typography>
-					App Version: <Box component="span" fontWeight='700'>{process.env.REACT_APP_VERSION}</Box>
+					App Version: <Box component="span" fontWeight='700'>{process.env.REACT_APP_VERSION?.replace(/"/g, "")}</Box>
 					&nbsp;<Chip label="Beta" color="info" size="small" />
 				</Typography>
 

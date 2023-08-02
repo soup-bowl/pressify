@@ -25,7 +25,7 @@ export const CardDisplay = ({
 }: Props) => {
 	const navigate = useNavigate();
 	const { inputURL } = useParams();
-	const location = `${process.env.PUBLIC_URL}/#/${inputURL}`;
+	const location = `/#/${inputURL}`;
 
 	return (
 		<>
