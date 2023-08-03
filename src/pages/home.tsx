@@ -3,10 +3,9 @@ import {
 } from '@mui/material';
 import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
-import { IPost, ISiteInfo, IWPAPIError } from '../interfaces';
 import { CardDisplay, CardLoad, GeneralAPIError, SiteSelectorDialog, localStorageRefs } from '../components';
+import { EPostType, IPost, ISiteInfo, IWPAPIError, WordPressApi } from '../api';
 import { WordPressContext } from './_layout';
-import WPAPI from 'wpapi';
 import { useLocalStorageJSON } from '../localStore';
 
 import GitHubIcon from '@mui/icons-material/GitHub';
@@ -52,7 +51,7 @@ export const MainHome = () => {
 			}
 
 			searchTimeout.current = setTimeout(() => {
-				new WPAPI({ endpoint: `https://${searchValue}/wp-json` }).root().get()
+				new WordPressApi({ endpoint: `https://${searchValue}/wp-json` }).fetchInfo()
 					.then(() => {
 						setWP(true);
 						setSearchValueValidated(searchValue);
@@ -131,15 +130,13 @@ export const AppHome = () => {
 
 	useEffect(() => {
 		Promise.all([
-			wp.posts().perPage(3).embed().get(),
-			wp.pages().perPage(3).embed().get(),
+			wp.fetchPosts({ type: EPostType.Post, page: 1, perPage: 3 }),
+			wp.fetchPosts({ type: EPostType.Page, page: 1, perPage: 3 }),
 		]).then(values => {
-			delete values[0]['_paging'];
-			delete values[1]['_paging'];
-			setPostCollection(values[0]);
-			setPageCollection(values[1]);
+			setPostCollection(values[0].posts);
+			setPageCollection(values[1].posts);
 			setLoadingContent(false);
-		}).catch((err:IWPAPIError) => {
+		}).catch((err: IWPAPIError) => {
 			setApiError(`[${err.code}] ${err.message}`);
 			setLoadingContent(false);
 		});

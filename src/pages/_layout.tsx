@@ -6,9 +6,8 @@ import {
 	createTheme, PaletteMode, Chip, Avatar, Badge
 } from '@mui/material';
 import { createContext, FormEvent, useEffect, useMemo, useState } from "react";
-import { ISiteInfo } from "../interfaces";
+import { ISiteInfo, WordPressApi } from "../api";
 import { Loading, MenuItems, PrincipalAPIError } from "../components";
-import WPAPI from "wpapi";
 import { EStatus } from "../enums";
 import { useLocalStorage } from "../localStore";
 import ColorThief from "colorthief";
@@ -19,7 +18,7 @@ import SearchIcon from '@mui/icons-material/Search';
 const drawerWidth = 240;
 
 export const ColorModeContext = createContext({ toggleColorMode: () => { } });
-export const WordPressContext = createContext(new WPAPI({ endpoint: '' }));
+export const WordPressContext = createContext(new WordPressApi({ endpoint: '' }));
 
 declare module '@mui/material/styles' {
 	interface Theme {
@@ -139,7 +138,7 @@ export const Layout = ({ simple = false }: Props) => {
 	const [apiState, setApiState] = useState<EStatus>(EStatus.Loading);
 	const [apiError, setApiError] = useState<string>('');
 	const [primaryColor, setPrimaryColor] = useState('#3858e9');
-	const wp = new WPAPI({ endpoint: `https://${inputURL}/wp-json` });
+	const wp = new WordPressApi({ endpoint: `https://${inputURL}/wp-json` });
 
 	const [mode, setMode] = useLocalStorage('ColourPref', 'dark');
 	const colorMode = useMemo(() => ({
@@ -216,8 +215,8 @@ export const Layout = ({ simple = false }: Props) => {
 
 	useEffect(() => {
 		setApiState(EStatus.Loading);
-		wp.root().get()
-			.then((response: any) => {
+		wp.fetchInfo()
+			.then((response: ISiteInfo) => {
 				setApiError('');
 				setMainInfo({
 					name: response.name ?? 'N/A',

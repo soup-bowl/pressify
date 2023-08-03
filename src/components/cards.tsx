@@ -1,6 +1,6 @@
 import { Box, Card, CardActionArea, CardContent, CardMedia, Grid, Pagination, Skeleton, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { IPost, IWPIndexing } from "../interfaces";
+import { IPost, IWPIndexing } from "../api";
 
 interface Props {
 	posts: IPost[];
