@@ -7,6 +7,7 @@ import {
 } from "../components";
 import { IPost } from "../interfaces";
 import { WordPressContext } from "./_layout";
+import { EPostType } from "../enums";
 
 const StyledStack = styled(Stack)(({ theme }) => ({
 	[theme.breakpoints.down('sm')]: {
@@ -30,10 +31,10 @@ const Content = ({ posts, pages }: Props) => {
 	const [apiError, setApiError] = useState<string>('');
 	const wp = useContext(WordPressContext);
 
-	const saveResponse = (p: any) => {
-		setPost(p as IPost);
+	const saveResponse = (p: IPost) => {
+		setPost(p);
 
-		if (p.type === 'page') {
+		/*if (p.type === 'page') {
 			wp.pages().param('parent', p.id).embed().get()
 				.then((c: any) => {
 					delete c['_paging'];
@@ -46,7 +47,7 @@ const Content = ({ posts, pages }: Props) => {
 						setParent(c as IPost);
 					});
 			}
-		}
+		}*/
 
 		setLoadingContent(false);
 	}
@@ -60,14 +61,14 @@ const Content = ({ posts, pages }: Props) => {
 		setLoadingContent(true);
 
 		if (posts && postID !== undefined) {
-			wp.posts().embed().id(parseInt(postID)).get()
-				.then((post: any) => saveResponse(post))
+			wp.fetchPost(parseInt(postID), EPostType.Post)
+				.then((post: IPost) => saveResponse(post))
 				.catch((err: any) => errResponse(err));
 		}
 
 		if (pages && postID !== undefined) {
-			wp.pages().embed().id(parseInt(postID)).get()
-				.then((post: any) => saveResponse(post))
+			wp.fetchPost(parseInt(postID), EPostType.Page)
+				.then((post: IPost) => saveResponse(post))
 				.catch((err: any) => errResponse(err));
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps

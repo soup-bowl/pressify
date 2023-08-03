@@ -109,9 +109,18 @@ export interface IStorage {
 export interface IWPIndexing {
 	total: number;
 	totalPages: number;
-	links: IWPIndexingLinks;
 }
 
 export interface IWPIndexingLinks {
 	next: string;
+}
+
+export interface IPostCollection {
+	posts: IPost[];
+	pagination: IWPIndexing;
+}
+
+export interface ISearchCollection {
+	results: ISearch[];
+	pagination: IWPIndexing;
 }

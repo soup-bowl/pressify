@@ -2,8 +2,9 @@ import { Box, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 import { CardDisplay, CardLoad, GeneralAPIError } from "../components";
-import { IPost, ISiteInfo, ITag, IWPAPIError, IWPIndexing } from "../interfaces";
+import { IPost, IPostCollection, ISiteInfo, ITag, IWPAPIError, IWPIndexing } from "../interfaces";
 import { WordPressContext } from "./_layout";
+import { EPostType, ETagType } from "../enums";
 
 const displayedLimit: number = 12;
 
@@ -26,18 +27,17 @@ export const PostListings = ({ posts = false, pages = false, categories = false,
 	const wp = useContext(WordPressContext);
 
 	const CommonInterface = {
-		posts: () => wp.posts().perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get(),
-		postsByCategory: (cat: number) => wp.posts().categories(cat).perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get(),
-		postsByTag: (cat: number) => wp.posts().tags(cat).perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get(),
-		pages: () => wp.pages().perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get(),
-		pagesByCategory: (cat: number) => wp.pages().categories(cat).perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get(),
-		pagesByTag: (cat: number) => wp.pages().tags(cat).perPage(displayedLimit).page(parseInt(pageID ?? '1')).embed().get(),
+		posts: () => wp.fetchPosts(EPostType.Post, parseInt(pageID ?? '1'), displayedLimit),
+		postsByCategory: (cat: number) => wp.fetchPosts(EPostType.Post, parseInt(pageID ?? '1'), displayedLimit, cat, 0),
+		postsByTag: (cat: number) => wp.fetchPosts(EPostType.Post, parseInt(pageID ?? '1'), displayedLimit, 0, cat),
+		pages: () => wp.fetchPosts(EPostType.Page, parseInt(pageID ?? '1'), displayedLimit),
+		pagesByCategory: (cat: number) => wp.fetchPosts(EPostType.Page, parseInt(pageID ?? '1'), displayedLimit, cat, 0),
+		pagesByTag: (cat: number) => wp.fetchPosts(EPostType.Page, parseInt(pageID ?? '1'), displayedLimit, 0, cat),
 	}
 
-	const saveResponse = (posts: any) => {
-		setPaging(posts._paging);
-		delete posts['_paging'];
-		setPostCollection(posts);
+	const saveResponse = (posts: IPostCollection) => {
+		setPaging(posts.pagination);
+		setPostCollection(posts.posts);
 		setLoadingContent(false);
 	}
 
@@ -54,17 +54,17 @@ export const PostListings = ({ posts = false, pages = false, categories = false,
 			if (categories) {
 				setPagingURL(`/${inputURL}/posts/category/${searchID}`);
 				CommonInterface.postsByCategory(parseInt(searchID ?? '0'))
-					.then((posts: any) => saveResponse(posts))
+					.then((posts: IPostCollection) => saveResponse(posts))
 					.catch((err: IWPAPIError) => errResponse(err));
 			} else if (tax) {
 				setPagingURL(`/${inputURL}/posts/tag/${searchID}`);
 				CommonInterface.postsByTag(parseInt(searchID ?? '0'))
-					.then((posts: any) => saveResponse(posts))
+					.then((posts: IPostCollection) => saveResponse(posts))
 					.catch((err: IWPAPIError) => errResponse(err));
 			} else {
 				setPagingURL(`/${inputURL}/posts`);
 				CommonInterface.posts()
-					.then((posts: any) => saveResponse(posts))
+					.then((posts: IPostCollection) => saveResponse(posts))
 					.catch((err: IWPAPIError) => errResponse(err));
 			}
 		}
@@ -74,17 +74,17 @@ export const PostListings = ({ posts = false, pages = false, categories = false,
 			if (categories) {
 				setPagingURL(`/${inputURL}/pages/category/${searchID}`);
 				CommonInterface.pagesByCategory(parseInt(searchID ?? '0'))
-					.then((posts: any) => saveResponse(posts))
+					.then((posts: IPostCollection) => saveResponse(posts))
 					.catch((err: IWPAPIError) => errResponse(err));
 			} else if (tax) {
 				setPagingURL(`/${inputURL}/pages/tag/${searchID}`);
 				CommonInterface.pagesByTag(parseInt(searchID ?? '0'))
-					.then((posts: any) => saveResponse(posts))
+					.then((posts: IPostCollection) => saveResponse(posts))
 					.catch((err: IWPAPIError) => errResponse(err));
 			} else {
 				setPagingURL(`/${inputURL}/pages`);
 				CommonInterface.pages()
-					.then((posts: any) => saveResponse(posts))
+					.then((posts: IPostCollection) => saveResponse(posts))
 					.catch((err: IWPAPIError) => errResponse(err));
 			}
 		}
@@ -93,12 +93,12 @@ export const PostListings = ({ posts = false, pages = false, categories = false,
 
 	useEffect(() => {
 		if (categories && searchID !== undefined) {
-			wp.categories().id(parseInt(searchID)).get()
+			wp.fetchTag(parseInt(searchID), ETagType.Category)
 				.then((catdef: ITag) => setIterDef(catdef.name ?? iterDef));
 		}
 
 		if (tax && searchID !== undefined) {
-			wp.tags().id(parseInt(searchID)).get()
+			wp.fetchTag(parseInt(searchID), ETagType.Tag)
 				.then((catdef: ITag) => setIterDef(catdef.name ?? iterDef));
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps

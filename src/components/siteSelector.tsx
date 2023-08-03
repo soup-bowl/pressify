@@ -5,12 +5,12 @@ import {
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppDialog } from ".";
-import WPAPI from "wpapi";
 import { useLocalStorageJSON } from "../localStore";
 
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import StarIcon from '@mui/icons-material/Star';
 import DeleteIcon from '@mui/icons-material/Delete';
+import WordPressApi from "../api/agent";
 
 export const localStorageRefs = {
 	history: 'URLHistory',
@@ -55,7 +55,7 @@ export const SiteSelectorDialog = ({ open, onClose, disableInput = false }: Site
 			}
 
 			searchTimeout.current = setTimeout(() => {
-				new WPAPI({ endpoint: `https://${searchValue}/wp-json` }).root().get()
+				new WordPressApi({ endpoint: `https://${searchValue}/wp-json` }).fetchInfo()
 					.then(() => {
 						setWP(true);
 						setSearchValueValidated(searchValue);
