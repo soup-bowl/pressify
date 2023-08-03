@@ -2,9 +2,8 @@ import { Box, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 import { CardDisplay, CardLoad, GeneralAPIError } from "../components";
-import { IPost, IPostCollection, ISiteInfo, ITag, IWPAPIError, IWPIndexing } from "../interfaces";
+import { EPostType, ETagType, IPost, IPostCollection, ISiteInfo, ITag, IWPAPIError, IWPIndexing } from '../api';
 import { WordPressContext } from "./_layout";
-import { EPostType, ETagType } from "../enums";
 
 const displayedLimit: number = 12;
 
@@ -27,12 +26,12 @@ export const PostListings = ({ posts = false, pages = false, categories = false,
 	const wp = useContext(WordPressContext);
 
 	const CommonInterface = {
-		posts: () => wp.fetchPosts(EPostType.Post, parseInt(pageID ?? '1'), displayedLimit),
-		postsByCategory: (cat: number) => wp.fetchPosts(EPostType.Post, parseInt(pageID ?? '1'), displayedLimit, cat, 0),
-		postsByTag: (cat: number) => wp.fetchPosts(EPostType.Post, parseInt(pageID ?? '1'), displayedLimit, 0, cat),
-		pages: () => wp.fetchPosts(EPostType.Page, parseInt(pageID ?? '1'), displayedLimit),
-		pagesByCategory: (cat: number) => wp.fetchPosts(EPostType.Page, parseInt(pageID ?? '1'), displayedLimit, cat, 0),
-		pagesByTag: (cat: number) => wp.fetchPosts(EPostType.Page, parseInt(pageID ?? '1'), displayedLimit, 0, cat),
+		posts: () => wp.fetchPosts({ type: EPostType.Post, page: parseInt(pageID ?? '1'), perPage: displayedLimit }),
+		postsByCategory: (cat: number) => wp.fetchPosts({ type: EPostType.Post, page: parseInt(pageID ?? '1'), perPage: displayedLimit, byCategory: cat }),
+		postsByTag: (cat: number) => wp.fetchPosts({ type: EPostType.Post, page: parseInt(pageID ?? '1'), perPage: displayedLimit, byTag: cat }),
+		pages: () => wp.fetchPosts({ type: EPostType.Page, page: parseInt(pageID ?? '1'), perPage: displayedLimit }),
+		pagesByCategory: (cat: number) => wp.fetchPosts({ type: EPostType.Page, page: parseInt(pageID ?? '1'), perPage: displayedLimit, byCategory: cat }),
+		pagesByTag: (cat: number) => wp.fetchPosts({ type: EPostType.Page, page: parseInt(pageID ?? '1'), perPage: displayedLimit, byTag: cat }),
 	}
 
 	const saveResponse = (posts: IPostCollection) => {

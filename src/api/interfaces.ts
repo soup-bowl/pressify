@@ -1,3 +1,29 @@
+// Interaction Interfaces
+
+import { EPostType } from ".";
+
+export interface IInnnerConstruct {
+	endpoint: string;
+}
+
+export interface IndexableInput {
+	page?: number;
+	perPage?: number;
+	byCategory?: number;
+	byTag?: number;
+}
+
+export interface FetchInput extends IndexableInput {
+	type: EPostType;
+	parent?: number;
+}
+
+export interface SearchInput extends IndexableInput {
+	search: string;
+}
+
+// Data Interfaces
+
 export interface IWPAPIError {
 	code: string;
 	message: string;

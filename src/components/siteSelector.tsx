@@ -10,7 +10,7 @@ import { useLocalStorageJSON } from "../localStore";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import StarIcon from '@mui/icons-material/Star';
 import DeleteIcon from '@mui/icons-material/Delete';
-import WordPressApi from "../api/agent";
+import { WordPressApi } from "../api";
 
 export const localStorageRefs = {
 	history: 'URLHistory',

@@ -5,9 +5,8 @@ import { useParams } from "react-router-dom";
 import {
 	Author, CardDisplay, CreatedDate, degubbins, GeneralAPIError, NativeShare, OriginalContentLink, TagGrid
 } from "../components";
-import { IPost } from "../interfaces";
+import { EPostType, IPost, IPostCollection } from "../api";
 import { WordPressContext } from "./_layout";
-import { EPostType } from "../enums";
 
 const StyledStack = styled(Stack)(({ theme }) => ({
 	[theme.breakpoints.down('sm')]: {
@@ -34,20 +33,15 @@ const Content = ({ posts, pages }: Props) => {
 	const saveResponse = (p: IPost) => {
 		setPost(p);
 
-		/*if (p.type === 'page') {
-			wp.pages().param('parent', p.id).embed().get()
-				.then((c: any) => {
-					delete c['_paging'];
-					setChildren(c);
-				});
+		if (p.type === 'page') {
+			wp.fetchPosts({ type: EPostType.Page, parent: p.id })
+				.then((c: IPostCollection) => setChildren(c.posts));
 
 			if (p.parent !== undefined && p.parent !== 0) {
-				wp.pages().id(p.parent).embed().get()
-					.then((c: any) => {
-						setParent(c as IPost);
-					});
+				wp.fetchPost(p.parent, EPostType.Page)
+					.then((c: IPost) => setParent(c));
 			}
-		}*/
+		}
 
 		setLoadingContent(false);
 	}

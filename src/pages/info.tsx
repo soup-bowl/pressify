@@ -1,6 +1,6 @@
 import { Box, Button, Chip, Link, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { IStorage } from "../interfaces";
+import { IStorage } from "../api";
 
 import GitHubIcon from '@mui/icons-material/GitHub';
 import CachedIcon from '@mui/icons-material/Cached';

@@ -6,7 +6,7 @@ import {
 	createTheme, PaletteMode, Chip, Avatar, Badge
 } from '@mui/material';
 import { createContext, FormEvent, useEffect, useMemo, useState } from "react";
-import { ISiteInfo } from "../interfaces";
+import { ISiteInfo, WordPressApi } from "../api";
 import { Loading, MenuItems, PrincipalAPIError } from "../components";
 import { EStatus } from "../enums";
 import { useLocalStorage } from "../localStore";
@@ -14,7 +14,6 @@ import ColorThief from "colorthief";
 
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
-import WordPressApi from "../api/agent";
 
 const drawerWidth = 240;
 
