@@ -3,10 +3,11 @@ import DOMPurify from "dompurify";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
-	Author, CardDisplay, CreatedDate, degubbins, GeneralAPIError, NativeShare, OriginalContentLink, TagGrid
+	Author, CardDisplay, CreatedDate, GeneralAPIError, NativeShare, OriginalContentLink, TagGrid
 } from "../components";
 import { EPostType, IPost, IPostCollection } from "../api";
 import { WordPressContext } from "./_layout";
+import { degubbins } from "../utils/stringUtils";
 
 const StyledStack = styled(Stack)(({ theme }) => ({
 	[theme.breakpoints.down('sm')]: {
@@ -46,8 +47,8 @@ const Content = ({ posts, pages }: Props) => {
 		setLoadingContent(false);
 	}
 
-	const errResponse = (err: any) => {
-		setApiError(`${err}`);
+	const errResponse = (err: Error) => {
+		setApiError(err.message);
 		setLoadingContent(false);
 	}
 
@@ -57,13 +58,13 @@ const Content = ({ posts, pages }: Props) => {
 		if (posts && postID !== undefined) {
 			wp.fetchPost(parseInt(postID), EPostType.Post)
 				.then((post: IPost) => saveResponse(post))
-				.catch((err: any) => errResponse(err));
+				.catch((err: Error) => errResponse(err));
 		}
 
 		if (pages && postID !== undefined) {
 			wp.fetchPost(parseInt(postID), EPostType.Page)
 				.then((post: IPost) => saveResponse(post))
-				.catch((err: any) => errResponse(err));
+				.catch((err: Error) => errResponse(err));
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [postID, posts, pages]);

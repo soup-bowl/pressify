@@ -15,7 +15,7 @@ import StarIcon from '@mui/icons-material/Star';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { WordPressApi } from "../api";
 
-export const localStorageRefs = {
+const localStorageRefs = {
 	history: 'URLHistory',
 	saved: 'URLSaved',
 };
@@ -48,11 +48,10 @@ export const SiteSelector = ({ onClose = undefined }: SiteSelectorProps) => {
 	const [historic, setHistoric] = useLocalStorageJSON<string[]>(localStorageRefs.history, []);
 	const [saved, setSaved] = useLocalStorageJSON<string[]>(localStorageRefs.saved, []);
 
-	const submitForm = (e: any) => {
-		e.preventDefault();
-		if (searchValue !== undefined && searchValue !== "") { saveSiteToHistory(searchValue) };
+	const submitForm = () => {
+		if (searchValue !== undefined && searchValue !== "") { saveSiteToHistory(searchValue) }
 		navigate('/' + searchValue);
-		if (onClose !== undefined) { onClose() };
+		if (onClose !== undefined) { onClose() }
 	};
 
 	const changeForm = (event: ChangeEvent<HTMLInputElement>) => {
@@ -99,7 +98,7 @@ export const SiteSelector = ({ onClose = undefined }: SiteSelectorProps) => {
 
 	const selectSite = (site: string) => {
 		navigate(`/${site}`);
-		if (onClose !== undefined) { onClose() };
+		if (onClose !== undefined) { onClose() }
 	}
 
 	return (

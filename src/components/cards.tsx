@@ -1,6 +1,7 @@
 import { Box, Card, CardActionArea, CardContent, CardMedia, Grid, Pagination, Skeleton, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { IPost, IWPIndexing } from "../api";
+import { degubbins } from "../utils/stringUtils";
 
 interface Props {
 	posts: IPost[];
@@ -8,12 +9,6 @@ interface Props {
 	page?: number;
 	returnURI?: string;
 	listView?: boolean;
-}
-
-export const degubbins = (input: string) => {
-	return input.replace(/<[^>]*>?/gm, '').replace(/&hellip;/g, '...').replace(
-		/&#[0-9]{1,5};/g, x => String.fromCharCode(parseInt(x.substring(2, x.length - 1)))
-	);
 }
 
 export const CardDisplay = ({
