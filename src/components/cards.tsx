@@ -1,6 +1,6 @@
 import { Box, Card, CardActionArea, CardContent, CardMedia, Grid, Pagination, Skeleton, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { IPost, IWPIndexing } from "../interfaces";
+import { IPost, IWPIndexing } from "../api";
 
 interface Props {
 	posts: IPost[];
@@ -25,7 +25,7 @@ export const CardDisplay = ({
 }: Props) => {
 	const navigate = useNavigate();
 	const { inputURL } = useParams();
-	const location = `${process.env.PUBLIC_URL}/#/${inputURL}`;
+	const location = `/#/${inputURL}`;
 
 	return (
 		<>
@@ -73,7 +73,7 @@ interface LoadProps {
 }
 
 export const CardLoad = ({ amount, listView = false }: LoadProps) => {
-	let collection = Array(amount).fill("");
+	const collection = Array(amount).fill("");
 
 	return (
 		<Grid container spacing={2} my={2}>

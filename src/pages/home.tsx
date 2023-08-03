@@ -3,7 +3,7 @@ import {
 } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { useOutletContext, useParams } from 'react-router-dom';
-import { IPost, ISiteInfo } from '../interfaces';
+import { EPostType, IPost, ISiteInfo, IWPAPIError } from '../api';
 import { CardDisplay, CardLoad, GeneralAPIError, SiteSelector } from '../components';
 import { WordPressContext } from './_layout';
 
@@ -52,15 +52,13 @@ export const AppHome = () => {
 
 	useEffect(() => {
 		Promise.all([
-			wp.posts().perPage(3).embed().get(),
-			wp.pages().perPage(3).embed().get(),
+			wp.fetchPosts({ type: EPostType.Post, page: 1, perPage: 3 }),
+			wp.fetchPosts({ type: EPostType.Page, page: 1, perPage: 3 }),
 		]).then(values => {
-			delete values[0]['_paging'];
-			delete values[1]['_paging'];
-			setPostCollection(values[0]);
-			setPageCollection(values[1]);
+			setPostCollection(values[0].posts);
+			setPageCollection(values[1].posts);
 			setLoadingContent(false);
-		}).catch((err) => {
+		}).catch((err: IWPAPIError) => {
 			setApiError(`[${err.code}] ${err.message}`);
 			setLoadingContent(false);
 		});

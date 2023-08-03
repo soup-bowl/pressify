@@ -5,7 +5,6 @@ import {
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppDialog } from ".";
-import WPAPI from "wpapi";
 import { useLocalStorageJSON } from "../localStore";
 
 import { ESelectorState } from "../enums";
@@ -14,6 +13,7 @@ import ButtonStateAppearance from "./statusButton";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import StarIcon from '@mui/icons-material/Star';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { WordPressApi } from "../api";
 
 export const localStorageRefs = {
 	history: 'URLHistory',
@@ -57,7 +57,7 @@ export const SiteSelector = ({ onClose = undefined }: SiteSelectorProps) => {
 
 	const changeForm = (event: ChangeEvent<HTMLInputElement>) => {
 		// Thanks to https://stackoverflow.com/a/31941978.
-		let parsedInput = event.target.value.match(/([^/,\s]+\.[^/,\s]+?)(?=\/|,|\s|$|\?|#)/g);
+		const parsedInput = event.target.value.match(/([^/,\s]+\.[^/,\s]+?)(?=\/|,|\s|$|\?|#)/g);
 		setDetectionState(ESelectorState.Detecting);
 		setSearchValue((parsedInput !== null) ? parsedInput[0] : '');
 	};
@@ -69,9 +69,9 @@ export const SiteSelector = ({ onClose = undefined }: SiteSelectorProps) => {
 			}
 
 			searchTimeout.current = setTimeout(() => {
-				new WPAPI({ endpoint: `https://${searchValue}/wp-json` }).root().get()
-					.then((response) => setDetectionState(ESelectorState.Confirmed))
-					.catch((err) => setDetectionState(ESelectorState.Denied))
+				new WordPressApi({ endpoint: `https://${searchValue}/wp-json` }).fetchInfo()
+					.then(() => setDetectionState(ESelectorState.Confirmed))
+					.catch(() => setDetectionState(ESelectorState.Denied))
 			}, 1000);
 		}
 	}, [searchValue]);
