@@ -10,10 +10,6 @@ module.exports = {
 	parser: '@typescript-eslint/parser',
 	plugins: ['react-refresh'],
 	rules: {
-		// Disabled due to WP-API library response (_paging) being incompatible with TS. Remove once solved.
-		'@typescript-eslint/no-explicit-any': ['warn'],
-		'@typescript-eslint/ban-ts-comment': ['warn'],
-		'@typescript-eslint/no-var-requires': ['warn'],
 		'react-refresh/only-export-components': [
 			'warn',
 			{ allowConstantExport: true },
