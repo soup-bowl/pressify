@@ -3,3 +3,10 @@ export enum EStatus {
 	Complete,
 	Error
 }
+
+export enum ESelectorState {
+	Ready,
+	Detecting,
+	Confirmed,
+	Denied
+}

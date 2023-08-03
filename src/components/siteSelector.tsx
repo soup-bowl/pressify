@@ -7,6 +7,9 @@ import { useNavigate } from "react-router-dom";
 import { AppDialog } from ".";
 import { useLocalStorageJSON } from "../localStore";
 
+import { ESelectorState } from "../enums";
+import ButtonStateAppearance from "./statusButton";
+
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import StarIcon from '@mui/icons-material/Star';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -17,18 +20,29 @@ export const localStorageRefs = {
 	saved: 'URLSaved',
 };
 
-interface SiteSelectorProps {
+interface SiteSelectorDialogProps {
 	open: boolean;
 	onClose: () => void;
 	disableInput?: boolean;
 }
 
-export const SiteSelectorDialog = ({ open, onClose, disableInput = false }: SiteSelectorProps) => {
+export const SiteSelectorDialog = ({ open, onClose }: SiteSelectorDialogProps) => {
+	return (
+		<AppDialog title="Select Site" open={open} onClose={onClose} size="md">
+			<SiteSelector onClose={onClose} />
+		</AppDialog>
+	);
+}
+
+interface SiteSelectorProps {
+	onClose?: () => void;
+	disableInput?: boolean;
+}
+
+export const SiteSelector = ({ onClose = undefined }: SiteSelectorProps) => {
 	const navigate = useNavigate();
-	const [searchValueValidated, setSearchValueValidated] = useState<string>('');
 	const [searchValue, setSearchValue] = useState<string>('');
-	const [isWP, setWP] = useState<boolean>(false);
-	const [isChanging, setChanging] = useState<boolean>(false);
+	const [detectionState, setDetectionState] = useState<ESelectorState>(ESelectorState.Ready);
 	const searchTimeout = useRef<NodeJS.Timeout | null>(null);
 
 	const [historic, setHistoric] = useLocalStorageJSON<string[]>(localStorageRefs.history, []);
@@ -36,15 +50,15 @@ export const SiteSelectorDialog = ({ open, onClose, disableInput = false }: Site
 
 	const submitForm = (e: any) => {
 		e.preventDefault();
-		saveSiteToHistory(searchValue);
+		if (searchValue !== undefined && searchValue !== "") { saveSiteToHistory(searchValue) };
 		navigate('/' + searchValue);
-		onClose();
+		if (onClose !== undefined) { onClose() };
 	};
 
 	const changeForm = (event: ChangeEvent<HTMLInputElement>) => {
 		// Thanks to https://stackoverflow.com/a/31941978.
 		const parsedInput = event.target.value.match(/([^/,\s]+\.[^/,\s]+?)(?=\/|,|\s|$|\?|#)/g);
-		setChanging(true);
+		setDetectionState(ESelectorState.Detecting);
 		setSearchValue((parsedInput !== null) ? parsedInput[0] : '');
 	};
 
@@ -56,12 +70,8 @@ export const SiteSelectorDialog = ({ open, onClose, disableInput = false }: Site
 
 			searchTimeout.current = setTimeout(() => {
 				new WordPressApi({ endpoint: `https://${searchValue}/wp-json` }).fetchInfo()
-					.then(() => {
-						setWP(true);
-						setSearchValueValidated(searchValue);
-					})
-					.catch(() => setWP(false))
-					.finally(() => setChanging(false));
+					.then(() => setDetectionState(ESelectorState.Confirmed))
+					.catch(() => setDetectionState(ESelectorState.Denied))
 			}, 1000);
 		}
 	}, [searchValue]);
@@ -89,40 +99,30 @@ export const SiteSelectorDialog = ({ open, onClose, disableInput = false }: Site
 
 	const selectSite = (site: string) => {
 		navigate(`/${site}`);
-		onClose();
+		if (onClose !== undefined) { onClose() };
 	}
 
 	return (
-		<AppDialog title="Select Site" open={open} onClose={onClose} size="md">
-			{!disableInput &&
-				<form onSubmit={submitForm} noValidate>
-					<FormControl sx={{ width: '100%', marginTop: 1 }} variant="outlined">
-						<InputLabel htmlFor="url">URL</InputLabel>
-						<OutlinedInput fullWidth
-							id="url"
-							type="url"
-							label="URL"
-							onChange={changeForm}
-							endAdornment={
-								<InputAdornment position="end">
-									<IconButton aria-label="submit" onClick={submitForm} edge="end">
-										<ArrowForwardIosIcon />
-									</IconButton>
-								</InputAdornment>
-							}
-						/>
-						<Typography color="darkgrey" mx={2}>
-							{(!isChanging ?
-								<>
-									{(isWP ?
-										<>{searchValueValidated} is a WordPress site!</>
-										:
-										<>No WordPress API detected.</>)}
-								</>
-								: <>Analysing...</>)}
-						</Typography>
-					</FormControl>
-				</form>}
+		<>
+			<form onSubmit={submitForm} noValidate>
+				<FormControl sx={{ width: '100%', marginTop: 1 }} variant="outlined">
+					<InputLabel htmlFor="url">URL</InputLabel>
+					<OutlinedInput fullWidth
+						id="url"
+						type="url"
+						label="URL"
+						onChange={changeForm}
+						endAdornment={
+							<InputAdornment position="end">
+								<ButtonStateAppearance state={detectionState} />
+								<IconButton aria-label="submit" onClick={submitForm} edge="end">
+									<ArrowForwardIosIcon />
+								</IconButton>
+							</InputAdornment>
+						}
+					/>
+				</FormControl>
+			</form>
 			<Grid container sx={{ paddingTop: 2 }}>
 				<Grid item xs={12} sm={6} sx={{ padding: 2 }}>
 					<Typography variant="h5" component="h2">History</Typography>
@@ -174,6 +174,6 @@ export const SiteSelectorDialog = ({ open, onClose, disableInput = false }: Site
 					}
 				</Grid>
 			</Grid>
-		</AppDialog>
+		</>
 	);
 }
