@@ -1,9 +1,21 @@
-import { Box, Button, Chip, Link, Stack, Typography } from "@mui/material";
+import { Box, Button, Chip, IconButton, Link, Stack, Typography, styled } from "@mui/material";
 import { useEffect, useState } from "react";
 import { IStorage } from "../api";
 
+import FileCopyIcon from '@mui/icons-material/FileCopy';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import CachedIcon from '@mui/icons-material/Cached';
+
+const WalletDisplay = styled(Typography)({
+	fontFamily: 'monospace',
+	color: '#ffffff',
+	backgroundColor: '#121212',
+	padding: 2,
+	borderRadius: 5,
+	borderStyle: 'solid',
+	borderWidth: 1,
+	borderColor: '#515151',
+});
 
 // https://stackoverflow.com/a/35696506
 const formatBytes = (bytes: number, decimals: number = 2) => {
@@ -22,6 +34,11 @@ export const AboutPage = () => {
 	const siteTitle = "About";
 
 	const [storageInfo, setStorageInfo] = useState<IStorage>({} as IStorage);
+
+	const wallets = [
+		{ key: 'btc', wallet: '3CFhcK1mazPDEiX8FLEhEQhQ9ARYFMCkqf' },
+		{ key: 'eth', wallet: '0x74C34F52593aF941BEea187203153Ec065321001' },
+	]
 
 	useEffect(() => { document.title = `${siteTitle} - Pressify` });
 
@@ -61,6 +78,20 @@ export const AboutPage = () => {
 				<Button onClick={() => (window.location.reload())} variant="outlined" color="error"><CachedIcon />&nbsp;Reload</Button>
 				<Button href="https://github.com/soup-bowl/wordpress-pwa" variant="outlined"><GitHubIcon />&nbsp;Source Code</Button>
 			</Stack>
+			<Typography variant="h1" my={2}>Donate</Typography>
+			{wallets.map((wallet, i) => (
+				<Box>
+					<Typography variant="h3" sx={{ marginTop: 2 }}>{wallet.key.toUpperCase()} Address</Typography>
+					<Stack direction="row" justifyContent="center" alignItems="center">
+						<WalletDisplay>{wallet.wallet}</WalletDisplay>
+						<IconButton onClick={() => {
+							navigator.clipboard.writeText(wallet.wallet);
+						}}>
+							<FileCopyIcon />
+						</IconButton>
+					</Stack>
+				</Box>
+			))}
 		</Box>
 	);
 }
