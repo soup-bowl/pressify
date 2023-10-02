@@ -9,7 +9,7 @@
     "@mui/icons-material": "^5.14.11",
     "@mui/material": "^5.14.7",
     "@types/dompurify": "^3.0.0",
-    "@types/node": "^20.5.8",
+    "@types/node": "^20.8.0",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.0.11",
     "@typescript-eslint/eslint-plugin": "^6.2.1",
