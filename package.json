@@ -25,7 +25,7 @@
     "react-router-dom": "^6.16.0",
     "typescript": "^5.2.2",
     "vite": "^4.5.0",
-    "vite-plugin-pwa": "^0.16.4"
+    "vite-plugin-pwa": "^0.16.6"
   },
   "scripts": {
     "start": "npm run dev",
