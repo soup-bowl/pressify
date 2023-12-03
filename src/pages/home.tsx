@@ -1,5 +1,5 @@
 import {
-	Typography, Box, Grid, Link, Skeleton, Alert, AlertTitle, useMediaQuery, Theme
+	Typography, Box, Grid, Link, Skeleton, Alert, AlertTitle, useMediaQuery, Theme, styled
 } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { useOutletContext, useParams } from 'react-router-dom';
@@ -10,32 +10,50 @@ import { WordPressContext } from './_layout';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import "@fontsource/eb-garamond";
 
-export const MainHome = () => {
+const FixedPostion = styled('div')({
+	position: 'fixed',
+	top: 0,
+	left: 0,
+	width: '100%',
+	height: '100%',
+	zIndex: 2000,
+	backdropFilter: 'blur(10px)'
+});
+
+interface HomeProps {
+	theme: Theme;
+}
+
+export const MainHome = ({ theme }: HomeProps) => {
 	useEffect(() => { document.title = `Choose a site - Pressify` }, []);
 
+	const backdropColour = theme.palette.background.default === '#fff' ? '#ffffffd1' : `${theme.palette.background.default}d1`;
+
 	return (
-		<Grid container spacing={0} direction="column" alignItems="center" justifyContent="center" style={{ minHeight: '80vh' }}>
-			<Grid item xs={3} textAlign="center">
-				<Typography variant="h1" sx={{ fontFamily: '"EB Garamond", serif', fontSize: '6rem' }}>Pressify.</Typography>
-				<Typography my={2}>
-					If the URL you specify is a <strong>WordPress</strong> site with an exposed&nbsp;
-					<Link href="https://developer.wordpress.org/rest-api/">WordPress REST API</Link>, we can generate a
-					basic web application from the API contents.
-				</Typography>
-				<Box my={2} textAlign="left">
-					<Alert severity="info">
-						<AlertTitle>Beta</AlertTitle>
-						This service is under active development. Please be aware that there may be bugs!
-					</Alert>
-				</Box>
-				<SiteSelector />
-				<Typography my={2}>
-					🧪 A <Link href="https://soupbowl.io">Soupbowl</Link> experiment&nbsp;
-					<GitHubIcon fontSize='inherit' /> <Link href="https://github.com/soup-bowl/project-wordpress-pwa">
-						source code</Link>
-				</Typography>
+		<FixedPostion style={{ backgroundColor: backdropColour }}>
+			<Grid container spacing={0} direction="column" alignItems="center" justifyContent="center" style={{ minHeight: '80vh' }}>
+				<Grid item xs={3} textAlign="center">
+					<Typography variant="h1" sx={{ fontFamily: '"EB Garamond", serif', fontSize: '6rem' }}>Pressify.</Typography>
+					<Typography my={2}>
+						If the URL you specify is a <strong>WordPress</strong> site with an exposed&nbsp;
+						<Link href="https://developer.wordpress.org/rest-api/">WordPress REST API</Link>, we can generate a
+						basic web application from the API contents.
+					</Typography>
+					<Box my={2} textAlign="left">
+						<Alert severity="info">
+							<AlertTitle>Beta</AlertTitle>
+							This service is under active development. Please be aware that there may be bugs!
+						</Alert>
+					</Box>
+					<SiteSelector />
+					<Typography my={2}>
+						🧪 A <Link href="https://soupbowl.io">Soupbowl</Link> experiment&nbsp;
+						<GitHubIcon fontSize='inherit' /> <Link href="https://github.com/soup-bowl/project-wordpress-pwa">
+							source code</Link>
+					</Typography>
+				</Grid>
 			</Grid>
-		</Grid>
+		</FixedPostion>
 	);
 }
 

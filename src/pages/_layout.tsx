@@ -232,7 +232,9 @@ export const Layout = () => {
 				});
 		} else {
 			setApiError('');
-			setMainInfo({} as ISiteInfo);
+			setMainInfo({
+				name: 'Select a Site'
+			} as ISiteInfo);
 			setApiState(EStatus.Unset);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -243,92 +245,88 @@ export const Layout = () => {
 			<ThemeProvider theme={theme}>
 				<Box sx={{ display: 'flex' }}>
 					<CssBaseline enableColorScheme />
-					{apiState !== EStatus.Unset &&
-						<>
-							<AppBar
-								enableColorOnDark
-								position="fixed"
-								open={open}
-								sx={{ zIndex: (theme) => (desktop ? theme.zIndex.drawer + 1 : 1) }}>
-								<Toolbar>
-									{!desktop &&
-										<IconButton
-											color="inherit"
-											aria-label="open drawer"
-											onClick={handleDrawerOpen}
-											edge="start"
-											sx={{ mr: 2, ...(open && { display: 'none' }) }}
-										>
-											<MenuIcon />
-										</IconButton>
-									}
-									<Badge
-										overlap="circular"
-										anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-										badgeContent={
-											<Chip label="Beta" color="info" size="small" sx={{
-												fontSize: '0.6rem',
-												height: 16
-											}} />
-										}
-									>
-										<Avatar
-											src={mainInfo.site_icon_url}
-											sx={{ marginRight: 2 }}
-										/>
-									</Badge>
-									<Typography
-										variant="h6"
-										noWrap
-										component="div"
-										sx={{ flexGrow: 1, display: { xs: 'block', sm: 'block' } }}
-									>
-										{mainInfo.name ?? 'Site'}
-									</Typography>
-									<form onSubmit={submitForm}>
-										<Search>
-											<SearchIconWrapper>
-												<SearchIcon />
-											</SearchIconWrapper>
-											<StyledInputBase
-												placeholder="Search…"
-												inputProps={{ 'aria-label': 'search' }}
-											/>
-										</Search>
-									</form>
-								</Toolbar>
-							</AppBar>
-							<Drawer
-								sx={{
-									width: drawerWidth,
-									flexShrink: 0,
-									'& .MuiDrawer-paper': {
-										width: drawerWidth,
-										boxSizing: 'border-box',
-									},
-								}}
-								variant={(desktop) ? "permanent" : "temporary"}
-								anchor="left"
-								open={open}
-								onClose={handleDrawerClose}
+					<AppBar
+						enableColorOnDark
+						position="fixed"
+						open={open}
+						sx={{ zIndex: (theme) => (desktop ? theme.zIndex.drawer + 1 : 1) }}>
+						<Toolbar>
+							{!desktop &&
+								<IconButton
+									color="inherit"
+									aria-label="open drawer"
+									onClick={handleDrawerOpen}
+									edge="start"
+									sx={{ mr: 2, ...(open && { display: 'none' }) }}
+								>
+									<MenuIcon />
+								</IconButton>
+							}
+							<Badge
+								overlap="circular"
+								anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+								badgeContent={
+									<Chip label="Beta" color="info" size="small" sx={{
+										fontSize: '0.6rem',
+										height: 16
+									}} />
+								}
 							>
-								<DrawerHeader>
-									<IconButton onClick={handleDrawerClose}>
-										<MenuIcon />
-									</IconButton>
-								</DrawerHeader>
-								<Divider />
-								<MenuItems onClose={handleDrawerClose} colorMode={colorMode} theme={theme} />
-							</Drawer>
-						</>
-					}
+								<Avatar
+									src={mainInfo.site_icon_url}
+									sx={{ marginRight: 2 }}
+								/>
+							</Badge>
+							<Typography
+								variant="h6"
+								noWrap
+								component="div"
+								sx={{ flexGrow: 1, display: { xs: 'block', sm: 'block' } }}
+							>
+								{mainInfo.name ?? 'Site'}
+							</Typography>
+							<form onSubmit={submitForm}>
+								<Search>
+									<SearchIconWrapper>
+										<SearchIcon />
+									</SearchIconWrapper>
+									<StyledInputBase
+										placeholder="Search…"
+										inputProps={{ 'aria-label': 'search' }}
+									/>
+								</Search>
+							</form>
+						</Toolbar>
+					</AppBar>
+					<Drawer
+						sx={{
+							width: drawerWidth,
+							flexShrink: 0,
+							'& .MuiDrawer-paper': {
+								width: drawerWidth,
+								boxSizing: 'border-box',
+							},
+						}}
+						variant={(desktop) ? "permanent" : "temporary"}
+						anchor="left"
+						open={open}
+						onClose={handleDrawerClose}
+					>
+						<DrawerHeader>
+							<IconButton onClick={handleDrawerClose}>
+								<MenuIcon />
+							</IconButton>
+						</DrawerHeader>
+						<Divider />
+						<MenuItems onClose={handleDrawerClose} colorMode={colorMode} theme={theme} />
+					</Drawer>
 					<Main open={open}>
 						<DrawerHeader />
 						<Container maxWidth="md">
 							{apiState === EStatus.Complete && <Outlet context={[mainInfo]} />}
 							{apiState === EStatus.Error && <PrincipalAPIError message={apiError} />}
 							{apiState === EStatus.Loading && <Loading />}
-							{apiState === EStatus.Unset && <MainHome />}
+							{apiState === EStatus.Unset && <MainHome theme={theme} />}
 						</Container>
 					</Main>
 				</Box>
