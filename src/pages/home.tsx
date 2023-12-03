@@ -48,7 +48,7 @@ export const MainHome = ({ theme }: HomeProps) => {
 					<SiteSelector />
 					<Typography my={2}>
 						🧪 A <Link href="https://soupbowl.io">Soupbowl</Link> experiment&nbsp;
-						<GitHubIcon fontSize='inherit' /> <Link href="https://github.com/soup-bowl/project-wordpress-pwa">
+						<GitHubIcon fontSize='inherit' /> <Link href="https://github.com/soup-bowl/pressify">
 							source code</Link>
 					</Typography>
 				</Grid>
