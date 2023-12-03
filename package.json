@@ -6,7 +6,7 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@fontsource/eb-garamond": "^5.0.8",
-    "@mui/icons-material": "^5.14.11",
+    "@mui/icons-material": "^5.14.19",
     "@mui/material": "^5.14.19",
     "@types/dompurify": "^3.0.0",
     "@types/node": "^20.8.0",
