@@ -47,7 +47,8 @@ export const MainHome = ({ theme }: HomeProps) => {
 					</Box>
 					<SiteSelector />
 					<Typography my={2}>
-						🧪 A <Link href="https://soupbowl.io">Soupbowl</Link> experiment&nbsp;
+						🧪 A <Link href="https://soupbowl.io">Soupbowl</Link> experiment ({process.env.REACT_APP_VERSION?.replace(/"/g, "")})
+						&nbsp;
 						<GitHubIcon fontSize='inherit' /> <Link href="https://github.com/soup-bowl/pressify">
 							source code</Link>
 					</Typography>
