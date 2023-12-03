@@ -1,7 +1,8 @@
 export enum EStatus {
 	Loading,
 	Complete,
-	Error
+	Error,
+	Unset
 }
 
 export enum ESelectorState {

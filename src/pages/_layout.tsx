@@ -11,6 +11,7 @@ import { Loading, MenuItems, PrincipalAPIError } from "../components";
 import { EStatus } from "../enums";
 import { useLocalStorage } from "../localStore";
 import ColorThief from "colorthief";
+import { MainHome } from "./home";
 
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
@@ -125,11 +126,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 	},
 }));
 
-interface Props {
-	simple?: boolean;
-}
-
-export const Layout = ({ simple = false }: Props) => {
+export const Layout = () => {
 	const navigate = useNavigate();
 	const { inputURL } = useParams();
 	const [open, setOpen] = useState(false);
@@ -214,24 +211,30 @@ export const Layout = ({ simple = false }: Props) => {
 	};
 
 	useEffect(() => {
-		setApiState(EStatus.Loading);
-		wp.fetchInfo()
-			.then((response: ISiteInfo) => {
-				setApiError('');
-				setMainInfo({
-					name: response.name ?? 'N/A',
-					description: response.description ?? '',
-					site_icon_url: response.site_icon_url,
-					url: response.url,
-					namespaces: response.namespaces,
+		if (inputURL !== undefined) {
+			setApiState(EStatus.Loading);
+			wp.fetchInfo()
+				.then((response: ISiteInfo) => {
+					setApiError('');
+					setMainInfo({
+						name: response.name ?? 'N/A',
+						description: response.description ?? '',
+						site_icon_url: response.site_icon_url,
+						url: response.url,
+						namespaces: response.namespaces,
+					});
+					setApiState(EStatus.Complete);
+				})
+				.catch((err) => {
+					setApiError(`[${err.code}] ${err.message}`);
+					setMainInfo({} as ISiteInfo);
+					setApiState(EStatus.Error);
 				});
-				setApiState(EStatus.Complete);
-			})
-			.catch((err) => {
-				setApiError(`[${err.code}] ${err.message}`);
-				setMainInfo({} as ISiteInfo);
-				setApiState(EStatus.Error);
-			});
+		} else {
+			setApiError('');
+			setMainInfo({} as ISiteInfo);
+			setApiState(EStatus.Unset);
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [inputURL]);
 
@@ -240,7 +243,7 @@ export const Layout = ({ simple = false }: Props) => {
 			<ThemeProvider theme={theme}>
 				<Box sx={{ display: 'flex' }}>
 					<CssBaseline enableColorScheme />
-					{!simple &&
+					{apiState !== EStatus.Unset &&
 						<>
 							<AppBar
 								enableColorOnDark
@@ -319,20 +322,15 @@ export const Layout = ({ simple = false }: Props) => {
 							</Drawer>
 						</>
 					}
-					{!simple ?
-						<Main open={open}>
-							<DrawerHeader />
-							<Container maxWidth="md">
-								{apiState === EStatus.Complete && <Outlet context={[mainInfo]} />}
-								{apiState === EStatus.Error && <PrincipalAPIError message={apiError} />}
-								{apiState === EStatus.Loading && <Loading />}
-							</Container>
-						</Main>
-						:
+					<Main open={open}>
+						<DrawerHeader />
 						<Container maxWidth="md">
-							<Outlet />
+							{apiState === EStatus.Complete && <Outlet context={[mainInfo]} />}
+							{apiState === EStatus.Error && <PrincipalAPIError message={apiError} />}
+							{apiState === EStatus.Loading && <Loading />}
+							{apiState === EStatus.Unset && <MainHome />}
 						</Container>
-					}
+					</Main>
 				</Box>
 			</ThemeProvider>
 		</WordPressContext.Provider>
