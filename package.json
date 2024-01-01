@@ -22,7 +22,7 @@
     "eslint-plugin-react-refresh": "^0.4.3",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
-    "react-router-dom": "^6.16.0",
+    "react-router-dom": "^6.21.1",
     "typescript": "^5.2.2",
     "vite": "5.0",
     "vite-plugin-pwa": "^0.17.2"
