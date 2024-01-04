@@ -57,7 +57,7 @@ export const AboutPage = () => {
 			<Typography variant="h1" my={2}>WordPress App Generator</Typography>
 			<Typography my={2}>
 				Developed by <Link style={{ fontWeight: 'bold' }} href="https://soupbowl.io">soup-bowl</Link> and hosted
-				on <Link style={{ fontWeight: 'bold' }} href="https://pages.github.com/">GitHub Pages</Link>.
+				on <Link style={{ fontWeight: 'bold' }} href="https://pages.cloudflare.com/">Cloudflare Pages</Link>.
 			</Typography>
 			<Stack my={2}>
 				<Typography>
