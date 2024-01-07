@@ -10,7 +10,6 @@ import { ISiteInfo, WordPressApi } from "../api";
 import { Loading, MenuItems, PrincipalAPIError } from "../components";
 import { EStatus } from "../enums";
 import { useLocalStorage } from "../localStore";
-import ColorThief from "colorthief";
 import { MainHome } from "./home";
 
 import MenuIcon from '@mui/icons-material/Menu';
@@ -134,7 +133,7 @@ export const Layout = () => {
 	const [mainInfo, setMainInfo] = useState<ISiteInfo>({} as ISiteInfo);
 	const [apiState, setApiState] = useState<EStatus>(EStatus.Loading);
 	const [apiError, setApiError] = useState<string>('');
-	const [primaryColor, setPrimaryColor] = useState('#3858e9');
+	const primaryColor = '#3858e9';
 	const wp = new WordPressApi({ endpoint: `https://${inputURL}/wp-json` });
 
 	const [mode, setMode] = useLocalStorage('ColourPref', 'dark');
@@ -179,23 +178,6 @@ export const Layout = () => {
 			},
 		}
 	}), [mode, primaryColor]);
-
-	useEffect(() => {
-		if (mainInfo.site_icon_url === undefined) { return; }
-
-		const image = new Image();
-		image.crossOrigin = 'anonymous';
-		image.src = mainInfo.site_icon_url;
-
-		image.onload = () => {
-			const colorThief = new ColorThief();
-			const [r, g, b] = colorThief.getColor(image);
-			const primaryColor = `rgb(${r}, ${g}, ${b})`;
-			setPrimaryColor(primaryColor);
-		};
-
-		image.onerror = (error) => console.error(error);
-	}, [mainInfo]);
 
 	const submitForm = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
