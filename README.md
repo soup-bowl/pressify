@@ -8,7 +8,7 @@
   <img src="https://blog.soupbowl.io/assets/img/devices-pressify-2.webp" />
 </p>
 
-Uses the power of the **[WordPress REST API][wapi]** ([JS library][wapj]) and **[Progressive Web Apps][pwa]** to form a portable app viewer for WordPress-based sites.
+Uses the power of the **[WordPress REST API][wapi]** and **[Progressive Web Apps][pwa]** to form a portable app viewer for WordPress-based sites.
 
 [Check it out in action][live]!
 
@@ -21,11 +21,10 @@ For a site to work, it has to meet the following criteria:
   * A typical custom config will be to require authentication for viewing endpoints, which this tool will not handle.
   * The tool is built to handle these scenarios, but will degrade the experience.
 
-## :warning: Safety Notice
-
-While we will [sanitise the HTML response](https://www.npmjs.com/package/dompurify) from the source API, this tool will obtain and display HTML from the specified site. Please only **use this tool with websites you trust**!
-
-For more info, see [React docs on **dangerouslySetInnerHTML**](https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml).
+> [!WARNING]  
+> While we will [sanitise the HTML response](https://www.npmjs.com/package/dompurify) from the source API, this tool will obtain and display HTML from the specified site. Please only **use this tool with websites you trust**!
+>
+>For more info, see [React docs on **dangerouslySetInnerHTML**](https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml).
 
 ## Getting Started
 
@@ -60,7 +59,7 @@ This has been ignored on the UseEffect commands where the WP API is called. This
 dependency array, an infinite loop is triggered. I welcome thoughts and suggestions to fix this, but until then (and it
 causing no foreseeable bugs), it has been disabled.
 
-[live]: https://soupbowl.io/pressify
+[live]: https://pressify.app
 [wapi]: https://developer.wordpress.org/rest-api/
 [wapj]: https://github.com/WP-API/node-wpapi
 [pwa]:  https://web.dev/progressive-web-apps/
