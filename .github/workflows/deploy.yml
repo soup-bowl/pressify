@@ -17,22 +17,22 @@ jobs:
       deployments: write
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js 16
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 16.x
+          node-version: 20.x
 
       - name: Identify Commit Hash
         id: commit
-        uses: pr-mpt/actions-commit-hash@v1
+        uses: pr-mpt/actions-commit-hash@v3
 
       - name: Identify version
         id: get_version
         uses: battila7/get-version-action@v2
 
       - name: change version in NPM
-        uses: reedyuk/npm-version@1.1.1
+        uses: reedyuk/npm-version@1.2.2
         with:
           version: ${{ steps.get_version.outputs.version-without-v  }}-${{ steps.commit.outputs.short }}
           git-tag-version: 'false'
