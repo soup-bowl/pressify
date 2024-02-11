@@ -6,11 +6,11 @@ import {
 	createTheme, PaletteMode, Chip, Avatar, Badge
 } from '@mui/material';
 import { createContext, FormEvent, useEffect, useMemo, useState } from "react";
-import { ISiteInfo, WordPressApi } from "../api";
-import { Loading, MenuItems, PrincipalAPIError } from "../components";
-import { EStatus } from "../enums";
-import { useLocalStorage } from "../localStore";
-import { MainHome } from "./home";
+import { ISiteInfo, WordPressApi } from "@/api";
+import { Loading, MenuItems, PrincipalAPIError } from "@/components";
+import { EStatus } from "@/enums";
+import { useLocalStorage } from "@/localStore";
+import { MainHome } from "@/pages/home";
 
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';

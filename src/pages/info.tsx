@@ -1,6 +1,6 @@
 import { Box, Button, Chip, IconButton, Link, Stack, Typography, styled } from "@mui/material";
 import { useEffect, useState } from "react";
-import { IStorage } from "../api";
+import { IStorage } from "@/api";
 
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import GitHubIcon from '@mui/icons-material/GitHub';

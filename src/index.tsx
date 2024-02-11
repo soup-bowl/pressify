@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { HashRouter, Routes, Route } from 'react-router-dom';
-import { AboutPage, AppHome, Content, Layout, PostListings, Search } from './pages';
+import { AboutPage, AppHome, Content, Layout, PostListings, Search } from '@/pages';
 
 const root = ReactDOM.createRoot(
 	document.getElementById('root') as HTMLElement

@@ -1,9 +1,9 @@
 import { Box, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { CardDisplay, CardLoad, GeneralAPIError } from "../components";
-import { IPost, ISearch, ISearchCollection, IWPAPIError, IWPIndexing } from '../api';
-import { WordPressContext } from "./_layout";
+import { CardDisplay, CardLoad, GeneralAPIError } from "@/components";
+import { IPost, ISearch, ISearchCollection, IWPAPIError, IWPIndexing } from '@/api';
+import { WordPressContext } from "@/pages/_layout";
 
 const displayedLimit: number = 12;
 

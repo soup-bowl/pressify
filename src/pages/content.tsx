@@ -4,9 +4,9 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
 	Author, CardDisplay, CreatedDate, GeneralAPIError, NativeShare, OriginalContentLink, TagGrid
-} from "../components";
-import { EPostType, IPost, IPostCollection } from "../api";
-import { WordPressContext } from "./_layout";
+} from "@/components";
+import { EPostType, IPost, IPostCollection } from "@/api";
+import { WordPressContext } from "@/pages/_layout";
 import { degubbins } from "../utils/stringUtils";
 
 const StyledStack = styled(Stack)(({ theme }) => ({

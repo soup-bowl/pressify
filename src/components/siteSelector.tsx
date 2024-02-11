@@ -5,15 +5,15 @@ import {
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppDialog } from ".";
-import { useLocalStorageJSON } from "../localStore";
+import { useLocalStorageJSON } from "@/localStore";
 
-import { ESelectorState } from "../enums";
+import { ESelectorState } from "@/enums";
 import ButtonStateAppearance from "./statusButton";
 
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import StarIcon from '@mui/icons-material/Star';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { WordPressApi } from "../api";
+import { WordPressApi } from "@/api";
 
 const localStorageRefs = {
 	history: 'URLHistory',

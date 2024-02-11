@@ -1,6 +1,6 @@
 import { Chip, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { ITag } from "../api";
+import { ITag } from "@/api";
 
 interface TagProps {
 	tags: ITag[];

@@ -3,9 +3,9 @@ import {
 } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { useOutletContext, useParams } from 'react-router-dom';
-import { EPostType, IPost, ISiteInfo, IWPAPIError } from '../api';
-import { CardDisplay, CardLoad, GeneralAPIError, SiteSelector } from '../components';
-import { WordPressContext } from './_layout';
+import { EPostType, IPost, ISiteInfo, IWPAPIError } from '@/api';
+import { CardDisplay, CardLoad, GeneralAPIError, SiteSelector } from '@/components';
+import { WordPressContext } from '@/pages/_layout';
 
 import GitHubIcon from '@mui/icons-material/GitHub';
 import "@fontsource/eb-garamond";

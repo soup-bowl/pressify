@@ -1,7 +1,7 @@
 import { CircularProgress, IconButton, Tooltip } from "@mui/material";
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import { ESelectorState } from "../enums";
+import { ESelectorState } from "@/enums";
 
 interface Props {
 	state: ESelectorState;
