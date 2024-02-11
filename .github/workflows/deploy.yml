@@ -1,6 +1,9 @@
 name: Deploy Site
 
 on:
+  push:
+    branches:
+    - main
   release:
     types: [published]
 
@@ -24,14 +27,17 @@ jobs:
           node-version: 20.x
 
       - name: Identify Commit Hash
+        if: github.event_name == 'release'
         id: commit
         uses: pr-mpt/actions-commit-hash@v3
 
       - name: Identify version
+        if: github.event_name == 'release'
         id: get_version
         uses: battila7/get-version-action@v2
 
       - name: change version in NPM
+        if: github.event_name == 'release'
         uses: reedyuk/npm-version@1.2.2
         with:
           version: ${{ steps.get_version.outputs.version-without-v  }}-${{ steps.commit.outputs.short }}
@@ -48,4 +54,4 @@ jobs:
           projectName: pressify
           directory: ./dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
+          branch: ${{ github.event_name == 'push' && 'per-commit-from-main' || 'main' }}
