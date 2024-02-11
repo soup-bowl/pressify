@@ -58,4 +58,4 @@ jobs:
           branch: ${{ github.event_name == 'push' && 'per-commit-from-main' || 'main' }}
 
       - name: Debriefing
-        run: echo '🚀 Deployed to [${{ cfp.url }}](${{ cfp.url }}).' >> $GITHUB_STEP_SUMMARY
+        run: echo '🚀 Deployed to [${{ steps.cfp.outputs.url }}](${{ steps.cfp.outputs.url }}).' >> $GITHUB_STEP_SUMMARY
