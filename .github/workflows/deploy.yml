@@ -47,6 +47,7 @@ jobs:
         run: npm ci && npm run build
 
       - name: 🚛 Publish Site
+        id: cfp
         uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
@@ -55,3 +56,6 @@ jobs:
           directory: ./dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.event_name == 'push' && 'per-commit-from-main' || 'main' }}
+
+      - name: Debriefing
+        run: echo '🚀 Deployed to [${{ cfp.url }}](${{ cfp.url }}).' >> $GITHUB_STEP_SUMMARY
