@@ -3,7 +3,7 @@ import {
 } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { useOutletContext, useParams } from 'react-router-dom';
-import { EPostType, IPost, ISiteInfo, IWPAPIError } from '@/api';
+import { EPostType, IArticleCollection, ISiteInfo, IWPAPIError } from '@/api';
 import { CardDisplay, CardLoad, GeneralAPIError, SiteSelector } from '@/components';
 import { WordPressContext } from '@/pages/_layout';
 
@@ -63,8 +63,7 @@ export const AppHome = () => {
 	const { inputURL } = useParams();
 	const [apiError, setApiError] = useState<string>('');
 	const [loadingContent, setLoadingContent] = useState<boolean>(true);
-	const [postCollection, setPostCollection] = useState<IPost[]>([]);
-	const [pageCollection, setPageCollection] = useState<IPost[]>([]);
+	const [postCollection, setPostCollection] = useState<IArticleCollection>({ posts: [], pages: [] });
 	const wp = useContext(WordPressContext);
 
 	const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
@@ -74,8 +73,10 @@ export const AppHome = () => {
 			wp.fetchPosts({ type: EPostType.Post, page: 1, perPage: 3 }),
 			wp.fetchPosts({ type: EPostType.Page, page: 1, perPage: 3 }),
 		]).then(values => {
-			setPostCollection(values[0].posts);
-			setPageCollection(values[1].posts);
+			setPostCollection({
+				posts: values[0].posts,
+				pages: values[1].posts
+			});
 			setLoadingContent(false);
 		}).catch((err: IWPAPIError) => {
 			setApiError(`[${err.code}] ${err.message}`);
@@ -106,17 +107,17 @@ export const AppHome = () => {
 				<>
 					{apiError === '' ?
 						<>
-							{postCollection.length > 0 &&
+							{postCollection.posts.length > 0 &&
 								<>
 									<Typography variant="h2">Posts</Typography>
-									<CardDisplay posts={postCollection} />
+									<CardDisplay posts={postCollection.posts} />
 								</>
 							}
 
-							{pageCollection.length > 0 &&
+							{postCollection.pages.length > 0 &&
 								<>
 									<Typography variant="h2">Pages</Typography>
-									<CardDisplay posts={pageCollection} />
+									<CardDisplay posts={postCollection.pages} />
 								</>
 							}
 						</>

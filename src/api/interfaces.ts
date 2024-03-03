@@ -150,3 +150,8 @@ export interface ISearchCollection {
 	results: ISearch[];
 	pagination: IWPIndexing;
 }
+
+export interface IArticleCollection {
+	posts: IPost[];
+	pages: IPost[];
+}
