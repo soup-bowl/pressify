@@ -115,7 +115,7 @@ export const SiteSelector = ({ onClose = undefined }: SiteSelectorProps) => {
 						endAdornment={
 							<InputAdornment position="end">
 								<ButtonStateAppearance state={detectionState} />
-								<IconButton aria-label="submit" onClick={submitForm} edge="end">
+								<IconButton aria-label="submit" edge="end" type="submit">
 									<ArrowForwardIosIcon />
 								</IconButton>
 							</InputAdornment>
