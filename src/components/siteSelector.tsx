@@ -2,7 +2,7 @@ import {
 	ButtonGroup, FormControl, Grid, IconButton, InputAdornment, InputLabel,
 	List, ListItem, ListItemButton, OutlinedInput, Typography
 } from "@mui/material";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEventHandler, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppDialog } from ".";
 import { useLocalStorageJSON } from "@/localStore";
@@ -48,9 +48,10 @@ export const SiteSelector = ({ onClose = undefined }: SiteSelectorProps) => {
 	const [historic, setHistoric] = useLocalStorageJSON<string[]>(localStorageRefs.history, []);
 	const [saved, setSaved] = useLocalStorageJSON<string[]>(localStorageRefs.saved, []);
 
-	const submitForm = () => {
+	const submitForm: FormEventHandler<HTMLFormElement> = (e) => {
+		e.preventDefault();
 		if (searchValue !== undefined && searchValue !== "") { saveSiteToHistory(searchValue) }
-		navigate('/' + searchValue);
+		navigate(`/${searchValue}`);
 		if (onClose !== undefined) { onClose() }
 	};
 
