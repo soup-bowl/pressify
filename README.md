@@ -48,9 +48,7 @@ The API the system will communicate with is defined in the appropriate `.env`.
 If you want to test the PWA functionality locally, you can add the following to the `VitePWA()` segment in `vite.config.ts`:
 
 ```js
-devOptions: {
-	enabled: true
-},
+devOptions: { enabled: true },
 ```
 
 ## react-hooks/exhaustive-deps
