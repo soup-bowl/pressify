@@ -2,12 +2,12 @@ export enum EStatus {
 	Loading,
 	Complete,
 	Error,
-	Unset
+	Unset,
 }
 
 export enum ESelectorState {
 	Ready,
 	Detecting,
 	Confirmed,
-	Denied
+	Denied,
 }

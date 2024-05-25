@@ -1,21 +1,21 @@
-version: '3.6'
+version: "3.6"
 services:
   db:
     image: docker.io/library/mariadb:10.5.15
     volumes:
-    - db_persist:/var/lib/mysql
+      - db_persist:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: wordpress
   wp:
     depends_on:
-    - db
+      - db
     build:
       context: .
     volumes:
-    - "wp_persist:/var/www/html"
+      - "wp_persist:/var/www/html"
     ports:
-    - 8080:80
+      - 8080:80
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_USER: root

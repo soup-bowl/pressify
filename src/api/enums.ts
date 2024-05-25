@@ -1,9 +1,9 @@
 export enum EPostType {
 	Post,
-	Page
+	Page,
 }
 
 export enum ETagType {
 	Category,
-	Tag
+	Tag,
 }

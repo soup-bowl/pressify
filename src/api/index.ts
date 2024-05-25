@@ -1,3 +1,3 @@
-export { default as WordPressApi } from './wordpress';
-export * from './interfaces';
-export * from './enums';
+export { default as WordPressApi } from "./wordpress"
+export * from "./interfaces"
+export * from "./enums"

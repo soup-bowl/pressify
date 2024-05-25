@@ -3,7 +3,7 @@ name: Deploy Site
 on:
   push:
     branches:
-    - main
+      - main
   release:
     types: [published]
 
@@ -41,7 +41,7 @@ jobs:
         uses: reedyuk/npm-version@1.2.2
         with:
           version: ${{ steps.get_version.outputs.version-without-v  }}-${{ steps.commit.outputs.short }}
-          git-tag-version: 'false'
+          git-tag-version: "false"
 
       - name: 🏗 Build Site
         run: npm ci && npm run build

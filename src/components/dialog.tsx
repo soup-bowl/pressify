@@ -1,36 +1,35 @@
-import { Dialog, DialogContent, DialogTitle, IconButton, styled } from "@mui/material";
-import { ReactNode } from "react";
+import { Dialog, DialogContent, DialogTitle, IconButton, styled } from "@mui/material"
+import { ReactNode } from "react"
 
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close"
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-	'& .MuiDialogContent-root': {
-
+	"& .MuiDialogContent-root": {
 		padding: theme.spacing(2),
 	},
-	'& .MuiDialogActions-root': {
+	"& .MuiDialogActions-root": {
 		padding: theme.spacing(1),
 	},
-}));
+}))
 
 interface DialogTitleProps {
-	id: string;
-	children?: React.ReactNode;
-	onClose: () => void;
+	id: string
+	children?: React.ReactNode
+	onClose: () => void
 }
 
 const BootstrapDialogTitle = (props: DialogTitleProps) => {
-	const { children, onClose, ...other } = props;
+	const { children, onClose, ...other } = props
 
 	return (
 		<DialogTitle sx={{ m: 0, p: 2 }} {...other}>
 			{children}
-			{onClose &&
+			{onClose && (
 				<IconButton
 					aria-label="close"
 					onClick={onClose}
 					sx={{
-						position: 'absolute',
+						position: "absolute",
 						right: 8,
 						top: 8,
 						color: (theme) => theme.palette.grey[500],
@@ -38,21 +37,21 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
 				>
 					<CloseIcon />
 				</IconButton>
-			}
+			)}
 		</DialogTitle>
-	);
+	)
 }
 
 interface AppDialogProps {
-	children?: ReactNode;
-	title: string;
-	open: boolean;
-	onClose: () => void;
-	size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+	children?: ReactNode
+	title: string
+	open: boolean
+	onClose: () => void
+	size?: "xs" | "sm" | "md" | "lg" | "xl"
 }
 
 export const AppDialog = ({ children, title, open, onClose, size }: AppDialogProps) => {
-	const ariaGen = title.toLowerCase().replace(/ /g, '-');
+	const ariaGen = title.toLowerCase().replace(/ /g, "-")
 	return (
 		<BootstrapDialog
 			open={open}
@@ -65,9 +64,7 @@ export const AppDialog = ({ children, title, open, onClose, size }: AppDialogPro
 			<BootstrapDialogTitle id="conn-modal-modal-title" onClose={onClose}>
 				{title}
 			</BootstrapDialogTitle>
-			<DialogContent>
-				{children}
-			</DialogContent>
+			<DialogContent>{children}</DialogContent>
 		</BootstrapDialog>
-	);
+	)
 }
