@@ -3,28 +3,28 @@
 	"version": "develop",
 	"private": true,
 	"dependencies": {
-		"@emotion/react": "^11.11.4",
-		"@emotion/styled": "^11.11.5",
-		"@fontsource/eb-garamond": "^5.0.18",
-		"@mui/icons-material": "^5.15.16",
-		"@mui/material": "^5.15.16",
+		"@emotion/react": "^11.13.3",
+		"@emotion/styled": "^11.13.0",
+		"@fontsource/eb-garamond": "^5.0.19",
+		"@mui/icons-material": "^6.0.1",
+		"@mui/material": "^6.0.1",
 		"@types/dompurify": "^3.0.0",
-		"@types/node": "^20.12.8",
-		"@types/react": "^18.3.1",
+		"@types/node": "^22.5.2",
+		"@types/react": "^18.3.5",
 		"@types/react-dom": "^18.3.0",
-		"@typescript-eslint/eslint-plugin": "^7.8.0",
-		"@typescript-eslint/parser": "^7.8.0",
+		"@typescript-eslint/eslint-plugin": "^7.18.0",
+		"@typescript-eslint/parser": "^7.18.0",
 		"@vitejs/plugin-react-swc": "^3.6.0",
-		"dompurify": "^3.1.2",
+		"dompurify": "^3.1.6",
 		"eslint": "^8.57.0",
 		"eslint-plugin-react-hooks": "^4.6.2",
-		"eslint-plugin-react-refresh": "^0.4.6",
+		"eslint-plugin-react-refresh": "^0.4.11",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
-		"react-router-dom": "^6.23.0",
-		"typescript": "^5.4.5",
-		"vite": "5.2",
-		"vite-plugin-pwa": "^0.20.0"
+		"react-router-dom": "^6.26.1",
+		"typescript": "^5.5.4",
+		"vite": "5.4",
+		"vite-plugin-pwa": "^0.20.2"
 	},
 	"scripts": {
 		"start": "npm run dev",
@@ -35,6 +35,6 @@
 		"format": "prettier . --write"
 	},
 	"devDependencies": {
-		"prettier": "^3.2.5"
+		"prettier": "^3.3.3"
 	}
 }
