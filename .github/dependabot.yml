@@ -12,11 +12,11 @@ updates:
     ignore:
       # Issues with Vite
       - dependency-name: "eslint"
-        versions: ["9.x"]
+        versions: ["9"]
       - dependency-name: "@typescript-eslint/eslint-plugin"
-        versions: ["8.x"]
+        versions: ["8"]
       - dependency-name: "@typescript-eslint/parser"
-        versions: ["8.x"]
+        versions: ["8"]
     groups:
       dev-dependencies:
         patterns:
