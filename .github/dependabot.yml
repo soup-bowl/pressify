@@ -9,6 +9,14 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    ignore:
+      # Issues with Vite
+      - dependency-name: "eslint"
+        versions: ["9.x"]
+      - dependency-name: "@typescript-eslint/eslint-plugin"
+        versions: ["8.x"]
+      - dependency-name: "@typescript-eslint/parser"
+        versions: ["8.x"]
     groups:
       dev-dependencies:
         patterns:
