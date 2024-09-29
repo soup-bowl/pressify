@@ -26,6 +26,9 @@ For a site to work, it has to meet the following criteria:
 >
 > For more info, see [React docs on **dangerouslySetInnerHTML**](https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml).
 
+> [!NOTE]  
+> There is an alternative version in development - check it out at [beta.pressify.app](https://beta.pressify.app)!
+
 ## Getting Started
 
 ### With Gitpod
