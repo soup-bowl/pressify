@@ -45,9 +45,11 @@ const Post: React.FC<{
 		}
 	}, [inputURL])
 
-	if (!post) {
-		return <></>
-	}
+	useEffect(() => {
+		if (post !== undefined && post.title !== undefined) {
+			document.title = `${degubbins(post.title.rendered) ?? "Loading"} - Pressify`
+		}
+	}, [post])
 
 	return (
 		<IonPage>

@@ -1,7 +1,12 @@
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from "@ionic/react"
 import { Placeholder } from "../components"
+import { useEffect } from "react"
 
 const Nothing: React.FC = () => {
+	useEffect(() => {
+		document.title = "Pressify"
+	}, [])
+
 	return (
 		<IonPage>
 			<IonHeader>

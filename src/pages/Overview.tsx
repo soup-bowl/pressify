@@ -53,6 +53,10 @@ const Overview: React.FC = () => {
 			})
 	}, [inputURL])
 
+	useEffect(() => {
+		document.title = `${mainInfo?.name ?? "Sites"} - Pressify`
+	}, [])
+
 	return (
 		<IonPage>
 			<IonHeader>

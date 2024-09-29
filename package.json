@@ -7,7 +7,7 @@
 		"dev": "vite",
 		"build": "tsc && vite build",
 		"build:ion": "tsc && ionic build --prod",
-		"serve": "ionic serve --host=0.0.0.0 --nobrowser",
+		"serve": "ionic serve --host=0.0.0.0 --no-open",
 		"preview": "vite preview",
 		"test.unit": "vitest",
 		"lint": "eslint",

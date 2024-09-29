@@ -19,7 +19,7 @@ tasks:
           echo "PUBLIC_URL=$(gp url 3000)" > .env.development.local
           echo "REACT_APP_VERSION=\$npm_package_version" >> .env.development.local
           cp .env.development.local .env.production.local
-          ionic serve --nobrowser
+          ionic serve --no-open
 
 ports:
     - name: Frontend
