@@ -37,7 +37,7 @@ const Menu: React.FC = () => {
 							<IonMenuToggle key={index} autoHide={false}>
 								<IonItemSliding>
 									<IonItem
-										className={location.pathname === site ? "selected" : ""}
+										className={location.pathname.includes(site) ? "selected" : ""}
 										routerLink={`/${site}`}
 										routerDirection="none"
 										lines="none"
