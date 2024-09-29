@@ -10,6 +10,7 @@ import {
 } from "@ionic/react"
 import { IPost } from "../api"
 import { degubbins } from "../utils"
+import "./PostGrid.css"
 
 const PostGrid: React.FC<{
 	posts?: IPost[]

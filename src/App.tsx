@@ -3,7 +3,7 @@ import { IonApp, IonRouterOutlet, IonSplitPane, setupIonicReact } from "@ionic/r
 import { IonReactRouter } from "@ionic/react-router"
 import { Route } from "react-router-dom"
 import { Menu } from "./components"
-import { Nothing, Overview, Post } from "./pages"
+import { Nothing, Overview, Post, PostCollection } from "./pages"
 import { WordPressApi } from "./api"
 
 /* Core CSS required for Ionic components to work properly */
@@ -58,8 +58,20 @@ const App: React.FC = () => {
 						<Route path="/:inputURL/post/:postID" exact={true}>
 							<Post posts />
 						</Route>
+						<Route path="/:inputURL/posts/" exact={true}>
+							<PostCollection isPosts />
+						</Route>
+						<Route path="/:inputURL/posts/:pageNumber" exact={true}>
+							<PostCollection isPosts />
+						</Route>
 						<Route path="/:inputURL/page/:postID" exact={true}>
 							<Post pages />
+						</Route>
+						<Route path="/:inputURL/pages/" exact={true}>
+							<PostCollection isPages />
+						</Route>
+						<Route path="/:inputURL/pages/:pageNumber" exact={true}>
+							<PostCollection isPages />
 						</Route>
 					</IonRouterOutlet>
 				</IonSplitPane>
