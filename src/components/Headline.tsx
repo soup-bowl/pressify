@@ -1,8 +1,5 @@
 import { IonCol, IonGrid, IonRow, IonSkeletonText } from "@ionic/react"
-import { useParams } from "react-router"
-import ExploreContainer from "../components/ExploreContainer"
-import { createContext, useEffect, useState } from "react"
-import { ISiteInfo, WordPressApi } from "../api"
+import { ISiteInfo } from "../api"
 import "./Headline.css"
 
 const Headline: React.FC<{
