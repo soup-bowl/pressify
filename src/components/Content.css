@@ -1,0 +1,9 @@
+.wp-content img,
+.wp-content video {
+	max-width: "100%";
+	height: "inherit";
+}
+
+.wp-content-skeleton {
+	margin-bottom: 24px;
+}

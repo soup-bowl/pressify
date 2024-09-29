@@ -13,8 +13,11 @@ import { degubbins } from "../utils"
 
 const PostGrid: React.FC<{
 	posts?: IPost[]
+	siteURL?: string
 	mockCount?: number
-}> = ({ posts, mockCount = 0 }) => {
+	isPosts?: boolean
+	isPages?: boolean
+}> = ({ posts, siteURL, mockCount = 0, isPosts, isPages }) => {
 	// 450
 	if (!posts) {
 		return (
@@ -37,12 +40,14 @@ const PostGrid: React.FC<{
 		)
 	}
 
+	const postType = isPosts ? "post" : "page"
+
 	return (
 		<IonGrid>
 			<IonRow>
 				{posts.map((post, index) => (
 					<IonCol key={index}>
-						<IonCard>
+						<IonCard routerLink={`/${siteURL}/${postType}/${post.id}`}>
 							<img
 								alt=""
 								src={

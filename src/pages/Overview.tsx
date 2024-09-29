@@ -12,7 +12,6 @@ import { useParams } from "react-router"
 import { useEffect, useState } from "react"
 import { EPostType, IArticleCollection, ISiteInfo, IWPAPIError, WordPressApi } from "../api"
 import { Headline, PostGrid } from "../components"
-import "./Overview.css"
 
 const Overview: React.FC = () => {
 	const { inputURL } = useParams<{ inputURL: string }>()
@@ -68,9 +67,9 @@ const Overview: React.FC = () => {
 			<IonContent fullscreen>
 				<Headline siteInfo={mainInfo} />
 				<IonListHeader>Posts</IonListHeader>
-				<PostGrid posts={postCollection?.posts} mockCount={3} />
+				<PostGrid isPosts posts={postCollection?.posts} siteURL={inputURL} mockCount={3} />
 				<IonListHeader>Pages</IonListHeader>
-				<PostGrid posts={postCollection?.pages} mockCount={3} />
+				<PostGrid isPages posts={postCollection?.pages} siteURL={inputURL} mockCount={3} />
 			</IonContent>
 		</IonPage>
 	)

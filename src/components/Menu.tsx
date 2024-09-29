@@ -38,7 +38,7 @@ const Menu: React.FC = () => {
 								<IonItemSliding>
 									<IonItem
 										className={location.pathname === site ? "selected" : ""}
-										routerLink={site}
+										routerLink={`/${site}`}
 										routerDirection="none"
 										lines="none"
 										detail={false}
