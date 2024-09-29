@@ -1,8 +1,10 @@
+import { createContext } from "react"
 import { IonApp, IonRouterOutlet, IonSplitPane, setupIonicReact } from "@ionic/react"
 import { IonReactRouter } from "@ionic/react-router"
 import { Route } from "react-router-dom"
 import { Menu } from "./components"
-import { Layout, Nothing } from "./pages"
+import { Nothing, Overview } from "./pages"
+import { WordPressApi } from "./api"
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css"
@@ -38,6 +40,8 @@ setupIonicReact({
 	mode: "ios",
 })
 
+export const WordPressContext = createContext(new WordPressApi({ endpoint: "" }))
+
 const App: React.FC = () => {
 	return (
 		<IonApp>
@@ -49,7 +53,7 @@ const App: React.FC = () => {
 							<Nothing />
 						</Route>
 						<Route path="/:inputURL" exact={true}>
-							<Layout />
+							<Overview />
 						</Route>
 					</IonRouterOutlet>
 				</IonSplitPane>
