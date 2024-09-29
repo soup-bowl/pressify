@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - beta
   release:
     types: [published]
 
@@ -52,10 +53,10 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          projectName: pressify
+          projectName: ${{ github.ref == 'refs/heads/beta' && 'pressifybeta' || 'pressify' }}
           directory: ./dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.event_name == 'push' && 'per-commit-from-main' || 'main' }}
+          branch: ${{ github.ref == 'refs/heads/beta' && 'main' || (github.event_name == 'push' && 'per-commit-from-main' || 'main') }}
 
       - name: Debriefing
         run: echo '🚀 Deployed to [${{ steps.cfp.outputs.url }}](${{ steps.cfp.outputs.url }}).' >> $GITHUB_STEP_SUMMARY
