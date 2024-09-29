@@ -2,14 +2,28 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" href="/logo.svg" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="apple-mobile-web-app-title" content="Pressify" />
-		<meta name="theme-color" content="#121212" />
-		<link rel="apple-touch-icon" href="/logo-mask-512.png" />
 		<title>Pressify</title>
 
-		<meta name="robots" content="noindex" />
+		<base href="/" />
+
+		<meta name="color-scheme" content="dark" />
+		<meta name="theme-color" content="#121212" />
+		<meta
+			name="viewport"
+			content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+		/>
+		<meta name="format-detection" content="telephone=no" />
+		<meta name="msapplication-tap-highlight" content="no" />
+
+		<link rel="manifest" href="/manifest.json" />
+
+		<link rel="shortcut icon" type="image/png" href="/favicon.png" />
+
+		<!-- add to homescreen for ios -->
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-title" content="Pressify" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<link rel="apple-touch-icon" href="/logo-mask-512.png" />
 
 		<meta property="og:type" content="website" />
 		<meta property="og:title" content="Pressify." />
@@ -31,6 +45,6 @@
 	<body>
 		<noscript>You need to enable JavaScript to run this app.</noscript>
 		<div id="root"></div>
-		<script type="module" src="/src/index.tsx"></script>
+		<script type="module" src="/src/main.tsx"></script>
 	</body>
 </html>

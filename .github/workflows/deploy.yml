@@ -1,62 +1,62 @@
 name: Deploy Site
 
 on:
-  push:
-    branches:
-      - main
-      - beta
-  release:
-    types: [published]
+    push:
+        branches:
+            - main
+            - beta
+    release:
+        types: [published]
 
 concurrency:
-  group: "pages"
-  cancel-in-progress: true
+    group: "pages"
+    cancel-in-progress: true
 
 jobs:
-  build_test:
-    runs-on: ubuntu-latest
+    build_test:
+        runs-on: ubuntu-latest
 
-    permissions:
-      contents: read
-      deployments: write
+        permissions:
+            contents: read
+            deployments: write
 
-    steps:
-      - uses: actions/checkout@v4
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.x
+        steps:
+            - uses: actions/checkout@v4
+            - name: Use Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20.x
 
-      - name: Identify Commit Hash
-        if: github.event_name == 'release'
-        id: commit
-        uses: pr-mpt/actions-commit-hash@v3
+            - name: Identify Commit Hash
+              if: github.event_name == 'release'
+              id: commit
+              uses: pr-mpt/actions-commit-hash@v3
 
-      - name: Identify version
-        if: github.event_name == 'release'
-        id: get_version
-        uses: battila7/get-version-action@v2
+            - name: Identify version
+              if: github.event_name == 'release'
+              id: get_version
+              uses: battila7/get-version-action@v2
 
-      - name: change version in NPM
-        if: github.event_name == 'release'
-        uses: reedyuk/npm-version@1.2.2
-        with:
-          version: ${{ steps.get_version.outputs.version-without-v  }}-${{ steps.commit.outputs.short }}
-          git-tag-version: "false"
+            - name: change version in NPM
+              if: github.event_name == 'release'
+              uses: reedyuk/npm-version@1.2.2
+              with:
+                  version: ${{ steps.get_version.outputs.version-without-v  }}-${{ steps.commit.outputs.short }}
+                  git-tag-version: "false"
 
-      - name: 🏗 Build Site
-        run: npm ci && npm run build
+            - name: 🏗 Build Site
+              run: npm ci && npm run build
 
-      - name: 🚛 Publish Site
-        id: cfp
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          projectName: ${{ github.ref == 'refs/heads/beta' && 'pressifybeta' || 'pressify' }}
-          directory: ./dist
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref == 'refs/heads/beta' && 'main' || (github.event_name == 'push' && 'per-commit-from-main' || 'main') }}
+            - name: 🚛 Publish Site
+              id: cfp
+              uses: cloudflare/pages-action@v1
+              with:
+                  apiToken: ${{ secrets.CF_API_TOKEN }}
+                  accountId: ${{ secrets.CF_ACCOUNT_ID }}
+                  projectName: ${{ github.ref == 'refs/heads/beta' && 'pressifybeta' || 'pressify' }}
+                  directory: ./dist
+                  gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+                  branch: ${{ github.ref == 'refs/heads/beta' && 'main' || (github.event_name == 'push' && 'per-commit-from-main' || 'main') }}
 
-      - name: Debriefing
-        run: echo '🚀 Deployed to [${{ steps.cfp.outputs.url }}](${{ steps.cfp.outputs.url }}).' >> $GITHUB_STEP_SUMMARY
+            - name: Debriefing
+              run: echo '🚀 Deployed to [${{ steps.cfp.outputs.url }}](${{ steps.cfp.outputs.url }}).' >> $GITHUB_STEP_SUMMARY
