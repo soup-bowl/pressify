@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router"
 import { EPostType, IArticleCollection, ISiteInfo, IWPAPIError, WordPressApi } from "../api"
 import { Headline, PostGrid } from "../components"
+import { IonListHeader } from "@ionic/react"
 import "./Overview.css"
 
 const Overview: React.FC<{
@@ -31,9 +32,9 @@ const Overview: React.FC<{
 	return (
 		<>
 			<Headline siteInfo={siteInfo} />
-			<h2>Posts</h2>
+			<IonListHeader>Posts</IonListHeader>
 			<PostGrid posts={postCollection?.posts} mockCount={3} />
-			<h2>Pages</h2>
+			<IonListHeader>Pages</IonListHeader>
 			<PostGrid posts={postCollection?.pages} mockCount={3} />
 		</>
 	)

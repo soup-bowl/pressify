@@ -3,11 +3,11 @@ import { useParams } from "react-router"
 import { createContext, useEffect, useState } from "react"
 import { ISiteInfo, WordPressApi } from "../api"
 import { Overview } from "."
-import "./Page.css"
+import "./Layout.css"
 
 export const WordPressContext = createContext(new WordPressApi({ endpoint: "" }))
 
-const Page: React.FC = () => {
+const Layout: React.FC = () => {
 	const { inputURL } = useParams<{ inputURL: string }>()
 	const wp = new WordPressApi({ endpoint: `https://${inputURL}/wp-json` })
 	const [mainInfo, setMainInfo] = useState<ISiteInfo | undefined>()
@@ -48,4 +48,4 @@ const Page: React.FC = () => {
 	)
 }
 
-export default Page
+export default Layout

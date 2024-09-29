@@ -22,7 +22,7 @@ const PostGrid: React.FC<{
 				<IonRow>
 					{Array.from({ length: mockCount }).map((_, index) => (
 						<IonCol key={index}>
-							<IonCard>
+							<IonCard style={{ minWidth: 200 }}>
 								<IonSkeletonText animated style={{ width: "100%", height: 200, marginTop: 0 }} />
 								<IonCardContent>
 									<IonSkeletonText animated style={{ width: "60%" }} />
