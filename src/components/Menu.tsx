@@ -1,10 +1,11 @@
-import { ChangeEvent, useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import {
 	InputCustomEvent,
 	InputInputEventDetail,
 	IonAlert,
 	IonButton,
 	IonButtons,
+	IonChip,
 	IonContent,
 	IonHeader,
 	IonIcon,
@@ -27,9 +28,9 @@ import { earthOutline, earthSharp } from "ionicons/icons"
 import { useLocation } from "react-router-dom"
 import { useSettings } from "../hooks"
 import { ESelectorState } from "../enum"
-import "./Menu.css"
 import { WordPressApi } from "../api"
-import ReadyState from "./ReadyState"
+import { ReadyState } from "."
+import "./Menu.css"
 
 const Menu: React.FC = () => {
 	const location = useLocation()
@@ -71,7 +72,12 @@ const Menu: React.FC = () => {
 			<IonContent>
 				<IonList id="inbox-list">
 					<IonListHeader>
-						<IonLabel>Pressify</IonLabel>
+						<IonLabel>
+							Pressify{" "}
+							<IonChip color="primary" id="is-beta">
+								Beta
+							</IonChip>
+						</IonLabel>
 						<IonButton onClick={() => setIsOpen(true)}>Add</IonButton>
 					</IonListHeader>
 					<IonNote>WordPress App Simulator</IonNote>
@@ -143,6 +149,15 @@ const Menu: React.FC = () => {
 						<ReadyState state={detectionState} />
 					</IonContent>
 				</IonModal>
+				<IonAlert
+					trigger="is-beta"
+					header="Application in beta"
+					message="This service is under active development. Please be aware that there may be bugs!"
+					buttons={[
+						"Close",
+						{ text: "Visit", handler: () => window?.open("https://soupbowl.io", "_blank")?.focus() },
+					]}
+				/>
 			</IonContent>
 		</IonMenu>
 	)
