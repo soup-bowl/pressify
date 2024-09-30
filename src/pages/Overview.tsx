@@ -1,13 +1,17 @@
 import {
+	IonButton,
 	IonButtons,
 	IonContent,
 	IonHeader,
+	IonIcon,
+	IonLabel,
 	IonListHeader,
 	IonMenuButton,
 	IonPage,
 	IonTitle,
 	IonToolbar,
 } from "@ionic/react"
+import { arrowForward, chevronForward, searchOutline } from "ionicons/icons"
 import { useParams } from "react-router"
 import { useEffect, useState } from "react"
 import { EPostType, IArticleCollection, ISiteInfo, IWPAPIError, WordPressApi } from "../api"
@@ -65,14 +69,31 @@ const Overview: React.FC = () => {
 						<IonMenuButton />
 					</IonButtons>
 					<IonTitle>{inputURL}</IonTitle>
+					<IonButtons slot="end">
+						<IonButton routerLink={`/${inputURL}/search`}>
+							<IonIcon slot="icon-only" ios={searchOutline}></IonIcon>
+						</IonButton>
+					</IonButtons>
 				</IonToolbar>
 			</IonHeader>
 
 			<IonContent fullscreen>
 				<Headline siteInfo={mainInfo} />
-				<IonListHeader>Posts</IonListHeader>
+				<IonListHeader>
+					<IonLabel>Posts</IonLabel>
+					<IonButton routerLink={`/${inputURL}/posts`}>
+						More
+						<IonIcon slot="end" ios={chevronForward} md={arrowForward}></IonIcon>
+					</IonButton>
+				</IonListHeader>
 				<PostGrid posts={postCollection?.posts} siteURL={inputURL} mockCount={3} />
-				<IonListHeader>Pages</IonListHeader>
+				<IonListHeader>
+					<IonLabel>Pages</IonLabel>
+					<IonButton routerLink={`/${inputURL}/pages`}>
+						More
+						<IonIcon slot="end" ios={chevronForward} md={arrowForward}></IonIcon>
+					</IonButton>
+				</IonListHeader>
 				<PostGrid posts={postCollection?.pages} siteURL={inputURL} mockCount={3} />
 			</IonContent>
 		</IonPage>

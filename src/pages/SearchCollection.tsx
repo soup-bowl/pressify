@@ -1,24 +1,34 @@
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from "@ionic/react"
+import {
+	IonBackButton,
+	IonButton,
+	IonButtons,
+	IonContent,
+	IonHeader,
+	IonIcon,
+	IonMenuButton,
+	IonPage,
+	IonSearchbar,
+	IonTitle,
+	IonToolbar,
+} from "@ionic/react"
 import { useParams } from "react-router"
 import { useEffect, useState } from "react"
 import { EPostType, IPost, ISiteInfo, WordPressApi } from "../api"
-import { degubbins } from "../utils"
-import { PostGrid } from "../components"
+import { degubbins, getLayoutIcon } from "../utils"
+import { PostGrid, PostList } from "../components"
+import { useSettings } from "../hooks"
 
 const pageAmount = 12
 
 const SearchCollection: React.FC = () => {
-	const { inputURL, searchTerms, pageNumber } = useParams<{
-		inputURL: string
-		searchTerms: string
-		pageNumber: string
-	}>()
+	const { inputURL } = useParams<{ inputURL: string }>()
+	const [layout, setLayout] = useSettings<"grid" | "list">("displayLayout", "grid")
 	const wp = new WordPressApi({ endpoint: `https://${inputURL}/wp-json` })
 	const [mainInfo, setMainInfo] = useState<ISiteInfo | undefined>()
+	const [searchTerms, setSearchTerms] = useState<string>("")
 	const [searchResults, setSearchResults] = useState<IPost[] | undefined>()
 
 	useEffect(() => {
-		setSearchResults(undefined)
 		setMainInfo(undefined)
 
 		wp.fetchInfo()
@@ -34,17 +44,27 @@ const SearchCollection: React.FC = () => {
 			.catch((err) => {
 				console.log(err)
 			})
+	}, [inputURL])
 
-		wp.searchPosts({ search: searchTerms ?? "", page: parseInt(pageNumber ?? "1"), perPage: pageAmount })
+	useEffect(() => {
+		wp.searchPosts({ search: searchTerms ?? "", page: 1, perPage: pageAmount })
 			.then((response) => {
 				const collection: IPost[] = []
 				response.results.forEach((e) => collection.push(e._embedded.self[0]))
 				setSearchResults(collection)
 			})
 			.catch((err) => console.log(err))
-	}, [inputURL])
+	}, [searchTerms])
 
-	const title = `${degubbins(mainInfo?.name ?? "Loading...")} search`
+	const toggleLayout = () => {
+		if (layout === "grid") {
+			setLayout("list")
+		} else {
+			setLayout("grid")
+		}
+	}
+
+	const title = `Searching ${mainInfo?.name} for "${searchTerms}"`
 	useEffect(() => {
 		document.title = `${title} - Pressify`
 	}, [mainInfo])
@@ -54,20 +74,31 @@ const SearchCollection: React.FC = () => {
 			<IonHeader>
 				<IonToolbar>
 					<IonButtons slot="start">
+						<IonBackButton />
 						<IonMenuButton />
 					</IonButtons>
 					<IonTitle>{title}</IonTitle>
+					<IonButtons slot="primary">
+						<IonButton onClick={toggleLayout}>
+							<IonIcon slot="icon-only" md={getLayoutIcon(layout)}></IonIcon>
+						</IonButton>
+					</IonButtons>
+				</IonToolbar>
+				<IonToolbar>
+					<IonSearchbar
+						value={searchTerms}
+						debounce={1000}
+						onIonInput={(ev) => setSearchTerms(ev.target.value?.toLowerCase() ?? "")}
+					/>
 				</IonToolbar>
 			</IonHeader>
 
-			<IonContent fullscreen>
-				<IonHeader collapse="condense">
-					<IonToolbar>
-						<IonTitle size="large">{title}</IonTitle>
-					</IonToolbar>
-				</IonHeader>
-
-				<PostGrid posts={searchResults} siteURL={inputURL} mockCount={pageAmount} />
+			<IonContent>
+				{layout === "grid" ? (
+					<PostGrid posts={searchResults} siteURL={inputURL} mockCount={pageAmount} />
+				) : (
+					<PostList posts={searchResults} siteURL={inputURL} mockCount={pageAmount} />
+				)}
 			</IonContent>
 		</IonPage>
 	)

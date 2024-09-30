@@ -1,1 +1,1 @@
-export { degubbins } from "./stringUtils"
+export { degubbins, getLayoutIcon } from "./stringUtils"

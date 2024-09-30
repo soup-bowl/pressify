@@ -1,4 +1,4 @@
-import { IonCol, IonGrid, IonRow, IonSkeletonText } from "@ionic/react"
+import { IonCol, IonGrid, IonRow, IonSkeletonText, IonText } from "@ionic/react"
 import { ISiteInfo } from "../api"
 import "./Headline.css"
 
@@ -44,7 +44,9 @@ const Headline: React.FC<{
 						<IonRow>
 							<h2>{siteInfo.name}</h2>
 						</IonRow>
-						<IonRow>{siteInfo.description}</IonRow>
+						<IonRow>
+							<IonText color="medium">{siteInfo.description}</IonText>
+						</IonRow>
 					</IonCol>
 				</IonRow>
 			</IonGrid>

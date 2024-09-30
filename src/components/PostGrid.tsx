@@ -16,7 +16,6 @@ const PostGrid: React.FC<{
 	siteURL?: string
 	mockCount?: number
 }> = ({ posts, siteURL, mockCount = 0 }) => {
-	// 450
 	if (!posts) {
 		return (
 			<IonGrid>
@@ -44,13 +43,12 @@ const PostGrid: React.FC<{
 				{posts.map((post, index) => (
 					<IonCol key={index} size="12" sizeMd="4">
 						<IonCard routerLink={`/${siteURL}/${post.type}/${post.id}`}>
-							<img
-								alt=""
-								src={
-									post._embedded?.["wp:featuredmedia"]?.[0].media_details?.sizes?.full?.source_url ??
-									"https://ionicframework.com/docs/img/demos/card-media.png"
-								}
-							/>
+							{post._embedded?.["wp:featuredmedia"]?.[0].media_details?.sizes?.full?.source_url && (
+								<img
+									alt=""
+									src={post._embedded?.["wp:featuredmedia"][0].media_details.sizes.full.source_url}
+								/>
+							)}
 							<IonCardHeader>
 								<IonCardTitle>{degubbins(post.title.rendered)}</IonCardTitle>
 							</IonCardHeader>

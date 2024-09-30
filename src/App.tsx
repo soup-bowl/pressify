@@ -36,9 +36,9 @@ import "@ionic/react/css/palettes/dark.always.css"
 /* Theme variables */
 import "./theme/variables.css"
 
-setupIonicReact({
-	mode: "ios",
-})
+import "./App.css"
+
+setupIonicReact({ mode: "ios" })
 
 export const WordPressContext = createContext(new WordPressApi({ endpoint: "" }))
 
@@ -58,17 +58,11 @@ const App: React.FC = () => {
 						<Route path="/:inputURL/post/:postID" exact={true}>
 							<Post type={EPostType.Post} />
 						</Route>
-						<Route path="/:inputURL/search/:searchTerms" exact={true}>
-							<SearchCollection />
-						</Route>
-						<Route path="/:inputURL/search/:searchTerms/:pageNumber" exact={true}>
+						<Route path="/:inputURL/search/" exact={true}>
 							<SearchCollection />
 						</Route>
 						{/* Posts */}
 						<Route path="/:inputURL/posts/" exact={true}>
-							<PostCollection type={EPostType.Post} />
-						</Route>
-						<Route path="/:inputURL/posts/:pageNumber" exact={true}>
 							<PostCollection type={EPostType.Post} />
 						</Route>
 						<Route path="/:inputURL/posts/category/:searchID" exact={true}>
@@ -82,12 +76,6 @@ const App: React.FC = () => {
 							<Post type={EPostType.Page} />
 						</Route>
 						<Route path="/:inputURL/pages/" exact={true}>
-							<PostCollection type={EPostType.Page} />
-						</Route>
-						<Route path="/:inputURL/pages/:pageNumber" exact={true}>
-							<PostCollection type={EPostType.Page} />
-						</Route>
-						<Route path="/:inputURL/pages/:pageNumber" exact={true}>
 							<PostCollection type={EPostType.Page} />
 						</Route>
 						<Route path="/:inputURL/pages/category/:searchID" exact={true}>

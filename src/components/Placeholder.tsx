@@ -2,14 +2,14 @@ import React from "react"
 import "./Placeholder.css"
 
 interface ContainerProps {
-	name: string
+	name?: string
 	children: React.ReactNode
 }
 
-const ExploreContainer: React.FC<ContainerProps> = ({ name, children }) => {
+const ExploreContainer: React.FC<ContainerProps> = ({ name = undefined, children }) => {
 	return (
 		<div id="container">
-			<strong>{name}</strong>
+			{name && <strong>{name}</strong>}
 			{children}
 		</div>
 	)
