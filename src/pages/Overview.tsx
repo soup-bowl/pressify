@@ -71,9 +71,9 @@ const Overview: React.FC = () => {
 			<IonContent fullscreen>
 				<Headline siteInfo={mainInfo} />
 				<IonListHeader>Posts</IonListHeader>
-				<PostGrid isPosts posts={postCollection?.posts} siteURL={inputURL} mockCount={3} />
+				<PostGrid posts={postCollection?.posts} siteURL={inputURL} mockCount={3} />
 				<IonListHeader>Pages</IonListHeader>
-				<PostGrid isPages posts={postCollection?.pages} siteURL={inputURL} mockCount={3} />
+				<PostGrid posts={postCollection?.pages} siteURL={inputURL} mockCount={3} />
 			</IonContent>
 		</IonPage>
 	)

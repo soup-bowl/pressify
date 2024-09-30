@@ -3,8 +3,8 @@ import { IonApp, IonRouterOutlet, IonSplitPane, setupIonicReact } from "@ionic/r
 import { IonReactRouter } from "@ionic/react-router"
 import { Route } from "react-router-dom"
 import { Menu } from "./components"
-import { Nothing, Overview, Post, PostCollection } from "./pages"
-import { WordPressApi } from "./api"
+import { Nothing, Overview, Post, PostCollection, SearchCollection, TaxCollection } from "./pages"
+import { EPostType, ETagType, WordPressApi } from "./api"
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css"
@@ -56,22 +56,45 @@ const App: React.FC = () => {
 							<Overview />
 						</Route>
 						<Route path="/:inputURL/post/:postID" exact={true}>
-							<Post posts />
+							<Post type={EPostType.Post} />
 						</Route>
+						<Route path="/:inputURL/search/:searchTerms" exact={true}>
+							<SearchCollection />
+						</Route>
+						<Route path="/:inputURL/search/:searchTerms/:pageNumber" exact={true}>
+							<SearchCollection />
+						</Route>
+						{/* Posts */}
 						<Route path="/:inputURL/posts/" exact={true}>
-							<PostCollection isPosts />
+							<PostCollection type={EPostType.Post} />
 						</Route>
 						<Route path="/:inputURL/posts/:pageNumber" exact={true}>
-							<PostCollection isPosts />
+							<PostCollection type={EPostType.Post} />
 						</Route>
+						<Route path="/:inputURL/posts/category/:searchID" exact={true}>
+							<TaxCollection type={EPostType.Post} tagType={ETagType.Category} />
+						</Route>
+						<Route path="/:inputURL/posts/tag/:searchID" exact={true}>
+							<TaxCollection type={EPostType.Post} tagType={ETagType.Tag} />
+						</Route>
+						{/* Pages */}
 						<Route path="/:inputURL/page/:postID" exact={true}>
-							<Post pages />
+							<Post type={EPostType.Page} />
 						</Route>
 						<Route path="/:inputURL/pages/" exact={true}>
-							<PostCollection isPages />
+							<PostCollection type={EPostType.Page} />
 						</Route>
 						<Route path="/:inputURL/pages/:pageNumber" exact={true}>
-							<PostCollection isPages />
+							<PostCollection type={EPostType.Page} />
+						</Route>
+						<Route path="/:inputURL/pages/:pageNumber" exact={true}>
+							<PostCollection type={EPostType.Page} />
+						</Route>
+						<Route path="/:inputURL/pages/category/:searchID" exact={true}>
+							<TaxCollection type={EPostType.Page} tagType={ETagType.Category} />
+						</Route>
+						<Route path="/:inputURL/pages/tag/:searchID" exact={true}>
+							<TaxCollection type={EPostType.Page} tagType={ETagType.Tag} />
 						</Route>
 					</IonRouterOutlet>
 				</IonSplitPane>

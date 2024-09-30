@@ -1,22 +1,24 @@
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from "@ionic/react"
 import { useParams } from "react-router"
 import { useEffect, useState } from "react"
-import { EPostType, IPostCollection, ISiteInfo, WordPressApi } from "../api"
+import { EPostType, IPost, ISiteInfo, WordPressApi } from "../api"
 import { degubbins } from "../utils"
 import { PostGrid } from "../components"
 
 const pageAmount = 12
 
-const PostCollection: React.FC<{
-	type: EPostType
-}> = ({ type }) => {
-	const { inputURL, pageNumber } = useParams<{ inputURL: string; pageNumber: string }>()
+const SearchCollection: React.FC = () => {
+	const { inputURL, searchTerms, pageNumber } = useParams<{
+		inputURL: string
+		searchTerms: string
+		pageNumber: string
+	}>()
 	const wp = new WordPressApi({ endpoint: `https://${inputURL}/wp-json` })
 	const [mainInfo, setMainInfo] = useState<ISiteInfo | undefined>()
-	const [posts, setPosts] = useState<IPostCollection | undefined>()
+	const [searchResults, setSearchResults] = useState<IPost[] | undefined>()
 
 	useEffect(() => {
-		setPosts(undefined)
+		setSearchResults(undefined)
 		setMainInfo(undefined)
 
 		wp.fetchInfo()
@@ -33,20 +35,16 @@ const PostCollection: React.FC<{
 				console.log(err)
 			})
 
-		if (type === EPostType.Post) {
-			wp.fetchPosts({ type: EPostType.Post, page: parseInt(pageNumber ?? "1"), perPage: pageAmount })
-				.then((post) => setPosts(post))
-				.catch((err: Error) => console.log(err))
-		}
-
-		if (type === EPostType.Page) {
-			wp.fetchPosts({ type: EPostType.Page, page: parseInt(pageNumber ?? "1"), perPage: pageAmount })
-				.then((post) => setPosts(post))
-				.catch((err: Error) => console.log(err))
-		}
+		wp.searchPosts({ search: searchTerms ?? "", page: parseInt(pageNumber ?? "1"), perPage: pageAmount })
+			.then((response) => {
+				const collection: IPost[] = []
+				response.results.forEach((e) => collection.push(e._embedded.self[0]))
+				setSearchResults(collection)
+			})
+			.catch((err) => console.log(err))
 	}, [inputURL])
 
-	const title = `${degubbins(mainInfo?.name ?? "Loading...")} ${type === EPostType.Post ? "posts" : "pages"}`
+	const title = `${degubbins(mainInfo?.name ?? "Loading...")} search`
 	useEffect(() => {
 		document.title = `${title} - Pressify`
 	}, [mainInfo])
@@ -69,10 +67,10 @@ const PostCollection: React.FC<{
 					</IonToolbar>
 				</IonHeader>
 
-				<PostGrid posts={posts?.posts} siteURL={inputURL} mockCount={pageAmount} />
+				<PostGrid posts={searchResults} siteURL={inputURL} mockCount={pageAmount} />
 			</IonContent>
 		</IonPage>
 	)
 }
 
-export default PostCollection
+export default SearchCollection

@@ -16,9 +16,7 @@ const PostGrid: React.FC<{
 	posts?: IPost[]
 	siteURL?: string
 	mockCount?: number
-	isPosts?: boolean
-	isPages?: boolean
-}> = ({ posts, siteURL, mockCount = 0, isPosts, isPages }) => {
+}> = ({ posts, siteURL, mockCount = 0 }) => {
 	// 450
 	if (!posts) {
 		return (
@@ -41,14 +39,12 @@ const PostGrid: React.FC<{
 		)
 	}
 
-	const postType = isPosts ? "post" : "page"
-
 	return (
 		<IonGrid>
 			<IonRow>
 				{posts.map((post, index) => (
 					<IonCol key={index}>
-						<IonCard routerLink={`/${siteURL}/${postType}/${post.id}`}>
+						<IonCard routerLink={`/${siteURL}/${post.type}/${post.id}`}>
 							<img
 								alt=""
 								src={

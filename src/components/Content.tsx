@@ -10,7 +10,7 @@ const Content: React.FC<{
 		return (
 			<div className="ion-padding">
 				{Array.from({ length: 8 }).map((_, index) => (
-					<div className="wp-content-skeleton">
+					<div key={index} className="wp-content-skeleton">
 						<IonSkeletonText animated style={{ height: 16, width: "80%" }} />
 						<IonSkeletonText animated style={{ height: 16, width: "80%" }} />
 						<IonSkeletonText animated style={{ height: 16, width: "50%" }} />

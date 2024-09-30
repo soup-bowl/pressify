@@ -1,16 +1,17 @@
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from "@ionic/react"
 import { useParams } from "react-router"
 import { useEffect, useState } from "react"
-import { EPostType, IPostCollection, ISiteInfo, WordPressApi } from "../api"
+import { EPostType, ETagType, IPostCollection, ISiteInfo, WordPressApi } from "../api"
 import { degubbins } from "../utils"
 import { PostGrid } from "../components"
 
 const pageAmount = 12
 
-const PostCollection: React.FC<{
+const TaxCollection: React.FC<{
 	type: EPostType
-}> = ({ type }) => {
-	const { inputURL, pageNumber } = useParams<{ inputURL: string; pageNumber: string }>()
+	tagType: ETagType
+}> = ({ type, tagType }) => {
+	const { inputURL, searchID, pageNumber } = useParams<{ inputURL: string; searchID: string; pageNumber: string }>()
 	const wp = new WordPressApi({ endpoint: `https://${inputURL}/wp-json` })
 	const [mainInfo, setMainInfo] = useState<ISiteInfo | undefined>()
 	const [posts, setPosts] = useState<IPostCollection | undefined>()
@@ -33,20 +34,28 @@ const PostCollection: React.FC<{
 				console.log(err)
 			})
 
-		if (type === EPostType.Post) {
-			wp.fetchPosts({ type: EPostType.Post, page: parseInt(pageNumber ?? "1"), perPage: pageAmount })
+		if (tagType === ETagType.Tag) {
+			wp.fetchPosts({
+				type: type,
+				page: parseInt(pageNumber ?? "1"),
+				perPage: pageAmount,
+				byTag: parseInt(searchID ?? "0"),
+			})
 				.then((post) => setPosts(post))
 				.catch((err: Error) => console.log(err))
-		}
-
-		if (type === EPostType.Page) {
-			wp.fetchPosts({ type: EPostType.Page, page: parseInt(pageNumber ?? "1"), perPage: pageAmount })
+		} else {
+			wp.fetchPosts({
+				type: type,
+				page: parseInt(pageNumber ?? "1"),
+				perPage: pageAmount,
+				byCategory: parseInt(searchID ?? "0"),
+			})
 				.then((post) => setPosts(post))
 				.catch((err: Error) => console.log(err))
 		}
 	}, [inputURL])
 
-	const title = `${degubbins(mainInfo?.name ?? "Loading...")} ${type === EPostType.Post ? "posts" : "pages"}`
+	const title = `${degubbins(mainInfo?.name ?? "Loading...")} ${tagType === ETagType.Category ? "category" : "tag"}`
 	useEffect(() => {
 		document.title = `${title} - Pressify`
 	}, [mainInfo])
@@ -75,4 +84,4 @@ const PostCollection: React.FC<{
 	)
 }
 
-export default PostCollection
+export default TaxCollection

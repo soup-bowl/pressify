@@ -6,9 +6,8 @@ import { degubbins } from "../utils"
 import { Content } from "../components"
 
 const Post: React.FC<{
-	posts?: boolean
-	pages?: boolean
-}> = ({ posts, pages }) => {
+	type: EPostType
+}> = ({ type }) => {
 	const { inputURL, postID } = useParams<{ inputURL: string; postID: string }>()
 	const wp = new WordPressApi({ endpoint: `https://${inputURL}/wp-json` })
 	const [mainInfo, setMainInfo] = useState<ISiteInfo | undefined>()
@@ -32,13 +31,13 @@ const Post: React.FC<{
 				console.log(err)
 			})
 
-		if (posts && postID !== undefined) {
+		if (type === EPostType.Post && postID !== undefined) {
 			wp.fetchPost(parseInt(postID), EPostType.Post)
 				.then((post: IPost) => setPost(post))
 				.catch((err: Error) => console.log(err))
 		}
 
-		if (pages && postID !== undefined) {
+		if (type === EPostType.Page && postID !== undefined) {
 			wp.fetchPost(parseInt(postID), EPostType.Page)
 				.then((post: IPost) => setPost(post))
 				.catch((err: Error) => console.log(err))
