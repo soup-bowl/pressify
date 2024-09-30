@@ -10,7 +10,6 @@ import {
 } from "@ionic/react"
 import { IPost } from "../api"
 import { degubbins } from "../utils"
-import "./PostGrid.css"
 
 const PostGrid: React.FC<{
 	posts?: IPost[]
@@ -23,7 +22,7 @@ const PostGrid: React.FC<{
 			<IonGrid>
 				<IonRow>
 					{Array.from({ length: mockCount }).map((_, index) => (
-						<IonCol key={index}>
+						<IonCol key={index} size="12" sizeMd="4">
 							<IonCard style={{ minWidth: 200 }}>
 								<IonSkeletonText animated style={{ width: "100%", height: 200, marginTop: 0 }} />
 								<IonCardContent>
@@ -43,7 +42,7 @@ const PostGrid: React.FC<{
 		<IonGrid>
 			<IonRow>
 				{posts.map((post, index) => (
-					<IonCol key={index}>
+					<IonCol key={index} size="12" sizeMd="4">
 						<IonCard routerLink={`/${siteURL}/${post.type}/${post.id}`}>
 							<img
 								alt=""
