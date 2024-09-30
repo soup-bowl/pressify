@@ -70,11 +70,7 @@ const Menu: React.FC = () => {
 						{
 							text: "OK",
 							role: "confirm",
-							handler: (e) => {
-								let newSites = sites
-								newSites.push(e[0])
-								setSites(newSites)
-							},
+							handler: (e) => setSites([...sites, e[0]]),
 						},
 					]}
 					inputs={[{ placeholder: "Site URL" }]}
