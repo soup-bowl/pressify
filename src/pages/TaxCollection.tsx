@@ -32,7 +32,7 @@ const TaxCollection: React.FC<{
 	const [scrollCount, setScrollCount] = useState<number>(1)
 
 	const siteInfo = useQuery<ISiteInfo>({
-		queryKey: [inputURL, 'info'],
+		queryKey: [inputURL, "info"],
 		queryFn: async () => fetchSiteInfo(wp),
 	})
 

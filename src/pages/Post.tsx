@@ -29,7 +29,7 @@ const Post: React.FC<{
 	const wp = new WordPressApi({ endpoint: `https://${inputURL}/wp-json` })
 
 	const postData = useQuery<IPost>({
-		queryKey: [inputURL, 'page', postID],
+		queryKey: [inputURL, "page", postID],
 		queryFn: async () => fetchContent(wp, parseInt(postID), type),
 	})
 

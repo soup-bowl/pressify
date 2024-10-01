@@ -22,6 +22,7 @@ import {
 	IonMenuToggle,
 	IonModal,
 	IonNote,
+	IonText,
 	IonTitle,
 	IonToolbar,
 } from "@ionic/react"
@@ -32,6 +33,7 @@ import { ESelectorState } from "@/enum"
 import { WordPressApi } from "@/api"
 import { ReadyState } from "@/components"
 import { ISite } from "@/interface"
+import "@fontsource/eb-garamond"
 import "./Menu.css"
 
 const Menu: React.FC = () => {
@@ -86,14 +88,14 @@ const Menu: React.FC = () => {
 				<IonList id="inbox-list">
 					<IonListHeader>
 						<IonLabel>
-							Pressify{" "}
+							<IonText style={{ fontFamily: '"EB Garamond", serif', fontSize: 32 }}>Pressify.</IonText>
 							<IonChip color="primary" id="is-beta">
 								Beta
 							</IonChip>
 						</IonLabel>
 						<IonButton onClick={() => setIsOpen(true)}>Add</IonButton>
 					</IonListHeader>
-					<IonNote>WordPress App Simulator {process.env.REACT_APP_VERSION?.replace(/"/g, "")}</IonNote>
+					<IonNote>WordPress App Simulator</IonNote>
 					{sites.map((site, index) => {
 						return (
 							<IonMenuToggle key={index} autoHide={false}>
@@ -177,11 +179,14 @@ const Menu: React.FC = () => {
 				</IonModal>
 				<IonAlert
 					trigger="is-beta"
-					header="Application in beta"
+					header={`Version ${process.env.REACT_APP_VERSION?.replace(/"/g, "")}`}
 					message="This service is under active development. Please be aware that there may be bugs!"
 					buttons={[
 						"Close",
-						{ text: "Visit", handler: () => window?.open("https://soupbowl.io", "_blank")?.focus() },
+						{
+							text: "Visit",
+							handler: () => window?.open("https://github.com/soup-bowl/pressify", "_blank")?.focus(),
+						},
 					]}
 				/>
 			</IonContent>
