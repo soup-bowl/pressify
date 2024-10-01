@@ -3,6 +3,7 @@ import {
 	InputCustomEvent,
 	InputInputEventDetail,
 	IonAlert,
+	IonAvatar,
 	IonButton,
 	IonButtons,
 	IonChip,
@@ -31,12 +32,14 @@ import { ESelectorState } from "../enum"
 import { WordPressApi } from "../api"
 import { ReadyState } from "."
 import "./Menu.css"
+import { ISite } from "../interface"
 
 const Menu: React.FC = () => {
 	const location = useLocation()
-	const [sites, setSites] = useSettings<string[]>("SitesAvailable", [])
+	const [sites, setSites] = useSettings<ISite[]>("SitesAvailable", [])
 	const [isOpen, setIsOpen] = useState(false)
 	const [siteInputValue, setSiteInputValue] = useState<string>("")
+	const [siteInputDetails, setSiteInputDetails] = useState<ISite | undefined>()
 	const [detectionState, setDetectionState] = useState<ESelectorState>(ESelectorState.Ready)
 	const searchTimeout = useRef<NodeJS.Timeout | null>(null)
 
@@ -54,6 +57,8 @@ const Menu: React.FC = () => {
 
 	useEffect(() => {
 		if (siteInputValue !== "") {
+			setSiteInputDetails(undefined)
+
 			if (searchTimeout.current) {
 				clearTimeout(searchTimeout.current)
 			}
@@ -61,7 +66,15 @@ const Menu: React.FC = () => {
 			searchTimeout.current = setTimeout(() => {
 				new WordPressApi({ endpoint: `https://${siteInputValue}/wp-json` })
 					.fetchInfo()
-					.then(() => setDetectionState(ESelectorState.Confirmed))
+					.then((response) => {
+						setDetectionState(ESelectorState.Confirmed)
+						setSiteInputDetails({
+							name: response.name ?? siteInputValue,
+							description: response.description,
+							url: siteInputValue,
+							image: response.site_icon_url,
+						})
+					})
 					.catch(() => setDetectionState(ESelectorState.Denied))
 			}, 1000)
 		}
@@ -86,14 +99,25 @@ const Menu: React.FC = () => {
 							<IonMenuToggle key={index} autoHide={false}>
 								<IonItemSliding>
 									<IonItem
-										className={location.pathname.includes(site) ? "selected" : ""}
-										routerLink={`/${site}`}
+										className={location.pathname.includes(site.url) ? "selected" : ""}
+										routerLink={`/${site.url}`}
 										routerDirection="none"
 										lines="none"
 										detail={false}
 									>
-										<IonIcon aria-hidden="true" slot="start" ios={earthOutline} md={earthSharp} />
-										<IonLabel>{site}</IonLabel>
+										{site.image ? (
+											<IonAvatar aria-hidden="true" slot="start">
+												<img alt="" src={site.image} />
+											</IonAvatar>
+										) : (
+											<IonIcon
+												aria-hidden="true"
+												slot="start"
+												ios={earthOutline}
+												md={earthSharp}
+											/>
+										)}
+										<IonLabel>{site.name}</IonLabel>
 									</IonItem>
 									<IonItemOptions>
 										<IonItemOption
@@ -120,9 +144,11 @@ const Menu: React.FC = () => {
 								<IonButton
 									strong
 									onClick={() => {
-										setSites([...sites, siteInputValue])
-										setSiteInputValue("")
-										setIsOpen(false)
+										if (detectionState === ESelectorState.Confirmed && siteInputDetails) {
+											setSites([...sites, siteInputDetails])
+											setSiteInputValue("")
+											setIsOpen(false)
+										}
 									}}
 									disabled={detectionState !== ESelectorState.Confirmed}
 								>
