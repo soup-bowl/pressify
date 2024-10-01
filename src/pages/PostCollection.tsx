@@ -14,7 +14,8 @@ import {
 	IonToolbar,
 } from "@ionic/react"
 import { useParams } from "react-router"
-import { EPostType, IPost, ISiteInfo, WordPressApi } from "@/api"
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
+import { EPostType, fetchPosts, fetchSiteInfo, IPost, ISiteInfo, WordPressApi } from "@/api"
 import { degubbins, getLayoutIcon } from "@/utils"
 import { PostGrid, PostList } from "@/components"
 import { useSettings } from "@/hooks"
@@ -27,37 +28,18 @@ const PostCollection: React.FC<{
 	const { inputURL } = useParams<{ inputURL: string }>()
 	const [layout, setLayout] = useSettings<"grid" | "list">("displayLayout", "grid")
 	const wp = new WordPressApi({ endpoint: `https://${inputURL}/wp-json` })
-	const [mainInfo, setMainInfo] = useState<ISiteInfo | undefined>()
-	const [posts, setPosts] = useState<IPost[] | undefined>()
 	const [scrollCount, setScrollCount] = useState<number>(1)
 
-	useEffect(() => {
-		setPosts(undefined)
-		setMainInfo(undefined)
+	const siteInfo = useQuery<ISiteInfo>({
+		queryKey: [`${inputURL}Info`],
+		queryFn: async () => fetchSiteInfo(wp),
+	})
 
-		wp.fetchInfo()
-			.then((response: ISiteInfo) => {
-				setMainInfo({
-					name: response.name ?? "N/A",
-					description: response.description ?? "",
-					site_icon_url: response.site_icon_url,
-					url: response.url,
-					namespaces: response.namespaces,
-				})
-			})
-			.catch((err) => {
-				console.log(err)
-			})
-
-		loadContent()
-	}, [inputURL])
-
-	const loadContent = () => {
-		setScrollCount(scrollCount + 1)
-		wp.fetchPosts({ type: type, page: scrollCount, perPage: pageAmount })
-			.then((post) => setPosts([...(posts ?? []), ...post.posts]))
-			.catch((err: Error) => console.log(err))
-	}
+	const postData = useQuery<IPost[]>({
+		queryKey: [`${inputURL}${type.toString()}`, scrollCount],
+		queryFn: async (): Promise<IPost[]> => fetchPosts(wp, type, scrollCount, pageAmount, postData.data),
+		placeholderData: keepPreviousData,
+	})
 
 	const toggleLayout = () => {
 		if (layout === "grid") {
@@ -67,10 +49,10 @@ const PostCollection: React.FC<{
 		}
 	}
 
-	const title = `${degubbins(mainInfo?.name ?? "Loading...")} ${type === EPostType.Post ? "posts" : "pages"}`
+	const title = `${degubbins(siteInfo.data?.name ?? "Loading...")} ${type === EPostType.Post ? "posts" : "pages"}`
 	useEffect(() => {
 		document.title = `${title} - Pressify`
-	}, [mainInfo])
+	}, [siteInfo.data])
 
 	return (
 		<IonPage>
@@ -106,14 +88,14 @@ const PostCollection: React.FC<{
 				</IonHeader>
 
 				{layout === "grid" ? (
-					<PostGrid posts={posts} siteURL={inputURL} mockCount={pageAmount} />
+					<PostGrid posts={postData.data} siteURL={inputURL} mockCount={pageAmount} />
 				) : (
-					<PostList posts={posts} siteURL={inputURL} mockCount={pageAmount} />
+					<PostList posts={postData.data} siteURL={inputURL} mockCount={pageAmount} />
 				)}
 
 				<IonInfiniteScroll
 					onIonInfinite={(ev) => {
-						loadContent()
+						setScrollCount(scrollCount + 1)
 						setTimeout(() => ev.target.complete(), 500)
 					}}
 				>

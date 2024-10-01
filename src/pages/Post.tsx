@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import {
 	IonBackButton,
 	IonButton,
@@ -17,7 +17,8 @@ import {
 } from "@ionic/react"
 import { shareOutline, shareSharp } from "ionicons/icons"
 import { useParams } from "react-router"
-import { EPostType, IPost, ISiteInfo, WordPressApi } from "@/api"
+import { useQuery } from "@tanstack/react-query"
+import { EPostType, fetchContent, IPost, WordPressApi } from "@/api"
 import { degubbins } from "@/utils"
 import { Content, TagGrid } from "@/components"
 
@@ -26,54 +27,26 @@ const Post: React.FC<{
 }> = ({ type }) => {
 	const { inputURL, postID } = useParams<{ inputURL: string; postID: string }>()
 	const wp = new WordPressApi({ endpoint: `https://${inputURL}/wp-json` })
-	const [mainInfo, setMainInfo] = useState<ISiteInfo | undefined>()
-	const [post, setPost] = useState<IPost | undefined>()
 
-	useEffect(() => {
-		setPost(undefined)
-		setMainInfo(undefined)
-
-		wp.fetchInfo()
-			.then((response: ISiteInfo) => {
-				setMainInfo({
-					name: response.name ?? "N/A",
-					description: response.description ?? "",
-					site_icon_url: response.site_icon_url,
-					url: response.url,
-					namespaces: response.namespaces,
-				})
-			})
-			.catch((err) => {
-				console.log(err)
-			})
-
-		if (type === EPostType.Post && postID !== undefined) {
-			wp.fetchPost(parseInt(postID), EPostType.Post)
-				.then((post: IPost) => setPost(post))
-				.catch((err: Error) => console.log(err))
-		}
-
-		if (type === EPostType.Page && postID !== undefined) {
-			wp.fetchPost(parseInt(postID), EPostType.Page)
-				.then((post: IPost) => setPost(post))
-				.catch((err: Error) => console.log(err))
-		}
-	}, [inputURL])
+	const postData = useQuery<IPost>({
+		queryKey: [`${inputURL}Page`, postID],
+		queryFn: async () => fetchContent(wp, parseInt(postID), type),
+	})
 
 	const shareArticle = () => {
-		if (post) {
+		if (postData.data) {
 			navigator.share({
-				title: degubbins(post.title.rendered),
-				url: post.link,
+				title: degubbins(postData.data.title.rendered),
+				url: postData.data.link,
 			})
 		}
 	}
 
 	useEffect(() => {
-		if (post !== undefined && post.title !== undefined) {
-			document.title = `${degubbins(post.title.rendered) ?? "Loading"} - Pressify`
+		if (postData.data !== undefined && postData.data.title !== undefined) {
+			document.title = `${degubbins(postData.data.title.rendered) ?? "Loading"} - Pressify`
 		}
-	}, [post])
+	}, [postData.data])
 
 	const ShareButton = () => (
 		<IonButton>
@@ -89,7 +62,7 @@ const Post: React.FC<{
 						<IonBackButton />
 						<IonMenuButton />
 					</IonButtons>
-					<IonTitle>{degubbins(post?.title.rendered ?? "Loading content")}</IonTitle>
+					<IonTitle>{degubbins(postData.data?.title.rendered ?? "Loading content")}</IonTitle>
 					<IonButtons slot="end" collapse={true}>
 						<ShareButton />
 					</IonButtons>
@@ -103,29 +76,31 @@ const Post: React.FC<{
 							<IonBackButton />
 							<IonMenuButton />
 						</IonButtons>
-						<IonTitle size="large">{degubbins(post?.title.rendered ?? "Loading content")}</IonTitle>
+						<IonTitle size="large">
+							{degubbins(postData.data?.title.rendered ?? "Loading content")}
+						</IonTitle>
 						<IonButtons slot="end" collapse={true}>
 							<ShareButton />
 						</IonButtons>
 					</IonToolbar>
 				</IonHeader>
 
-				<Content post={post} />
+				<Content post={postData.data} />
 
 				<IonGrid>
 					<IonRow>
 						<IonCol size="6">
 							<IonListHeader>Categories</IonListHeader>
 							<TagGrid
-								prelink={`${inputURL}/${post?.type}s/category`}
-								tags={post?._embedded?.["wp:term"]?.[0]}
+								prelink={`${inputURL}/${postData.data?.type}s/category`}
+								tags={postData.data?._embedded?.["wp:term"]?.[0]}
 							/>
 						</IonCol>
 						<IonCol size="6">
 							<IonListHeader>Tags</IonListHeader>
 							<TagGrid
-								prelink={`${inputURL}/${post?.type}s/tag`}
-								tags={post?._embedded?.["wp:term"]?.[1]}
+								prelink={`${inputURL}/${postData.data?.type}s/tag`}
+								tags={postData.data?._embedded?.["wp:term"]?.[1]}
 							/>
 						</IonCol>
 					</IonRow>

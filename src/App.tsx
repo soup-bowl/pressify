@@ -2,9 +2,10 @@ import { createContext } from "react"
 import { IonApp, IonRouterOutlet, IonSplitPane, setupIonicReact } from "@ionic/react"
 import { IonReactRouter } from "@ionic/react-router"
 import { Route } from "react-router-dom"
-import { Menu } from "./components"
-import { Nothing, Overview, Post, PostCollection, SearchCollection, TaxCollection } from "./pages"
-import { EPostType, ETagType, WordPressApi } from "./api"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { Menu } from "@/components"
+import { Nothing, Overview, Post, PostCollection, SearchCollection, TaxCollection } from "@/pages"
+import { EPostType, ETagType, WordPressApi } from "@/api"
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css"
@@ -40,54 +41,58 @@ import "./App.css"
 
 setupIonicReact({ mode: "ios" })
 
+const queryClient = new QueryClient()
+
 export const WordPressContext = createContext(new WordPressApi({ endpoint: "" }))
 
 const App: React.FC = () => {
 	return (
-		<IonApp>
-			<IonReactRouter>
-				<IonSplitPane contentId="main">
-					<Menu />
-					<IonRouterOutlet id="main">
-						<Route path="/" exact={true}>
-							<Nothing />
-						</Route>
-						<Route path="/:inputURL" exact={true}>
-							<Overview />
-						</Route>
-						<Route path="/:inputURL/post/:postID" exact={true}>
-							<Post type={EPostType.Post} />
-						</Route>
-						<Route path="/:inputURL/search/" exact={true}>
-							<SearchCollection />
-						</Route>
-						{/* Posts */}
-						<Route path="/:inputURL/posts/" exact={true}>
-							<PostCollection type={EPostType.Post} />
-						</Route>
-						<Route path="/:inputURL/posts/category/:searchID" exact={true}>
-							<TaxCollection type={EPostType.Post} tagType={ETagType.Category} />
-						</Route>
-						<Route path="/:inputURL/posts/tag/:searchID" exact={true}>
-							<TaxCollection type={EPostType.Post} tagType={ETagType.Tag} />
-						</Route>
-						{/* Pages */}
-						<Route path="/:inputURL/page/:postID" exact={true}>
-							<Post type={EPostType.Page} />
-						</Route>
-						<Route path="/:inputURL/pages/" exact={true}>
-							<PostCollection type={EPostType.Page} />
-						</Route>
-						<Route path="/:inputURL/pages/category/:searchID" exact={true}>
-							<TaxCollection type={EPostType.Page} tagType={ETagType.Category} />
-						</Route>
-						<Route path="/:inputURL/pages/tag/:searchID" exact={true}>
-							<TaxCollection type={EPostType.Page} tagType={ETagType.Tag} />
-						</Route>
-					</IonRouterOutlet>
-				</IonSplitPane>
-			</IonReactRouter>
-		</IonApp>
+		<QueryClientProvider client={queryClient}>
+			<IonApp>
+				<IonReactRouter>
+					<IonSplitPane contentId="main">
+						<Menu />
+						<IonRouterOutlet id="main">
+							<Route path="/" exact={true}>
+								<Nothing />
+							</Route>
+							<Route path="/:inputURL" exact={true}>
+								<Overview />
+							</Route>
+							<Route path="/:inputURL/post/:postID" exact={true}>
+								<Post type={EPostType.Post} />
+							</Route>
+							<Route path="/:inputURL/search/" exact={true}>
+								<SearchCollection />
+							</Route>
+							{/* Posts */}
+							<Route path="/:inputURL/posts/" exact={true}>
+								<PostCollection type={EPostType.Post} />
+							</Route>
+							<Route path="/:inputURL/posts/category/:searchID" exact={true}>
+								<TaxCollection type={EPostType.Post} tagType={ETagType.Category} />
+							</Route>
+							<Route path="/:inputURL/posts/tag/:searchID" exact={true}>
+								<TaxCollection type={EPostType.Post} tagType={ETagType.Tag} />
+							</Route>
+							{/* Pages */}
+							<Route path="/:inputURL/page/:postID" exact={true}>
+								<Post type={EPostType.Page} />
+							</Route>
+							<Route path="/:inputURL/pages/" exact={true}>
+								<PostCollection type={EPostType.Page} />
+							</Route>
+							<Route path="/:inputURL/pages/category/:searchID" exact={true}>
+								<TaxCollection type={EPostType.Page} tagType={ETagType.Category} />
+							</Route>
+							<Route path="/:inputURL/pages/tag/:searchID" exact={true}>
+								<TaxCollection type={EPostType.Page} tagType={ETagType.Tag} />
+							</Route>
+						</IonRouterOutlet>
+					</IonSplitPane>
+				</IonReactRouter>
+			</IonApp>
+		</QueryClientProvider>
 	)
 }
 

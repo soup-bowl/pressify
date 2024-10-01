@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import {
 	IonButton,
 	IonButtons,
@@ -14,51 +14,26 @@ import {
 } from "@ionic/react"
 import { arrowForward, chevronForward, searchOutline } from "ionicons/icons"
 import { useParams } from "react-router"
-import { EPostType, IArticleCollection, ISiteInfo, IWPAPIError, WordPressApi } from "@/api"
+import { useQuery } from "@tanstack/react-query"
+import { fetchOverview, fetchSiteInfo, IArticleCollection, ISiteInfo, WordPressApi } from "@/api"
 import { Headline, PostGrid } from "@/components"
 
 const Overview: React.FC = () => {
 	const { inputURL } = useParams<{ inputURL: string }>()
 	const wp = new WordPressApi({ endpoint: `https://${inputURL}/wp-json` })
-	const [mainInfo, setMainInfo] = useState<ISiteInfo | undefined>()
-	const [postCollection, setPostCollection] = useState<IArticleCollection | undefined>()
+
+	const siteInfo = useQuery<ISiteInfo>({
+		queryKey: [`${inputURL}Info`],
+		queryFn: async () => fetchSiteInfo(wp),
+	})
+
+	const overviewInfo = useQuery<IArticleCollection>({
+		queryKey: [`${inputURL}Overview`],
+		queryFn: async () => fetchOverview(wp),
+	})
 
 	useEffect(() => {
-		setPostCollection(undefined)
-		setMainInfo(undefined)
-
-		wp.fetchInfo()
-			.then((response: ISiteInfo) => {
-				setMainInfo({
-					name: response.name ?? "N/A",
-					description: response.description ?? "",
-					site_icon_url: response.site_icon_url,
-					url: response.url,
-					namespaces: response.namespaces,
-				})
-			})
-			.catch((err) => {
-				console.log(err)
-				setMainInfo(undefined)
-			})
-
-		Promise.all([
-			wp.fetchPosts({ type: EPostType.Post, page: 1, perPage: 3 }),
-			wp.fetchPosts({ type: EPostType.Page, page: 1, perPage: 3 }),
-		])
-			.then((values) => {
-				setPostCollection({
-					posts: values[0].posts,
-					pages: values[1].posts,
-				})
-			})
-			.catch((err: IWPAPIError) => {
-				console.log(err)
-			})
-	}, [inputURL])
-
-	useEffect(() => {
-		document.title = `${mainInfo?.name ?? "Sites"} - Pressify`
+		document.title = `${siteInfo.data?.name ?? "Sites"} - Pressify`
 	}, [])
 
 	return (
@@ -78,7 +53,7 @@ const Overview: React.FC = () => {
 			</IonHeader>
 
 			<IonContent fullscreen>
-				<Headline siteInfo={mainInfo} />
+				<Headline siteInfo={siteInfo.data} />
 				<IonListHeader>
 					<IonLabel>Posts</IonLabel>
 					<IonButton routerLink={`/${inputURL}/posts`}>
@@ -86,7 +61,7 @@ const Overview: React.FC = () => {
 						<IonIcon slot="end" ios={chevronForward} md={arrowForward}></IonIcon>
 					</IonButton>
 				</IonListHeader>
-				<PostGrid posts={postCollection?.posts} siteURL={inputURL} mockCount={3} />
+				<PostGrid posts={overviewInfo.data?.posts} siteURL={inputURL} mockCount={3} />
 				<IonListHeader>
 					<IonLabel>Pages</IonLabel>
 					<IonButton routerLink={`/${inputURL}/pages`}>
@@ -94,7 +69,7 @@ const Overview: React.FC = () => {
 						<IonIcon slot="end" ios={chevronForward} md={arrowForward}></IonIcon>
 					</IonButton>
 				</IonListHeader>
-				<PostGrid posts={postCollection?.pages} siteURL={inputURL} mockCount={3} />
+				<PostGrid posts={overviewInfo.data?.pages} siteURL={inputURL} mockCount={3} />
 			</IonContent>
 		</IonPage>
 	)

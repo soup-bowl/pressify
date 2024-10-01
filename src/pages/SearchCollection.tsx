@@ -13,7 +13,8 @@ import {
 	IonToolbar,
 } from "@ionic/react"
 import { useParams } from "react-router"
-import { IPost, ISiteInfo, WordPressApi } from "@/api"
+import { useQuery } from "@tanstack/react-query"
+import { fetchSiteInfo, IPost, ISiteInfo, searchPosts, WordPressApi } from "@/api"
 import { getLayoutIcon } from "@/utils"
 import { PostGrid, PostList } from "@/components"
 import { useSettings } from "@/hooks"
@@ -24,37 +25,17 @@ const SearchCollection: React.FC = () => {
 	const { inputURL } = useParams<{ inputURL: string }>()
 	const [layout, setLayout] = useSettings<"grid" | "list">("displayLayout", "grid")
 	const wp = new WordPressApi({ endpoint: `https://${inputURL}/wp-json` })
-	const [mainInfo, setMainInfo] = useState<ISiteInfo | undefined>()
 	const [searchTerms, setSearchTerms] = useState<string>("")
-	const [searchResults, setSearchResults] = useState<IPost[] | undefined>()
 
-	useEffect(() => {
-		setMainInfo(undefined)
+	const siteInfo = useQuery<ISiteInfo>({
+		queryKey: [`${inputURL}Info`],
+		queryFn: async () => fetchSiteInfo(wp),
+	})
 
-		wp.fetchInfo()
-			.then((response: ISiteInfo) => {
-				setMainInfo({
-					name: response.name ?? "N/A",
-					description: response.description ?? "",
-					site_icon_url: response.site_icon_url,
-					url: response.url,
-					namespaces: response.namespaces,
-				})
-			})
-			.catch((err) => {
-				console.log(err)
-			})
-	}, [inputURL])
-
-	useEffect(() => {
-		wp.searchPosts({ search: searchTerms ?? "", page: 1, perPage: pageAmount })
-			.then((response) => {
-				const collection: IPost[] = []
-				response.results.forEach((e) => collection.push(e._embedded.self[0]))
-				setSearchResults(collection)
-			})
-			.catch((err) => console.log(err))
-	}, [searchTerms])
+	const postData = useQuery<IPost[]>({
+		queryKey: [`${inputURL}search`, searchTerms],
+		queryFn: async () => searchPosts(wp, searchTerms, pageAmount),
+	})
 
 	const toggleLayout = () => {
 		if (layout === "grid") {
@@ -64,10 +45,10 @@ const SearchCollection: React.FC = () => {
 		}
 	}
 
-	const title = `Searching ${mainInfo?.name} for "${searchTerms}"`
+	const title = `Searching ${siteInfo.data?.name} for "${searchTerms}"`
 	useEffect(() => {
 		document.title = `${title} - Pressify`
-	}, [mainInfo])
+	}, [siteInfo.data])
 
 	return (
 		<IonPage>
@@ -95,9 +76,9 @@ const SearchCollection: React.FC = () => {
 
 			<IonContent>
 				{layout === "grid" ? (
-					<PostGrid posts={searchResults} siteURL={inputURL} mockCount={pageAmount} />
+					<PostGrid posts={postData.data} siteURL={inputURL} mockCount={pageAmount} />
 				) : (
-					<PostList posts={searchResults} siteURL={inputURL} mockCount={pageAmount} />
+					<PostList posts={postData.data} siteURL={inputURL} mockCount={pageAmount} />
 				)}
 			</IonContent>
 		</IonPage>
