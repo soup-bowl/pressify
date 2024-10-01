@@ -1,6 +1,6 @@
 import { createContext } from "react"
 import { IonApp, IonRouterOutlet, IonSplitPane, setupIonicReact } from "@ionic/react"
-import { IonReactRouter } from "@ionic/react-router"
+import { IonReactHashRouter } from "@ionic/react-router"
 import { Route } from "react-router-dom"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { Menu } from "@/components"
@@ -49,7 +49,7 @@ const App: React.FC = () => {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<IonApp>
-				<IonReactRouter>
+				<IonReactHashRouter>
 					<IonSplitPane contentId="main">
 						<Menu />
 						<IonRouterOutlet id="main">
@@ -90,7 +90,7 @@ const App: React.FC = () => {
 							</Route>
 						</IonRouterOutlet>
 					</IonSplitPane>
-				</IonReactRouter>
+				</IonReactHashRouter>
 			</IonApp>
 		</QueryClientProvider>
 	)
