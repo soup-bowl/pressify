@@ -1,17 +1,6 @@
-import {
-	IonCard,
-	IonCardContent,
-	IonCol,
-	IonGrid,
-	IonItem,
-	IonLabel,
-	IonList,
-	IonRow,
-	IonSkeletonText,
-	IonThumbnail,
-} from "@ionic/react"
-import { IPost } from "../api"
-import { degubbins } from "../utils"
+import { IonItem, IonLabel, IonList, IonSkeletonText, IonThumbnail } from "@ionic/react"
+import { IPost } from "@/api"
+import { degubbins } from "@/utils"
 
 const PostList: React.FC<{
 	posts?: IPost[]

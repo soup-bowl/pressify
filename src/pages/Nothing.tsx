@@ -1,6 +1,6 @@
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from "@ionic/react"
-import { Placeholder } from "../components"
 import { useEffect } from "react"
+import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from "@ionic/react"
+import { Placeholder } from "@/components"
 
 const Nothing: React.FC = () => {
 	useEffect(() => {

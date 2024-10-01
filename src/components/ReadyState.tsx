@@ -1,4 +1,4 @@
-import { ESelectorState } from "../enum"
+import { ESelectorState } from "@/enum"
 
 const ReadyState: React.FC<{ state: ESelectorState }> = ({ state }) => {
 	switch (state) {

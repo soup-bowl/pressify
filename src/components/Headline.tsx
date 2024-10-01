@@ -1,5 +1,5 @@
 import { IonCol, IonGrid, IonRow, IonSkeletonText, IonText } from "@ionic/react"
-import { ISiteInfo } from "../api"
+import { ISiteInfo } from "@/api"
 import "./Headline.css"
 
 const Headline: React.FC<{

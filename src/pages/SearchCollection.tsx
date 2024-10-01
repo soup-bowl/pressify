@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react"
 import {
 	IonBackButton,
 	IonButton,
@@ -12,11 +13,10 @@ import {
 	IonToolbar,
 } from "@ionic/react"
 import { useParams } from "react-router"
-import { useEffect, useState } from "react"
-import { EPostType, IPost, ISiteInfo, WordPressApi } from "../api"
-import { degubbins, getLayoutIcon } from "../utils"
-import { PostGrid, PostList } from "../components"
-import { useSettings } from "../hooks"
+import { IPost, ISiteInfo, WordPressApi } from "@/api"
+import { getLayoutIcon } from "@/utils"
+import { PostGrid, PostList } from "@/components"
+import { useSettings } from "@/hooks"
 
 const pageAmount = 12
 

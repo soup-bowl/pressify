@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react"
 import {
 	IonBackButton,
 	IonButton,
@@ -5,17 +6,18 @@ import {
 	IonContent,
 	IonHeader,
 	IonIcon,
+	IonInfiniteScroll,
+	IonInfiniteScrollContent,
 	IonMenuButton,
 	IonPage,
 	IonTitle,
 	IonToolbar,
 } from "@ionic/react"
 import { useParams } from "react-router"
-import { useEffect, useState } from "react"
-import { EPostType, ETagType, IPostCollection, ISiteInfo, WordPressApi } from "../api"
-import { degubbins, getLayoutIcon } from "../utils"
-import { PostGrid, PostList } from "../components"
-import { useSettings } from "../hooks"
+import { EPostType, ETagType, IPost, ISiteInfo, WordPressApi } from "@/api"
+import { degubbins, getLayoutIcon } from "@/utils"
+import { PostGrid, PostList } from "@/components"
+import { useSettings } from "@/hooks"
 
 const pageAmount = 12
 
@@ -23,11 +25,12 @@ const TaxCollection: React.FC<{
 	type: EPostType
 	tagType: ETagType
 }> = ({ type, tagType }) => {
-	const { inputURL, searchID, pageNumber } = useParams<{ inputURL: string; searchID: string; pageNumber: string }>()
+	const { inputURL, searchID } = useParams<{ inputURL: string; searchID: string }>()
 	const [layout, setLayout] = useSettings<"grid" | "list">("displayLayout", "grid")
 	const wp = new WordPressApi({ endpoint: `https://${inputURL}/wp-json` })
 	const [mainInfo, setMainInfo] = useState<ISiteInfo | undefined>()
-	const [posts, setPosts] = useState<IPostCollection | undefined>()
+	const [posts, setPosts] = useState<IPost[] | undefined>()
+	const [scrollCount, setScrollCount] = useState<number>(1)
 
 	useEffect(() => {
 		setPosts(undefined)
@@ -47,26 +50,31 @@ const TaxCollection: React.FC<{
 				console.log(err)
 			})
 
+		loadContent()
+	}, [inputURL])
+
+	const loadContent = () => {
+		setScrollCount(scrollCount + 1)
 		if (tagType === ETagType.Tag) {
 			wp.fetchPosts({
 				type: type,
-				page: parseInt(pageNumber ?? "1"),
+				page: scrollCount,
 				perPage: pageAmount,
 				byTag: parseInt(searchID ?? "0"),
 			})
-				.then((post) => setPosts(post))
+				.then((post) => setPosts([...(posts ?? []), ...post.posts]))
 				.catch((err: Error) => console.log(err))
 		} else {
 			wp.fetchPosts({
 				type: type,
-				page: parseInt(pageNumber ?? "1"),
+				page: scrollCount,
 				perPage: pageAmount,
 				byCategory: parseInt(searchID ?? "0"),
 			})
-				.then((post) => setPosts(post))
+				.then((post) => setPosts([...(posts ?? []), ...post.posts]))
 				.catch((err: Error) => console.log(err))
 		}
-	}, [inputURL])
+	}
 
 	const toggleLayout = () => {
 		if (layout === "grid") {
@@ -115,10 +123,19 @@ const TaxCollection: React.FC<{
 				</IonHeader>
 
 				{layout === "grid" ? (
-					<PostGrid posts={posts?.posts} siteURL={inputURL} mockCount={pageAmount} />
+					<PostGrid posts={posts} siteURL={inputURL} mockCount={pageAmount} />
 				) : (
-					<PostList posts={posts?.posts} siteURL={inputURL} mockCount={pageAmount} />
+					<PostList posts={posts} siteURL={inputURL} mockCount={pageAmount} />
 				)}
+
+				<IonInfiniteScroll
+					onIonInfinite={(ev) => {
+						loadContent()
+						setTimeout(() => ev.target.complete(), 500)
+					}}
+				>
+					<IonInfiniteScrollContent />
+				</IonInfiniteScroll>
 			</IonContent>
 		</IonPage>
 	)

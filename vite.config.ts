@@ -2,6 +2,8 @@ import legacy from "@vitejs/plugin-legacy"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
 import { VitePWA } from "vite-plugin-pwa"
+import { version } from "./package.json"
+import path from "path"
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -18,4 +20,14 @@ export default defineConfig({
 			},
 		}),
 	],
+	define: {
+		"process.env": {
+			REACT_APP_VERSION: JSON.stringify(version),
+		},
+	},
+	resolve: {
+		alias: {
+			"@": path.resolve(__dirname, "./src"),
+		},
+	},
 })

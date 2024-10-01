@@ -27,12 +27,12 @@ import {
 } from "@ionic/react"
 import { earthOutline, earthSharp } from "ionicons/icons"
 import { useLocation } from "react-router-dom"
-import { useSettings } from "../hooks"
-import { ESelectorState } from "../enum"
-import { WordPressApi } from "../api"
-import { ReadyState } from "."
+import { useSettings } from "@/hooks"
+import { ESelectorState } from "@/enum"
+import { WordPressApi } from "@/api"
+import { ReadyState } from "@/components"
+import { ISite } from "@/interface"
 import "./Menu.css"
-import { ISite } from "../interface"
 
 const Menu: React.FC = () => {
 	const location = useLocation()
@@ -93,7 +93,7 @@ const Menu: React.FC = () => {
 						</IonLabel>
 						<IonButton onClick={() => setIsOpen(true)}>Add</IonButton>
 					</IonListHeader>
-					<IonNote>WordPress App Simulator</IonNote>
+					<IonNote>WordPress App Simulator {process.env.REACT_APP_VERSION?.replace(/"/g, "")}</IonNote>
 					{sites.map((site, index) => {
 						return (
 							<IonMenuToggle key={index} autoHide={false}>

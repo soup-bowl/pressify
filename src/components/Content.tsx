@@ -1,6 +1,6 @@
-import DOMPurify from "dompurify"
-import { IPost } from "../api"
 import { IonSkeletonText } from "@ionic/react"
+import DOMPurify from "dompurify"
+import { IPost } from "@/api"
 import "./Content.css"
 
 const Content: React.FC<{

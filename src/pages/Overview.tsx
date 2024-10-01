@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react"
 import {
 	IonButton,
 	IonButtons,
@@ -13,9 +14,8 @@ import {
 } from "@ionic/react"
 import { arrowForward, chevronForward, searchOutline } from "ionicons/icons"
 import { useParams } from "react-router"
-import { useEffect, useState } from "react"
-import { EPostType, IArticleCollection, ISiteInfo, IWPAPIError, WordPressApi } from "../api"
-import { Headline, PostGrid } from "../components"
+import { EPostType, IArticleCollection, ISiteInfo, IWPAPIError, WordPressApi } from "@/api"
+import { Headline, PostGrid } from "@/components"
 
 const Overview: React.FC = () => {
 	const { inputURL } = useParams<{ inputURL: string }>()

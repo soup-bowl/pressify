@@ -8,8 +8,8 @@ import {
 	IonRow,
 	IonSkeletonText,
 } from "@ionic/react"
-import { IPost } from "../api"
-import { degubbins } from "../utils"
+import { IPost } from "@/api"
+import { degubbins } from "@/utils"
 
 const PostGrid: React.FC<{
 	posts?: IPost[]

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react"
 import {
 	IonBackButton,
 	IonButton,
@@ -14,12 +15,11 @@ import {
 	IonTitle,
 	IonToolbar,
 } from "@ionic/react"
-import { useParams } from "react-router"
-import { useEffect, useState } from "react"
-import { EPostType, IPost, ISiteInfo, WordPressApi } from "../api"
-import { degubbins } from "../utils"
-import { Content, TagGrid } from "../components"
 import { shareOutline, shareSharp } from "ionicons/icons"
+import { useParams } from "react-router"
+import { EPostType, IPost, ISiteInfo, WordPressApi } from "@/api"
+import { degubbins } from "@/utils"
+import { Content, TagGrid } from "@/components"
 
 const Post: React.FC<{
 	type: EPostType

@@ -1,5 +1,5 @@
-import { IonButton, IonChip } from "@ionic/react"
-import { ITag } from "../api"
+import { IonButton } from "@ionic/react"
+import { ITag } from "@/api"
 
 const TagGrid: React.FC<{
 	tags?: ITag[]
