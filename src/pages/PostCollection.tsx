@@ -31,12 +31,12 @@ const PostCollection: React.FC<{
 	const [scrollCount, setScrollCount] = useState<number>(1)
 
 	const siteInfo = useQuery<ISiteInfo>({
-		queryKey: [`${inputURL}Info`],
+		queryKey: [inputURL, 'info'],
 		queryFn: async () => fetchSiteInfo(wp),
 	})
 
 	const postData = useQuery<IPost[]>({
-		queryKey: [`${inputURL}${type.toString()}`, scrollCount],
+		queryKey: [inputURL, type.toString(), scrollCount],
 		queryFn: async (): Promise<IPost[]> => fetchPosts(wp, type, scrollCount, pageAmount, postData.data),
 		placeholderData: keepPreviousData,
 	})

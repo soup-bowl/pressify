@@ -32,12 +32,12 @@ const TaxCollection: React.FC<{
 	const [scrollCount, setScrollCount] = useState<number>(1)
 
 	const siteInfo = useQuery<ISiteInfo>({
-		queryKey: [`${inputURL}Info`],
+		queryKey: [inputURL, 'info'],
 		queryFn: async () => fetchSiteInfo(wp),
 	})
 
 	const postData = useQuery<IPost[]>({
-		queryKey: [`${inputURL}${tagType.toString()}${type.toString()}`, searchID, scrollCount],
+		queryKey: [inputURL, tagType.toString(), type.toString(), searchID, scrollCount],
 		queryFn: async (): Promise<IPost[]> =>
 			fetchTaxes(wp, type, tagType, parseInt(searchID ?? "0"), scrollCount, pageAmount, postData.data),
 		placeholderData: keepPreviousData,

@@ -23,7 +23,7 @@ const Overview: React.FC = () => {
 	const wp = new WordPressApi({ endpoint: `https://${inputURL}/wp-json` })
 
 	const siteInfo = useQuery<ISiteInfo>({
-		queryKey: [`${inputURL}Info`],
+		queryKey: [inputURL, 'info'],
 		queryFn: async () => fetchSiteInfo(wp),
 	})
 

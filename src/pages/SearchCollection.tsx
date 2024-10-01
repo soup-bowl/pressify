@@ -28,12 +28,12 @@ const SearchCollection: React.FC = () => {
 	const [searchTerms, setSearchTerms] = useState<string>("")
 
 	const siteInfo = useQuery<ISiteInfo>({
-		queryKey: [`${inputURL}Info`],
+		queryKey: [inputURL, 'info'],
 		queryFn: async () => fetchSiteInfo(wp),
 	})
 
 	const postData = useQuery<IPost[]>({
-		queryKey: [`${inputURL}search`, searchTerms],
+		queryKey: [inputURL, 'search', searchTerms],
 		queryFn: async () => searchPosts(wp, searchTerms, pageAmount),
 	})
 
