@@ -52,7 +52,7 @@ const Overview: React.FC = () => {
 				</IonToolbar>
 			</IonHeader>
 
-			<IonContent fullscreen>
+			<IonContent>
 				<Headline siteInfo={siteInfo.data} />
 				<IonListHeader>
 					<IonLabel>Posts</IonLabel>

@@ -97,7 +97,7 @@ const Home: React.FC = () => {
 				</IonToolbar>
 			</IonHeader>
 
-			<IonContent fullscreen>
+			<IonContent>
 				{layout === "grid" ? (
 					<PostGrid posts={postData.data} mockCount={10} />
 				) : (
