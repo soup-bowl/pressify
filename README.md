@@ -37,8 +37,8 @@ For a site to work, it has to meet the following criteria:
 This project requires NodeJS to develop, test and compile the code. The following will quickstart you.
 
 ```bash
-npm install
-npm start
+npm ci
+npm run serve
 ```
 
 The API the system will communicate with is defined in the appropriate `.env`.
@@ -51,11 +51,6 @@ If you want to test the PWA functionality locally, you can add the following to 
 devOptions: { enabled: true },
 ```
 
-## react-hooks/exhaustive-deps
-
-This has been ignored on the UseEffect commands where the WP API is called. This is because once wp is added to the
-dependency array, an infinite loop is triggered. I welcome thoughts and suggestions to fix this, but until then (and it
-causing no foreseeable bugs), it has been disabled.
 
 [live]: https://pressify.app
 [wapi]: https://developer.wordpress.org/rest-api/
