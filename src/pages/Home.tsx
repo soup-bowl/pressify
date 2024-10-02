@@ -12,9 +12,9 @@ import {
 } from "@ionic/react"
 import { Placeholder, PostGrid, PostList } from "@/components"
 import { useSettings } from "@/hooks"
-import { ISite } from "@/interface"
+import { IPostExtended, ISite } from "@/interface"
 import { useQuery } from "@tanstack/react-query"
-import { EPostType, fetchPosts, fetchSiteInfo, IPost, WordPressApi } from "@/api"
+import { EPostType, fetchPosts, IPost, WordPressApi } from "@/api"
 import { getLayoutIcon } from "@/utils"
 
 const Home: React.FC = () => {
@@ -54,18 +54,30 @@ const Home: React.FC = () => {
 		)
 	}
 
-	const postData = useQuery<IPost[]>({
+	const postData = useQuery<IPostExtended[]>({
 		queryKey: ["summary", sites.length],
 		queryFn: async () => {
+			const extendPosts = (posts: IPost[], info: ISite): IPostExtended[] => {
+				return posts.map((post) => ({
+					...post,
+					name: info.name,
+					description: info.description,
+					url: info.url,
+					image: info.image,
+				}))
+			}
+
 			const postCollectionPromises = sites.map(async (site) => {
 				const wp = new WordPressApi({ endpoint: `https://${site.url}/wp-json` })
-				//const details = await fetchSiteInfo(wp)
-				const posts = await fetchPosts(wp, EPostType.Post, 1, 10)
+				const posts = extendPosts(await fetchPosts(wp, EPostType.Post, 1, 10), site)
 				return posts
 			})
 
 			const postCollections = await Promise.all(postCollectionPromises)
-			return postCollections.flat()
+			return postCollections
+				.flat()
+				.sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime())
+				.slice(0, 15)
 		},
 	})
 
@@ -87,9 +99,9 @@ const Home: React.FC = () => {
 
 			<IonContent fullscreen>
 				{layout === "grid" ? (
-					<PostGrid posts={postData.data} siteURL={""} mockCount={10} />
+					<PostGrid posts={postData.data} mockCount={10} />
 				) : (
-					<PostList posts={postData.data} siteURL={""} mockCount={10} />
+					<PostList posts={postData.data} mockCount={10} />
 				)}
 			</IonContent>
 		</IonPage>

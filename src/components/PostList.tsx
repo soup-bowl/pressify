@@ -1,9 +1,10 @@
-import { IonItem, IonLabel, IonList, IonSkeletonText, IonThumbnail } from "@ionic/react"
+import { IonAvatar, IonChip, IonItem, IonLabel, IonList, IonSkeletonText, IonThumbnail } from "@ionic/react"
 import { IPost } from "@/api"
-import { degubbins } from "@/utils"
+import { degubbins, isPostExtended } from "@/utils"
+import { IPostExtended } from "@/interface"
 
 const PostList: React.FC<{
-	posts?: IPost[]
+	posts?: IPost[] | IPostExtended[]
 	siteURL?: string
 	mockCount?: number
 }> = ({ posts, siteURL, mockCount = 0 }) => {
@@ -27,7 +28,11 @@ const PostList: React.FC<{
 	return (
 		<IonList>
 			{posts.map((post, index) => (
-				<IonItem key={index} button routerLink={`/${siteURL}/${post.type}/${post.id}`}>
+				<IonItem
+					key={index}
+					button
+					routerLink={`/${isPostExtended(post) ? post.url : siteURL}/${post.type}/${post.id}`}
+				>
 					{post._embedded?.["wp:featuredmedia"]?.[0].media_details?.sizes?.full?.source_url && (
 						<IonThumbnail slot="start">
 							<img
@@ -40,6 +45,14 @@ const PostList: React.FC<{
 						<h2>{degubbins(post.title.rendered)}</h2>
 						<p>{degubbins(post.excerpt.rendered)}</p>
 					</IonLabel>
+					{isPostExtended(post) && (
+						<IonChip slot="end">
+							<IonAvatar>
+								<img alt="" src={post.image} />
+							</IonAvatar>
+							<IonLabel>{post.name}</IonLabel>
+						</IonChip>
+					)}
 				</IonItem>
 			))}
 		</IonList>

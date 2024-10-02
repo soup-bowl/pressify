@@ -1,18 +1,22 @@
 import {
+	IonAvatar,
 	IonCard,
 	IonCardContent,
 	IonCardHeader,
 	IonCardTitle,
+	IonChip,
 	IonCol,
 	IonGrid,
+	IonLabel,
 	IonRow,
 	IonSkeletonText,
 } from "@ionic/react"
 import { IPost } from "@/api"
-import { degubbins } from "@/utils"
+import { degubbins, isPostExtended } from "@/utils"
+import { IPostExtended } from "@/interface"
 
 const PostGrid: React.FC<{
-	posts?: IPost[]
+	posts?: IPost[] | IPostExtended[]
 	siteURL?: string
 	mockCount?: number
 }> = ({ posts, siteURL, mockCount = 0 }) => {
@@ -42,7 +46,7 @@ const PostGrid: React.FC<{
 			<IonRow>
 				{posts.map((post, index) => (
 					<IonCol key={index} size="12" sizeMd="4">
-						<IonCard routerLink={`/${siteURL}/${post.type}/${post.id}`}>
+						<IonCard routerLink={`/${isPostExtended(post) ? post.url : siteURL}/${post.type}/${post.id}`}>
 							{post._embedded?.["wp:featuredmedia"]?.[0].media_details?.sizes?.full?.source_url && (
 								<img
 									alt=""
@@ -52,7 +56,20 @@ const PostGrid: React.FC<{
 							<IonCardHeader>
 								<IonCardTitle>{degubbins(post.title.rendered)}</IonCardTitle>
 							</IonCardHeader>
-							<IonCardContent>{degubbins(post.excerpt.rendered)}</IonCardContent>
+							<IonCardContent>
+								{isPostExtended(post) && (
+									<>
+										<IonChip>
+											<IonAvatar>
+												<img alt="" src={post.image} />
+											</IonAvatar>
+											<IonLabel>{post.name}</IonLabel>
+										</IonChip>
+										<br />
+									</>
+								)}
+								{degubbins(post.excerpt.rendered)}
+							</IonCardContent>
 						</IonCard>
 					</IonCol>
 				))}
