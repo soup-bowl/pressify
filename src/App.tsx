@@ -4,7 +4,7 @@ import { IonReactHashRouter } from "@ionic/react-router"
 import { Route } from "react-router-dom"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { Menu } from "@/components"
-import { Nothing, Overview, Post, PostCollection, SearchCollection, TaxCollection } from "@/pages"
+import { Home, Overview, Post, PostCollection, SearchCollection, TaxCollection } from "@/pages"
 import { EPostType, ETagType, WordPressApi } from "@/api"
 
 /* Core CSS required for Ionic components to work properly */
@@ -54,7 +54,7 @@ const App: React.FC = () => {
 						<Menu />
 						<IonRouterOutlet id="main">
 							<Route path="/" exact={true}>
-								<Nothing />
+								<Home />
 							</Route>
 							<Route path="/:inputURL" exact={true}>
 								<Overview />

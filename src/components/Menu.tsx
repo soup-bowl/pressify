@@ -26,7 +26,7 @@ import {
 	IonTitle,
 	IonToolbar,
 } from "@ionic/react"
-import { earthOutline, earthSharp } from "ionicons/icons"
+import { earthOutline, earthSharp, homeOutline, homeSharp } from "ionicons/icons"
 import { useLocation } from "react-router-dom"
 import { useSettings } from "@/hooks"
 import { ESelectorState } from "@/enum"
@@ -96,6 +96,22 @@ const Menu: React.FC = () => {
 						<IonButton onClick={() => setIsOpen(true)}>Add</IonButton>
 					</IonListHeader>
 					<IonNote>WordPress App Simulator</IonNote>
+					<IonItem
+						className={location.pathname === "/" ? "selected" : ""}
+						routerLink="/"
+						routerDirection="none"
+						lines="none"
+						detail={false}
+					>
+						<IonIcon
+							aria-hidden="true"
+							slot="start"
+							ios={homeOutline}
+							md={homeSharp}
+							style={{ minWidth: 36 }}
+						/>
+						<IonLabel>Home</IonLabel>
+					</IonItem>
 					{sites.map((site, index) => {
 						return (
 							<IonMenuToggle key={index} autoHide={false}>
@@ -117,6 +133,7 @@ const Menu: React.FC = () => {
 												slot="start"
 												ios={earthOutline}
 												md={earthSharp}
+												style={{ minWidth: 36 }}
 											/>
 										)}
 										<IonLabel>{site.name}</IonLabel>
