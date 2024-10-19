@@ -54,7 +54,6 @@ If you want to test the PWA functionality locally, you can add the following to 
 devOptions: { enabled: true },
 ```
 
-
 [live]: https://pressify.app
 [wapi]: https://developer.wordpress.org/rest-api/
 [wapj]: https://github.com/WP-API/node-wpapi
