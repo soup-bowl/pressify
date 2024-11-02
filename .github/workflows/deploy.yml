@@ -56,15 +56,11 @@ jobs:
         run: npm ci && npm run build
 
       - name: 🚛 Publish Site
-        id: cfp
-        uses: cloudflare/pages-action@v1
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          projectName: ${{ github.ref == 'refs/heads/beta' && 'pressifybeta' || 'pressify' }}
-          directory: ./dist
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref == 'refs/heads/beta' && 'main' || (github.event_name == 'push' && 'per-commit-from-main' || 'main') }}
-
-      - name: Debriefing
-        run: echo '🚀 Deployed to [${{ steps.cfp.outputs.url }}](${{ steps.cfp.outputs.url }}).' >> $GITHUB_STEP_SUMMARY
+          command: >
+            pages deploy ./dist
+            --project-name=${{ github.ref == 'refs/heads/beta' && 'pressifybeta' || 'pressify' }}
+            --branch ${{ github.ref == 'refs/heads/beta' && 'main' || (github.event_name == 'push' && 'per-commit-from-main' || 'main') }}
