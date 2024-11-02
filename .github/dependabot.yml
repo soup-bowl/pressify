@@ -9,6 +9,12 @@ updates:
       directory: "/"
       schedule:
           interval: "monthly"
+      ignore:
+          # Issues with Ionic Framework
+          - dependency-name: "react-router"
+          - dependency-name: "react-router-dom"
+          # Issues with Vite
+          - dependency-name: "eslint"
       groups:
           dev-dependencies:
               patterns:
