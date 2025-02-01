@@ -1,13 +1,14 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
 {
-	"name": "Node.js & TypeScript",
+	"name": "Localib Dev",
 	"image": "mcr.microsoft.com/devcontainers/typescript-node:18-bullseye",
 	"features": {
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
 	},
 	"postCreateCommand": "./.devcontainer/postCreateCommand.sh",
 	"postStartCommand": "./.devcontainer/postStartCommand.sh",
-	"postAttachCommand": "./.devcontainer/postAttachCommand.sh",
-	"forwardPorts": [3000]
+	"postAttachCommand": ["npm", "run", "serve"],
+	"forwardPorts": [3000],
+	"remoteUser": "root"
 }
