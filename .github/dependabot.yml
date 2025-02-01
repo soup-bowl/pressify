@@ -13,6 +13,10 @@ updates:
           # Issues with Ionic Framework
           - dependency-name: "react-router"
           - dependency-name: "react-router-dom"
+          - dependency-name: "react"
+          - dependency-name: "react-dom"
+          - dependency-name: "@types/react"
+          - dependency-name: "@types/react-dom"
           # Issues with Vite
           - dependency-name: "eslint"
       groups:
