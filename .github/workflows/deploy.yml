@@ -5,6 +5,12 @@ on:
     branches:
       - main
       - beta
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'package.json'
+      - 'index.html'
+      - 'vite.config.js'
   release:
     types: [published]
 
