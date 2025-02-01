@@ -9,6 +9,6 @@
 	"postCreateCommand": "./.devcontainer/postCreateCommand.sh",
 	"postStartCommand": "./.devcontainer/postStartCommand.sh",
 	"postAttachCommand": ["npm", "run", "serve"],
-	"forwardPorts": [3000],
+	"forwardPorts": [8100],
 	"remoteUser": "root"
 }
