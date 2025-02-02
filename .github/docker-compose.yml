@@ -1,28 +1,32 @@
-version: "3.6"
 services:
-    db:
-        image: docker.io/library/mariadb:10.5.15
-        volumes:
-            - db_persist:/var/lib/mysql
-        environment:
-            MYSQL_ROOT_PASSWORD: password
-            MYSQL_DATABASE: wordpress
-    wp:
-        depends_on:
-            - db
-        build:
-            context: .
-        volumes:
-            - "wp_persist:/var/www/html"
-        ports:
-            - 8080:80
-        environment:
-            WORDPRESS_DB_HOST: db
-            WORDPRESS_DB_USER: root
-            WORDPRESS_DB_PASSWORD: password
-            WORDPRESS_DEBUG: 1
-            WORDPRESS_CONFIG_EXTRA: |
-                define( 'WP_ALLOW_MULTISITE', true );
+  db:
+    image: docker.io/library/mariadb:10.5.15
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 5
+    volumes:
+      - db_persist:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: wordpress
+  wp:
+    depends_on:
+      - db
+    build:
+      context: .
+    volumes:
+      - "wp_persist:/var/www/html"
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: password
+      WORDPRESS_DEBUG: 1
+      WORDPRESS_CONFIG_EXTRA: |
+        define( 'WP_ALLOW_MULTISITE', true );
+
 volumes:
-    wp_persist:
-    db_persist:
+  wp_persist:
+  db_persist:

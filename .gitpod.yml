@@ -12,9 +12,11 @@ tasks:
           docker-compose -f .github/docker-compose.yml logs -f
     - name: WordPress App
       before: |
+          nvm install 22
           npm i -g @ionic/cli
           npm ci
       command: |
+          nvm use 22
           npm i -g @ionic/cli
           echo "PUBLIC_URL=$(gp url 3000)" > .env.development.local
           echo "REACT_APP_VERSION=\$npm_package_version" >> .env.development.local
