@@ -1,4 +1,4 @@
-<h1 align="center"><a href="https://pressify.app">Pressify</a></h1>
+<h1 align="center"><a href="https://pressify.subo.dev">Pressify</a></h1>
 <p align="center">
   <a href="https://www.codefactor.io/repository/github/soup-bowl/pressify"><img src="https://www.codefactor.io/repository/github/soup-bowl/pressify/badge" alt="CodeFactor" /></a>
   <a href="https://gitpod.io/#https://github.com/soup-bowl/pressify"><img src="https://img.shields.io/badge/open%20in-Gitpod-orange?logo=gitpod&logoColor=white" /></a>
@@ -51,7 +51,7 @@ If you want to test the PWA functionality locally, you can add the following to 
 devOptions: { enabled: true },
 ```
 
-[live]: https://pressify.app
+[live]: https://pressify.subo.dev
 [wapi]: https://developer.wordpress.org/rest-api/
 [wapj]: https://github.com/WP-API/node-wpapi
 [pwa]: https://web.dev/progressive-web-apps/
