@@ -16,7 +16,7 @@ class WordPressApi {
 	/**
 	 * The base URL of the WordPress REST API.
 	 */
-	private baseUrl: string
+	private readonly baseUrl: string
 
 	/**
 	 * Creates an instance of the WordPressApi.
@@ -75,7 +75,12 @@ class WordPressApi {
 		byTag = 0,
 		parent = 0,
 	}: FetchInput): Promise<IPostCollection> {
-		const arg = byCategory > 0 ? `&categories=${byCategory}` : byTag > 0 ? `&tags=${byTag}` : ""
+		let arg = ""
+		if (byCategory > 0) {
+			arg = `&categories=${byCategory}`
+		} else if (byTag > 0) {
+			arg = `&tags=${byTag}`
+		}
 		const pnt = parent > 0 ? `&parent=${parent}` : ""
 		const url = `${this.baseUrl}/wp/v2/${type === EPostType.Post ? "posts" : "pages"}?_embed=true&page=${page}&per_page=${perPage}${arg}${pnt}`
 

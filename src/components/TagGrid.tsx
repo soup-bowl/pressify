@@ -11,8 +11,8 @@ const TagGrid: React.FC<{
 
 	return (
 		<>
-			{tags.map((tag, index) => (
-				<IonButton size="small" key={index} routerLink={`/${prelink}/${tag.id}`}>
+			{tags.map((tag) => (
+				<IonButton size="small" key={tag.id} routerLink={`/${prelink}/${tag.id}`}>
 					{tag.name}
 				</IonButton>
 			))}

@@ -44,8 +44,8 @@ const PostGrid: React.FC<{
 	return (
 		<IonGrid>
 			<IonRow>
-				{posts.map((post, index) => (
-					<IonCol key={index} size="12" sizeMd="4">
+				{posts.map((post) => (
+					<IonCol key={post.id} size="12" sizeMd="4">
 						<IonCard routerLink={`/${isPostExtended(post) ? post.url : siteURL}/${post.type}/${post.id}`}>
 							{post._embedded?.["wp:featuredmedia"]?.[0].media_details?.sizes?.full?.source_url && (
 								<img

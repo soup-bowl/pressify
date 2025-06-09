@@ -1,72 +1,72 @@
 name: Deploy Site
 
 on:
-  push:
-    branches:
-      - main
-      - beta
-    paths:
-      - 'src/**'
-      - 'public/**'
-      - 'package.json'
-      - 'index.html'
-      - 'vite.config.js'
-  release:
-    types: [published]
+    push:
+        branches:
+            - main
+            - beta
+        paths:
+            - "src/**"
+            - "public/**"
+            - "package.json"
+            - "index.html"
+            - "vite.config.js"
+    release:
+        types: [published]
 
 concurrency:
-  group: "pages"
-  cancel-in-progress: true
+    group: "pages"
+    cancel-in-progress: true
 
 jobs:
-  build_test:
-    runs-on: ubuntu-latest
+    build_test:
+        runs-on: ubuntu-latest
 
-    permissions:
-      contents: read
-      deployments: write
+        permissions:
+            contents: read
+            deployments: write
 
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
 
-      - uses: sonarsource/sonarqube-scan-action@v3
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+            - uses: sonarsource/sonarqube-scan-action@v3
+              env:
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+                  SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22.x
+            - name: Use Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22.x
 
-      - name: Identify Commit Hash
-        if: github.event_name == 'release'
-        id: commit
-        uses: pr-mpt/actions-commit-hash@v3
+            - name: Identify Commit Hash
+              if: github.event_name == 'release'
+              id: commit
+              uses: pr-mpt/actions-commit-hash@v3
 
-      - name: Identify version
-        if: github.event_name == 'release'
-        id: get_version
-        uses: battila7/get-version-action@v2
+            - name: Identify version
+              if: github.event_name == 'release'
+              id: get_version
+              uses: battila7/get-version-action@v2
 
-      - name: change version in NPM
-        if: github.event_name == 'release'
-        uses: reedyuk/npm-version@1.2.2
-        with:
-          version: ${{ steps.get_version.outputs.version-without-v  }}-${{ steps.commit.outputs.short }}
-          git-tag-version: "false"
+            - name: change version in NPM
+              if: github.event_name == 'release'
+              uses: reedyuk/npm-version@1.2.2
+              with:
+                  version: ${{ steps.get_version.outputs.version-without-v  }}-${{ steps.commit.outputs.short }}
+                  git-tag-version: "false"
 
-      - name: 🏗 Build Site
-        run: npm ci && npm run build
+            - name: 🏗 Build Site
+              run: npm ci && npm run build
 
-      - name: 🚛 Publish Site
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          command: >
-            pages deploy ./dist
-            --project-name=${{ github.ref == 'refs/heads/beta' && 'pressifybeta' || 'pressify' }}
-            --branch ${{ github.ref == 'refs/heads/beta' && 'main' || (github.event_name == 'push' && 'per-commit-from-main' || 'main') }}
+            - name: 🚛 Publish Site
+              uses: cloudflare/wrangler-action@v3
+              with:
+                  apiToken: ${{ secrets.CF_API_TOKEN }}
+                  accountId: ${{ secrets.CF_ACCOUNT_ID }}
+                  command: >
+                      pages deploy ./dist
+                      --project-name=${{ github.ref == 'refs/heads/beta' && 'pressifybeta' || 'pressify' }}
+                      --branch ${{ github.ref == 'refs/heads/beta' && 'main' || (github.event_name == 'push' && 'per-commit-from-main' || 'main') }}

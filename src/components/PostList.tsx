@@ -27,9 +27,9 @@ const PostList: React.FC<{
 
 	return (
 		<IonList>
-			{posts.map((post, index) => (
+			{posts.map((post) => (
 				<IonItem
-					key={index}
+					key={post.id}
 					button
 					routerLink={`/${isPostExtended(post) ? post.url : siteURL}/${post.type}/${post.id}`}
 				>

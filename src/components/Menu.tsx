@@ -112,9 +112,9 @@ const Menu: React.FC = () => {
 						/>
 						<IonLabel>Home</IonLabel>
 					</IonItem>
-					{sites.map((site, index) => {
+					{sites.map((site) => {
 						return (
-							<IonMenuToggle key={index} autoHide={false}>
+							<IonMenuToggle key={site.url} autoHide={false}>
 								<IonItemSliding>
 									<IonItem
 										className={location.pathname.includes(site.url) ? "selected" : ""}

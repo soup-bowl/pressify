@@ -12,7 +12,7 @@ const setLocalStorageItem = <T>(key: string, value: T): void => {
 const useSettings = <T>(key: string, defaultValue: T): [T, (value: T) => void, () => void] => {
 	const [setting, setSetting] = useState<T>(() => {
 		const storedValue = getLocalStorageItem<T>(key)
-		return storedValue !== null ? storedValue : defaultValue
+		return storedValue ?? defaultValue
 	})
 
 	const saveSetting = (value: T): void => {

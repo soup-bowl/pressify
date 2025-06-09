@@ -18,7 +18,7 @@ import { EPostType, fetchPosts, IPost, WordPressApi } from "@/api"
 import { getLayoutIcon } from "@/utils"
 
 const Home: React.FC = () => {
-	const [sites, setSites] = useSettings<ISite[]>("SitesAvailable", [])
+	const [sites] = useSettings<ISite[]>("SitesAvailable", [])
 	const [layout, setLayout] = useSettings<"grid" | "list">("displayLayout", "grid")
 
 	useEffect(() => {
