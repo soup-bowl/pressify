@@ -35,7 +35,7 @@ const Headline: React.FC<{
 		<IonGrid>
 			<IonRow>
 				<IonCol size="auto">
-					<img className="wp-favicon-loc" src={siteInfo.site_icon_url} />
+					<img className="wp-favicon-loc" src={siteInfo.site_icon_url} alt="" />
 				</IonCol>
 				<IonCol>
 					<IonRow>

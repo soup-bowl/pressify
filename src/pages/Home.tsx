@@ -33,30 +33,10 @@ const Home: React.FC = () => {
 		}
 	}
 
-	if (sites.length < 1) {
-		return (
-			<IonPage>
-				<IonHeader>
-					<IonToolbar>
-						<IonButtons slot="start">
-							<IonMenuButton />
-						</IonButtons>
-						<IonTitle>Home</IonTitle>
-					</IonToolbar>
-				</IonHeader>
-
-				<IonContent fullscreen>
-					<Placeholder name="No site selected">
-						<p>Please select a site, or add a new one</p>
-					</Placeholder>
-				</IonContent>
-			</IonPage>
-		)
-	}
-
 	const postData = useQuery<IPostExtended[]>({
 		queryKey: ["summary", sites.length],
 		queryFn: async () => {
+			if (sites.length < 1) return []
 			const extendPosts = (posts: IPost[], info: ISite): IPostExtended[] => {
 				return posts.map((post) => ({
 					...post,
@@ -80,6 +60,27 @@ const Home: React.FC = () => {
 				.slice(0, 15)
 		},
 	})
+
+	if (sites.length < 1) {
+		return (
+			<IonPage>
+				<IonHeader>
+					<IonToolbar>
+						<IonButtons slot="start">
+							<IonMenuButton />
+						</IonButtons>
+						<IonTitle>Home</IonTitle>
+					</IonToolbar>
+				</IonHeader>
+
+				<IonContent fullscreen>
+					<Placeholder name="No site selected">
+						<p>Please select a site, or add a new one</p>
+					</Placeholder>
+				</IonContent>
+			</IonPage>
+		)
+	}
 
 	return (
 		<IonPage>

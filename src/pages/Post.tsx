@@ -22,6 +22,12 @@ import { EPostType, fetchContent, IPost, WordPressApi } from "@/api"
 import { degubbins } from "@/utils"
 import { Content, TagGrid } from "@/components"
 
+const ShareButton: React.FC<{ onShare: () => void }> = ({ onShare }) => (
+	<IonButton>
+		<IonIcon onClick={onShare} ios={shareOutline} md={shareSharp} />
+	</IonButton>
+)
+
 const Post: React.FC<{
 	type: EPostType
 }> = ({ type }) => {
@@ -48,12 +54,6 @@ const Post: React.FC<{
 		}
 	}, [postData.data])
 
-	const ShareButton = () => (
-		<IonButton>
-			<IonIcon onClick={shareArticle} ios={shareOutline} md={shareSharp} />
-		</IonButton>
-	)
-
 	return (
 		<IonPage>
 			<IonHeader>
@@ -64,7 +64,7 @@ const Post: React.FC<{
 					</IonButtons>
 					<IonTitle>{degubbins(postData.data?.title.rendered ?? "Loading content")}</IonTitle>
 					<IonButtons slot="end" collapse={true}>
-						<ShareButton />
+						<ShareButton onShare={shareArticle} />
 					</IonButtons>
 				</IonToolbar>
 			</IonHeader>
@@ -80,7 +80,7 @@ const Post: React.FC<{
 							{degubbins(postData.data?.title.rendered ?? "Loading content")}
 						</IonTitle>
 						<IonButtons slot="end" collapse={true}>
-							<ShareButton />
+							<ShareButton onShare={shareArticle} />
 						</IonButtons>
 					</IonToolbar>
 				</IonHeader>
