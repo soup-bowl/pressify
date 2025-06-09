@@ -47,10 +47,19 @@ const Menu: React.FC = () => {
 
 	const changeForm = (event: InputCustomEvent<InputInputEventDetail>) => {
 		if (event.detail.value) {
-			// Thanks to https://stackoverflow.com/a/31941978.
-			const parsedInput = event.detail.value.toString().match(/([^/,\s]+\.[^/,\s]+?)(?=\/|,|\s|$|\?|#)/g)
-			setDetectionState(ESelectorState.Detecting)
-			setSiteInputValue(parsedInput !== null ? parsedInput[0] : "")
+			let input = event.detail.value.toString().trim()
+			try {
+				// Ensure protocol for URL parsing
+				if (!/^https?:\/\//i.test(input)) {
+					input = "https://" + input
+				}
+				const url = new URL(input)
+				setDetectionState(ESelectorState.Detecting)
+				setSiteInputValue(url.host)
+			} catch {
+				setDetectionState(ESelectorState.Ready)
+				setSiteInputValue("")
+			}
 		} else {
 			setDetectionState(ESelectorState.Ready)
 			setSiteInputValue("")
