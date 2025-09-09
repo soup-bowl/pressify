@@ -47,7 +47,7 @@
 		"prettier": "^3.6.2",
 		"terser": "^5.43.1",
 		"typescript": "^5.9.2",
-		"vite": "~7.0.6",
+		"vite": "~7.0.7",
 		"vite-plugin-pwa": "^1.0.2"
 	}
 }
