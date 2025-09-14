@@ -28,13 +28,6 @@ jobs:
 
         steps:
             - uses: actions/checkout@v4
-              with:
-                  fetch-depth: 0
-
-            - uses: sonarsource/sonarqube-scan-action@v3
-              env:
-                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-                  SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
             - name: Use Node.js
               uses: actions/setup-node@v4
