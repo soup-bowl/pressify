@@ -20,9 +20,9 @@
 		"@capacitor/keyboard": "7.0.3",
 		"@capacitor/status-bar": "7.0.3",
 		"@fontsource/eb-garamond": "^5.2.7",
-		"@ionic/react": "^8.7.8",
-		"@ionic/react-router": "^8.7.8",
-		"@tanstack/react-query": "^5.90.6",
+		"@ionic/react": "^8.7.11",
+		"@ionic/react-router": "^8.7.11",
+		"@tanstack/react-query": "^5.90.11",
 		"@types/react-router": "^5.1.20",
 		"@types/react-router-dom": "^5.3.3",
 		"dompurify": "^3.3.0",
@@ -40,14 +40,14 @@
 		"@types/react": "^18.0.27",
 		"@types/react-dom": "^18.0.10",
 		"@vitejs/plugin-legacy": "^7.2.1",
-		"@vitejs/plugin-react": "^5.1.0",
+		"@vitejs/plugin-react": "^5.1.1",
 		"eslint": "^8.35.0",
 		"eslint-plugin-react": "^7.37.5",
-		"jsdom": "^27.1.0",
-		"prettier": "^3.6.2",
-		"terser": "^5.44.0",
+		"jsdom": "^27.2.0",
+		"prettier": "^3.7.3",
+		"terser": "^5.44.1",
 		"typescript": "^5.9.3",
-		"vite": "~7.1.12",
-		"vite-plugin-pwa": "^1.1.0"
+		"vite": "~7.2.6",
+		"vite-plugin-pwa": "^1.2.0"
 	}
 }
