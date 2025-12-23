@@ -28,12 +28,6 @@ For a site to work, it has to meet the following criteria:
 
 ## Getting Started
 
-### With Gitpod
-
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/soup-bowl/pressify)
-
-### Without Gitpod
-
 This project requires NodeJS to develop, test and compile the code. The following will quickstart you.
 
 ```bash
