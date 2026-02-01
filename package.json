@@ -15,14 +15,14 @@
 	},
 	"dependencies": {
 		"@capacitor/app": "8.0.0",
-		"@capacitor/core": "8.0.0",
+		"@capacitor/core": "8.0.2",
 		"@capacitor/haptics": "8.0.0",
 		"@capacitor/keyboard": "8.0.0",
 		"@capacitor/status-bar": "8.0.0",
 		"@fontsource/eb-garamond": "^5.2.7",
-		"@ionic/react": "^8.7.16",
-		"@ionic/react-router": "^8.7.16",
-		"@tanstack/react-query": "^5.90.16",
+		"@ionic/react": "^8.7.17",
+		"@ionic/react-router": "^8.7.17",
+		"@tanstack/react-query": "^5.90.20",
 		"@types/react-router": "^5.1.20",
 		"@types/react-router-dom": "^5.3.3",
 		"dompurify": "^3.3.1",
@@ -33,9 +33,9 @@
 		"react-router-dom": "^5.3.4"
 	},
 	"devDependencies": {
-		"@capacitor/cli": "8.0.0",
+		"@capacitor/cli": "8.0.2",
 		"@ionic/cli": "^7.2.1",
-		"@tanstack/eslint-plugin-query": "^5.91.2",
+		"@tanstack/eslint-plugin-query": "^5.91.4",
 		"@types/dompurify": "^3.2.0",
 		"@types/react": "^18.0.27",
 		"@types/react-dom": "^18.0.10",
@@ -44,10 +44,10 @@
 		"eslint": "^8.35.0",
 		"eslint-plugin-react": "^7.37.5",
 		"jsdom": "^27.4.0",
-		"prettier": "^3.7.4",
-		"terser": "^5.44.1",
+		"prettier": "^3.8.1",
+		"terser": "^5.46.0",
 		"typescript": "^5.9.3",
-		"vite": "~7.3.0",
+		"vite": "~7.3.1",
 		"vite-plugin-pwa": "^1.2.0"
 	}
 }
