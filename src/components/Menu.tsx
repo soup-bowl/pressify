@@ -98,8 +98,8 @@ const Menu: React.FC = () => {
 					<IonListHeader>
 						<IonLabel>
 							<IonText style={{ fontFamily: '"EB Garamond", serif', fontSize: 32 }}>Pressify.</IonText>
-							<IonChip color="primary" id="is-beta">
-								Beta
+							<IonChip color="danger" id="is-beta">
+								Discontinued
 							</IonChip>
 						</IonLabel>
 						<IonButton onClick={() => setIsOpen(true)}>Add</IonButton>
@@ -206,7 +206,7 @@ const Menu: React.FC = () => {
 				<IonAlert
 					trigger="is-beta"
 					header={`Version ${process.env.REACT_APP_VERSION?.replace(/"/g, "")}`}
-					message="This service is under active development. Please be aware that there may be bugs!"
+					message="This service has been discontinued and is no longer maintained."
 					buttons={[
 						"Close",
 						{

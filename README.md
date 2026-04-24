@@ -9,7 +9,8 @@
 
 Uses the power of the **[WordPress REST API][wapi]** and **[Progressive Web Apps][pwa]** to form a portable app viewer for WordPress-based sites.
 
-[Check it out in action][live]!
+> [!WARNING]  
+> This service has now been **discontinued**. If you wish to keep using it, it will be available at [pressify.subo.dev](https://pressify.subo.dev/) and should work for as long as the WordPress REST v2 API is supported.
 
 For a site to work, it has to meet the following criteria:
 
